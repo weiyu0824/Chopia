@@ -26,3 +26,15 @@ export class AccessDatabaseError extends HttpException {
     super(status, message)
   }
 }
+
+export class InvalidAPIError extends HttpException {
+  constructor(status=401, message='Your API call missed something'){
+    super(status, message)
+  }
+}
+
+export class AlreadyLogoutError extends HttpException {
+  constructor(status=400, message='You have already logged out'){
+    super(status, message)
+  }
+}

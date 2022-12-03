@@ -1,4 +1,4 @@
-import LoginForm from "./LoginForm"
+import LoginForm from './LoginForm'
 const Login: React.FC = () => {
   return (
     <div>

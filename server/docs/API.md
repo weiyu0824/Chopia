@@ -1,22 +1,38 @@
 # API 
 ## Auth
 ### Login
-- Post `auth/login` 
+- Post `api/auth/login` 
 ```json
     "username": string,
     "password": string,
 ```
 
 ### Register
-- Post `auth/register` 
+- Post `api/auth/register` 
 ```json
     "username": string,
     "password": string,
 ```
 
+### Refresh 
+
 ### Logout 
-- Delete `auth/logout`
+- Delete `api/auth/logout`
 ```
 Token: string
 ```
+
 ## Chat
+### Get Chat
+- Get `api/auth/chat/:friendUsername`
+```
+Result = {
+    data = {
+        message = [
+            {messageText: 'Today is snowy day', senderUsername: 'ben'},
+            {messageText: 'How is the weather in Taiwan', senderUsername: 'ben'}
+        ]
+    }
+}
+```
+### Post Chat

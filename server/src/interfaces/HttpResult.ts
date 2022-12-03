@@ -1,4 +1,4 @@
 export interface HttpResult {
-  succuss: boolean
+  success: boolean
   message: string
 }

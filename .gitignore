@@ -1,4 +1,8 @@
 .DS_Store
-./client/node_modules/*
-./server/node_modules/*
-./idea/*
+./git
+client/node_modules/*
+server/node_modules/*
+server/dist/*
+idea*
+
+*.env

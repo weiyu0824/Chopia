@@ -2,7 +2,7 @@ import { Router, Response, Request, NextFunction } from 'express'
 import { Controller } from '../interfaces/Controller'
 import { jwtMiddleware } from '../middlewares/JwtMiddleware'
 import { ChatService } from '../services/ChatService'
-import { HttpException } from '../utils/HttpException'
+import { InvalidAPIError } from '../utils/HttpException'
 
 
 
@@ -16,25 +16,28 @@ export class ChatController implements Controller {
     this.initRouter()
   }
   private initRouter() {
-    this.router.get('/:page', jwtMiddleware, this.getPrivateMessage)
+    this.router.get('/:friendUsername', jwtMiddleware, this.getPrivateMessage)
     this.router.post('/private', jwtMiddleware, this.sendPrivateMessage)
     this.router.post('/group')
   }
 
   getPrivateMessage = async (req: Request, res: Response, next: NextFunction) => {
     // get token and page id here
-    // console.log(req.token)
     const username = req.body.verifiedName
-    const friendUsername = req.body.friendUsername
-
-    const serviceResult = await chatService.getMessages(username, friendUsername)
-
-    if (!serviceResult.error) {
-      res.send(serviceResult)
+    const friendUsername = req.params.friendUsername
+    if (friendUsername === undefined){
+      next(new InvalidAPIError())
     } else {
-      next(serviceResult.error)
+      console.log(username)
+      console.log(friendUsername)
+      const serviceResult = await chatService.getMessages(username, friendUsername)
+
+      if (!serviceResult.error) {
+        res.send(serviceResult)
+      } else {
+        next(serviceResult.error)
+      }
     }
-  
   }
 
   sendPrivateMessage = async (req: Request, res: Response, next: NextFunction) => {

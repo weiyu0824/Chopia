@@ -21,6 +21,23 @@ export function jwtMiddleware(req: Request, res: Response, next: NextFunction) {
   } catch (err) {
     next(new InvalidTokenError())
   }
+}
+
+export function refreshMiddleware(req: Request, res: Response, next: NextFunction) {
+  const authHeader = req.headers['authorization']
   
-  return
+  const token = authHeader && authHeader.split(' ')[1]
+  if (!token) {
+    next(new NoTokenError())
+    return
+  }
+
+  try {
+    const decoded = jwt.verify(token, config.token.refreshSecret) as TokenPayload
+    console.log('jwt verified (v)')
+    req.body.verifiedName = decoded.name // TODO: Set in other pos
+    next()
+  } catch (err) {
+    next(new InvalidTokenError())
+  }
 }

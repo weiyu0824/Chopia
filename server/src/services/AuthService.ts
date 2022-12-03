@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import config from '../config/config'
 import { User } from '../models/User'
-import { HttpException } from '../utils/HttpException'
+import { HttpException, AccessDatabaseError, AlreadyLogoutError } from '../utils/HttpException'
 import { TokenPayload } from '../interfaces/TokenPayload'
 
 interface ServiceResult {
@@ -29,6 +29,26 @@ export class AuthService {
     return token
   }
 
+  // TODO: Operate on In-memory DB
+  checkIsLoggedIn(verifiedName: string) {
+    return this.loggedinUsers.has(verifiedName)
+  }
+  // TODO: this refresh token should be the latest one
+  checkIsUpdatedToken(verifiedName: string) {
+
+  }
+
+  storeRefreshToken(username: string, refreshToken: string) {
+    this.loggedinUsers.set(username, refreshToken)
+  }
+
+  removeRefreshToken(verifiedName: string) {
+    // return True if this user already logged-in,
+    // otherwise return False
+    return this.loggedinUsers.delete(verifiedName) 
+  }
+
+  // Services
   register = async (username: string, password: string): Promise<ServiceResult> => {
     try {
       const exist = await User.findOne({
@@ -68,13 +88,15 @@ export class AuthService {
       if (correct !== null) {
         const accessToken = this.genAccessToken({ name: username })
         const refreshToken = this.genRefreshToken({ name: username })
-        this.loggedinUsers.set(username, refreshToken)
+        this.storeRefreshToken(username, refreshToken)
+
         return {
           success: true,
           message: 'Login successfully',
           accessToken: accessToken,
           refreshToken: refreshToken
         }
+
       } else {
         return {
           success: false,
@@ -83,33 +105,41 @@ export class AuthService {
       }
     } catch (err) {
       return {
-        error: new HttpException(500, 'Access Database error')
+        error: new AccessDatabaseError()
       }
     }
   }
 
   logout = (verifiedName: string): ServiceResult => {
     // delete token
-    if (this.loggedinUsers.has(verifiedName)) {
-      this.loggedinUsers.delete(verifiedName)
+    if (this.removeRefreshToken(verifiedName)) {
       return {
         success: true,
         message: 'Succeesfully log out'
       }
     } else {
       return {
-        error: new HttpException(400, 'You have already logged out')
+        error: new AlreadyLogoutError()
       }
     }
-
   }
 
-
-  refresh = async (refreshToken: string) => {
+  refresh = (verifiedName: string): ServiceResult => {
 
     // const decodedToken = jwt.verify(refreshToken, config.token.refreshSecret)
     // const accessToken = this.genAccessToken(decodedToken.)
 
+    if (this.checkIsLoggedIn(verifiedName)){
+      const accessToken = this.genAccessToken({ name: verifiedName })
+      return {
+        success: true,
+        accessToken: accessToken
+      }
+    } else {
+      return {
+        error: new AlreadyLogoutError()
+      }
+    }
 
   } // token
 }

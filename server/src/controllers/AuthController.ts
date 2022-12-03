@@ -1,10 +1,8 @@
 import { Router, Response, Request, NextFunction } from 'express'
 import { Controller } from '../interfaces/Controller'
-import { HttpException } from '../utils/HttpException'
 import { HttpResult } from '../interfaces/HttpResult'
 import { AuthService } from '../services/AuthService'
-import { User } from '../models/User'
-import { jwtMiddleware } from '../middlewares/JwtMiddleware'
+import { jwtMiddleware, refreshMiddleware } from '../middlewares/JwtMiddleware'
 
 const authService = new AuthService()
 
@@ -38,7 +36,7 @@ export class AuthController implements Controller {
     this.router.post('/login', this.login)
     this.router.post('/register', this.register)
     this.router.delete('/logout', jwtMiddleware, this.logout)
-    this.router.get('/refresh', jwtMiddleware, this.refresh)
+    this.router.get('/refresh', refreshMiddleware, this.refresh)
   }
 
   private login = async (req: Request, res: Response, next: NextFunction) => {
@@ -49,11 +47,14 @@ export class AuthController implements Controller {
     const serviceResult = await authService.login(username, password)
     if (!serviceResult.error) {
       const result: LoginResult = {
-        succuss: serviceResult.success ?? false,
+        success: serviceResult.success ?? false,
         message: serviceResult.message ?? '',
         accessToken: serviceResult.accessToken ?? '',
         refreshToken: serviceResult.refreshToken ?? ''
       }
+
+      // res.cookie('access_token', 'Bearer ' + serviceResult.accessToken)
+      // res.cookie('refresh_token', 'Bearer ' + serviceResult.refreshToken)
       res.send(result)
 
     } else {
@@ -70,7 +71,7 @@ export class AuthController implements Controller {
 
     if (!serviceResult.error) {
       const result: RegisterResult = {
-        succuss: serviceResult.success ?? false,
+        success: serviceResult.success ?? false,
         message: serviceResult.message ?? '',
         accessToken: serviceResult.accessToken ?? '',
         refreshToken: serviceResult.refreshToken ?? ''
@@ -98,7 +99,18 @@ export class AuthController implements Controller {
   }
 
   private refresh = (req: Request, res: Response, next: NextFunction) => {
-    res.send('refresh')
+    const verifiedName: string = req.body.verifiedName
+    const serviceResult = authService.refresh(verifiedName)
+    console.log(serviceResult)
+    if (!serviceResult.error) {
+      res.send({
+        succuss: serviceResult.success ?? false,
+        accessToken: serviceResult.accessToken ?? ''
+      })
+    } else {
+      next(serviceResult.error)
+    }
+    
   }
 
 }

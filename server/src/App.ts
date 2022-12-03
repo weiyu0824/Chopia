@@ -1,4 +1,5 @@
 import express, { Application } from 'express'
+import cors from 'cors'
 import mongoose from 'mongoose'
 import { AuthController } from './controllers/AuthController'
 import { ChatController } from './controllers/ChatController'
@@ -26,7 +27,7 @@ class App {
 
   private mountMiddlewares(): void {
     // this.express.use(helmet())
-    // this.express.use(cors())
+    this.express.use(cors())
     // this.express.use(morgan('dev'))
 
     // body-parser

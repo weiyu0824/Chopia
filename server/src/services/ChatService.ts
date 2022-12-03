@@ -5,6 +5,7 @@ interface ServiceResult {
   error?: HttpException
   messages?: Message[]
 }
+
 interface Message {
   messageText: string
   senderUsername: string
@@ -48,14 +49,16 @@ export class ChatService {
 
   }
 
-  sendMessages = async (username: string, friendUsername: string, message: string): Promise<ServiceResult> => {
+  sendMessages = async (username: string, friendUsername: string, message: Message): Promise<ServiceResult> => {
     try {
       const chatRoomId = this.calculateChatRoomId(username, friendUsername)
       const privateMessage = new PrivateMessage({
         chatRoomId: chatRoomId,
-        message: message,
-        senderUsername: username
+        message: message.messageText,
+        senderUsername: message.senderUsername
       })
+
+      console.log(privateMessage)
       privateMessage.save()
       // TODO: check return type
       return {}

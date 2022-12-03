@@ -22,7 +22,12 @@ const MyNav: React.FC = () => {
       <Brand>brand</Brand>
 
 
-      {isLoggedIn ? <Name> {username} </Name> : <Link to='/signin'><Button>log in </Button></Link>}
+      {isLoggedIn ? 
+       <div>
+        <Name> {username} </Name>
+        <Button> Sign Out </Button>
+        </div> : 
+       <Link to='/signin'><Button> Log In </Button></Link>}
 
 
     </Navbar>
