@@ -85,6 +85,7 @@ export class AuthService {
         username: username,
         password: password
       })
+      console.log(correct)
       if (correct !== null) {
         const accessToken = this.genAccessToken({ name: username })
         const refreshToken = this.genRefreshToken({ name: username })

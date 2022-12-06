@@ -1,10 +1,11 @@
 import React from 'react';
 import Home from './pages/Home/Home'
-import Login from './pages/Login/Login';
+import Login from './pages/Login/Login'
 import Demo from './pages/Demo/Demo'
-import { Route, Routes } from 'react-router-dom';
+import Register from './pages/Register/Register'
+import { Route, Routes } from 'react-router-dom'
 import MyNav from './components/MyNav'
-import { useAuthStore } from './store/AuthStore';
+import { useAuthStore } from './store/AuthStore'
 import './App.css'
 
 const Page: React.FC = () => {
@@ -24,7 +25,9 @@ const App : React.FC = () => {
       <MyNav />
       <Routes>
         <Route path='/signin' element={<Login />} />
+        <Route path='/signup' element={<Register />} />
         <Route path="/" element={<Page />} />
+
       </Routes>
     </div>
   );
