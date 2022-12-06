@@ -8,8 +8,7 @@ const app = new App(config.server.port, config.mongo.dbUrl)
 app.listen()
 
 
-
-// // declare a route with a response
+// declare a route with a response
 // app.get('/api', )
 
 // // start the server
