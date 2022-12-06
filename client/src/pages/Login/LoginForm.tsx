@@ -59,15 +59,6 @@ const SignInHeader = styled.h2`
   text-align: left;
 `
 
-
-
-
-
-
-
-
-
-
 const LoginForm: React.FC = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword ] = useState('')
