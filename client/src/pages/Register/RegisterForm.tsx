@@ -22,6 +22,7 @@ const FormWrapper = styled.div`
   border-style: solid;
   border-color: lightgray;
   padding: 20px;
+  box-shadow: 0px 2px 6px -2px rgba(0,0,0,0.3);
 `
 const StyledForm = styled.form`
   display: flex;
@@ -117,7 +118,7 @@ const RegisterForm: React.FC = () => {
           Sign up
         </SignInHeader>
         <Input value={username} onChange={handleUsername} placeholder='Username'/>
-        <Input value={password} onChange={handlePassword} placeholder='Password'/>
+        <Input type='password' value={password} onChange={handlePassword} placeholder='Password'/>
         <WarningBlock isHidden={warningMessage === ''}> 
           <span>{loadingWarn}</span>
           <span>{warningMessage} </span>
