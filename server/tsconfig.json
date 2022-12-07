@@ -5,7 +5,7 @@
         "lib": ["dom"],
         "types": ["node"],
         "outDir": "./dist",
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "noImplicitOverride": true,
         "noImplicitReturns": true,
         "noUncheckedIndexedAccess": true,

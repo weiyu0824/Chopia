@@ -20,7 +20,8 @@ export class AuthService {
   constructor() { }
 
   genAccessToken(payload: TokenPayload) {
-    const token: string = jwt.sign(payload, config.token.accessSecret, { expiresIn: config.token.accessTokenDuration })
+    // const token: string = jwt.sign(payload, config.token.accessSecret, { expiresIn: config.token.accessTokenDuration })
+    const token: string = jwt.sign(payload, config.token.accessSecret)
     return token
   }
 
@@ -85,6 +86,7 @@ export class AuthService {
         username: username,
         password: password
       })
+      console.log(correct)
       if (correct !== null) {
         const accessToken = this.genAccessToken({ name: username })
         const refreshToken = this.genRefreshToken({ name: username })

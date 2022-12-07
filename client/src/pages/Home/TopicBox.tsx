@@ -1,5 +1,9 @@
-import React from "react";
-import styled, { css } from "styled-components";
+import React from 'react'
+import styled, { css } from 'styled-components"
+import './style.css'import { GrRefresh } from 'react-icons/gr'
+import { VscRefresh } from 'react-icons/vsc'
+import { IconContext } from "react-icons"
+
 import { keyframes } from 'styled-components'
 import ReactDOM from "react-dom";
 import MyTopic from './MyTopic'
@@ -48,6 +52,24 @@ const FullSummary = styled.button`
   width: 500px;
   height:500px;
   animation: ${popin} 300ms;
+`
+const RefreshIcon = styled.button`
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  color: grey;
+  &:hover{
+    background-color: lightgray;
+  };
+`
+const RefreshIcon = styled.button`
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  color: grey;
+  &:hover{
+    background-color: lightgray;
+  };
 `
 
 
@@ -122,6 +144,18 @@ const TopicBox = () => {
     }
     else{
         return(
+            <Box>
+            <input></input>
+            {/*  */}
+            <RefreshIcon >
+                <IconContext.Provider value={{ size: "1.2rem" }}>
+                <VscRefresh />
+                </ IconContext.Provider>
+                {/* <GrRefresh id='try'/> */}
+            </RefreshIcon>
+            {/*  */}
+            
+            </Box>
             <Box>
                 {topics}
             </Box>

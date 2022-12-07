@@ -3,6 +3,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import { AuthController } from './controllers/AuthController'
 import { ChatController } from './controllers/ChatController'
+import { MLController } from './controllers/MLController'
 import { Controller } from './interfaces/Controller'
 import { errorMiddleware } from './middlewares/ErrorMiddleware'
 
@@ -18,7 +19,7 @@ class App {
     this.dbUrl = dbUrl
     this.apiUrl = '/api'
 
-    const controllers: Controller[] = [new AuthController(), new ChatController()]
+    const controllers: Controller[] = [new AuthController(), new ChatController(), new MLController()]
     this.mountDatabase()
     this.mountMiddlewares()
     this.mountControllers(controllers)

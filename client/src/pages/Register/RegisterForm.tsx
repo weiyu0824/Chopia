@@ -4,7 +4,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { useAuthStore } from '../../store/AuthStore'
-import { LoginApi } from '../../api/auth'
+import { LoginApi, RegisterApi } from '../../api/auth'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 
@@ -17,6 +17,7 @@ const FormWrapper = styled.div`
   left: 50%;
   top: 25%;
   transform: translateX(-50%);
+  
   width: 400px;
   border-style: solid;
   border-color: lightgray;
@@ -31,7 +32,6 @@ const StyledForm = styled.form`
 const Input = styled.input`
   margin: 10px 0px;
   padding: 5px;
-  border-width: 1px;
 `
 const SignInButton = styled.button`
   margin: 10px 0px;
@@ -40,6 +40,8 @@ const SignInButton = styled.button`
   border-radius: 5px;
   border-style: none;
   background-color: #B8F1B0;
+
+  /* TODO: Why hover not working */
   &:hover {
     opacity: 0.5;
     background-color: black;
@@ -58,7 +60,7 @@ const SignInHeader = styled.h2`
   text-align: left;
 `
 
-const LoginForm: React.FC = () => {
+const RegisterForm: React.FC = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword ] = useState('')
   const [warningMessage, setWarningMessage ] = useState('')
@@ -72,19 +74,19 @@ const LoginForm: React.FC = () => {
 
   const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
 
-  const handleSignIn = async () => {
+  const handleSignUp = async () => {
     if (username && password) {
       startAuth()
-      const res = await LoginApi(username, password)
+      const res = await RegisterApi(username, password)
       endAuth()
 
       if (res.data.success === false) {
-        console.log('fail to login')
+        console.log('Fail to register')
         setWarningMessage(res.data.message)
       }else {
-        console.log('sucess to login')
+        console.log('Registered Sucess')
         successAuth(username) //TODO: username should be in response
-        navigate('/')
+        navigate('/signin')
         setCookies('access_token', res.data.accessToken)
         setCookies('refresh_token', res.data.refreshToken)
       }
@@ -94,7 +96,7 @@ const LoginForm: React.FC = () => {
       console.log(warningMessage)
     }
   }
-  
+
   const handleUsername: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const target = e.target
     const value = target.value
@@ -113,16 +115,15 @@ const LoginForm: React.FC = () => {
     <FormWrapper>
       <StyledForm>
         <SignInHeader>
-          Sign in
+          Sign up
         </SignInHeader>
-        <Link to='/signup'> I don't have an account</Link> 
         <Input value={username} onChange={handleUsername} placeholder='Username'/>
-        <Input type="password" value={password} onChange={handlePassword} placeholder='Password'/>
+        <Input type='password' value={password} onChange={handlePassword} placeholder='Password'/>
         <WarningBlock isHidden={warningMessage === ''}> 
           <span>{loadingWarn}</span>
           <span>{warningMessage} </span>
         </WarningBlock> 
-        <SignInButton onClick={handleSignIn} type='button'>sign in </SignInButton>
+        <SignInButton onClick={handleSignUp} type='button'>Register </SignInButton>
       </StyledForm>
     </FormWrapper>
     
@@ -130,4 +131,4 @@ const LoginForm: React.FC = () => {
 }
 
 
-export default LoginForm
+export default RegisterForm
