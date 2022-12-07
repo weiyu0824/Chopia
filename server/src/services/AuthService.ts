@@ -20,7 +20,8 @@ export class AuthService {
   constructor() { }
 
   genAccessToken(payload: TokenPayload) {
-    const token: string = jwt.sign(payload, config.token.accessSecret, { expiresIn: config.token.accessTokenDuration })
+    // const token: string = jwt.sign(payload, config.token.accessSecret, { expiresIn: config.token.accessTokenDuration })
+    const token: string = jwt.sign(payload, config.token.accessSecret)
     return token
   }
 

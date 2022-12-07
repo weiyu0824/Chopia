@@ -36,3 +36,7 @@ Result = {
 }
 ```
 ### Post Chat
+
+
+## Model
+- Get `api/ml/summary/:friendUsername`

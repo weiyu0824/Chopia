@@ -13,7 +13,7 @@ interface Message {
 
 
 export class ChatService {
-  calculateChatRoomId(usernameA: string, usernameB: string): string {
+  static calculateChatRoomId(usernameA: string, usernameB: string): string {
     if (usernameA < usernameB) {
       return usernameA + usernameB
     } else {
@@ -23,7 +23,7 @@ export class ChatService {
 
   getMessages = async (username: string, friendUsername: string): Promise<ServiceResult> => {
     try {
-      const chatRoomId = this.calculateChatRoomId(username, friendUsername)
+      const chatRoomId = ChatService.calculateChatRoomId(username, friendUsername)
       const rawMessages = await PrivateMessage.find({
         chatRoomId: chatRoomId
       })
@@ -51,7 +51,7 @@ export class ChatService {
 
   sendMessages = async (username: string, friendUsername: string, message: Message): Promise<ServiceResult> => {
     try {
-      const chatRoomId = this.calculateChatRoomId(username, friendUsername)
+      const chatRoomId = ChatService.calculateChatRoomId(username, friendUsername)
       const privateMessage = new PrivateMessage({
         chatRoomId: chatRoomId,
         message: message.messageText,
