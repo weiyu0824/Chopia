@@ -12,7 +12,6 @@ const Brand = styled.span`
 const Name = styled.span`
   color: white;
 `
-
 const MyNav: React.FC = () => {
   const username = useAuthStore((state) => state.username)
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
@@ -23,16 +22,14 @@ const MyNav: React.FC = () => {
     navigate('/signin')
   }
   return (
-    <Navbar color="black">
+    <Navbar color="white">
       <Brand>brand</Brand>
-
-
       {isLoggedIn ? 
        <div>
         <Name> {username} </Name>
-        <Button  onClick={handleSignOut}> Sign Out </Button>
+        <Button style={{ color: "red"}} type="link" onClick={handleSignOut}> Sign Out </Button>
         </div> : 
-       <Link to='/signin'><Button> Log In </Button></Link>}
+       <Link to='/signin'><Button style={{ color: "red"}} type="link"> Sign In </Button></Link>}
 
     </Navbar>
   )

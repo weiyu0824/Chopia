@@ -17,11 +17,11 @@ const FormWrapper = styled.div`
   left: 50%;
   top: 25%;
   transform: translateX(-50%);
-  
   width: 400px;
   border-style: solid;
   border-color: lightgray;
   padding: 20px;
+  box-shadow: 0px 2px 6px -2px rgba(0,0,0,0.3);
 `
 const StyledForm = styled.form`
   display: flex;
@@ -31,6 +31,7 @@ const StyledForm = styled.form`
 const Input = styled.input`
   margin: 10px 0px;
   padding: 5px;
+  border-width: 1px;
 `
 const SignInButton = styled.button`
   margin: 10px 0px;
@@ -39,8 +40,6 @@ const SignInButton = styled.button`
   border-radius: 5px;
   border-style: none;
   background-color: #B8F1B0;
-
-  /* TODO: Why hover not working */
   &:hover {
     opacity: 0.5;
     background-color: black;
@@ -58,15 +57,6 @@ const WarningBlock = styled.div<Props>`
 const SignInHeader = styled.h2`
   text-align: left;
 `
-
-
-
-
-
-
-
-
-
 
 const LoginForm: React.FC = () => {
   const [username, setUsername] = useState('')
@@ -125,10 +115,9 @@ const LoginForm: React.FC = () => {
         <SignInHeader>
           Sign in
         </SignInHeader>
-        <Link to='/signup'> I don't have an account</Link>
-        
+        <Link to='/signup'> I don't have an account</Link> 
         <Input value={username} onChange={handleUsername} placeholder='Username'/>
-        <Input value={password} onChange={handlePassword} placeholder='Password'/>
+        <Input type="password" value={password} onChange={handlePassword} placeholder='Password'/>
         <WarningBlock isHidden={warningMessage === ''}> 
           <span>{loadingWarn}</span>
           <span>{warningMessage} </span>
