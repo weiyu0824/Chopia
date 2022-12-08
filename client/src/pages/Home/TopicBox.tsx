@@ -1,40 +1,73 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { GrRefresh } from 'react-icons/gr'
 import { VscRefresh } from 'react-icons/vsc'
 import { IconContext } from "react-icons"
+import { MdSummarize } from 'react-icons/md'
+import { RxCross1 } from 'react-icons/rx' 
 import './style.css'
 
-const Box = styled.div`
-    width: auto;
-    height: 700px;
+interface IBox {
+  shrink: boolean
+}
+
+const Box = styled.div<IBox>`
+    padding: 10px;
+    width: ${props => (props.shrink) ? "50px" : "800px"};
+    height: 100vh;
     background-color: white;
     border-style: solid;
     border-color: lightgray;
-`
-const RefreshIcon = styled.button`
-  background-color: white;
-  border: none;
-  border-radius: 5px;
-  color: grey;
-  &:hover{
-    background-color: lightgray;
-  };
+    transition-property: width;
+    transition-duration: 0.2s;
+    
+    .togleBtn {
+      position: absolute;
+      top:5px;
+      right:3px;
+      padding: 5px 8px;
+      background-color: white;
+      border: none;
+      border-radius: 20px;
+      color: #565151;
+      /* float: right; */
+      
+      &:hover{
+        background-color: lightgray;
+      };
+      
+    }
+    .expandBtn {
+      display: ${props => (props.shrink) ? "inline" : "none"};
+    }
+    .closeBtn {
+      float: right;
+      display: ${props => (props.shrink) ? "none" : "inline"};
+    }
+
 `
 
 const TopicBox = () => { 
+  const [shrink, setShrink]= useState(true)
+
+  const handleShrinkAndExpand = () => {
+    console.log(shrink)
+    setShrink(!shrink)
+  }
+
   return (
-    <Box>
-      <input></input>
-      {/*  */}
-      <RefreshIcon >
-        <IconContext.Provider value={{ size: "1.2rem" }}>
-          <VscRefresh />
+    <Box shrink={shrink}>
+      <button  className="togleBtn expandBtn" onClick={handleShrinkAndExpand}>
+        <IconContext.Provider value={{ size: "1.2rem" }}>          
+          <MdSummarize />
         </ IconContext.Provider>
-        {/* <GrRefresh id='try'/> */}
-      </RefreshIcon>
-      {/*  */}
-      
+        
+      </button>   
+      <button  className="togleBtn closeBtn" onClick={handleShrinkAndExpand}>
+        <IconContext.Provider value={{ size: "1.2rem" }}>
+          <RxCross1 />
+        </ IconContext.Provider>
+      </button>    
     </Box>
   ) 
 }

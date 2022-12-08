@@ -1,5 +1,5 @@
 import { PrivateMessage } from '../models/PrivateMessage'
-import { inference, predict } from '../script/inference'
+import { inference } from '../script/inference'
 
 export class MLService {
 

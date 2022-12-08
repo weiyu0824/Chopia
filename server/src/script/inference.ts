@@ -10,7 +10,7 @@ const fsPromises = fs.promises
 const scriptName = 'src/script/predict.py'
 const folderName = 'cache/'
 
-export const predict = (filename: string) => {
+const predict = (filename: string) => {
     return new Promise((resolve, reject) => {
         
         const python = spawn('python3', [scriptName, filename]);

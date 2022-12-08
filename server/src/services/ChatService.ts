@@ -28,17 +28,17 @@ export class ChatService {
         chatRoomId: chatRoomId
       })
 
-      console.log(rawMessages)
+      // console.log(rawMessages)
 
-      const processedMessages = rawMessages.map((rawMessage, index) => {
-        return {
-          "messageText": rawMessage.message,
-          "senderUsername": rawMessage.senderUsername
-        }
-      })
+      // const processedMessages = rawMessages.map((rawMessage, index) => {
+      //   return {
+      //     "messageText": rawMessage.message,
+      //     "senderUsername": rawMessage.senderUsername
+      //   }
+      // })
 
       return {
-        messages: processedMessages
+        messages: rawMessages
       }
     } catch (err) {
       return {

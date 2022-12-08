@@ -1,30 +1,33 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import MyMessage from './MyMessage'
+import MessageEditor from './MessageEditor'
 import { GetChatApi, SendMessageAPI } from '../../api/chat'
 import { useCookies } from 'react-cookie'
 import { useAuthStore } from '../../store/AuthStore'
 import { Message } from '../../utils/Message'
+import { getCurrentTimeString } from '../../utils/time'
 
 
 const Box = styled.div`
-  width: auto;
+  width: 100%;
   /* height: 700px; */
-  background-color: white;
+  background-color: #EFF5F5;
   border-style: solid;
   border-right: none;
   border-color: lightgray;
 `
 const Editor = styled.div`
+  height: 40px;
   border-style: solid;
   margin: 10px 50px;
   padding: 0px 10px;
   border-color: lightgray;
+  background-color: white;
   border-radius: 20px;
 `
 const StyledInputBox = styled.input`
   width: 90%;
-  height: 30px;
+  height: 90%;
   border-style: none;
   outline: none;
 `
@@ -37,12 +40,13 @@ const StyledSendButton = styled.button`
   border-color: #A0E4CB;
 `
 const ChatArea = styled.div`
-  height: 644px; // 644
-  background-color: #E3FCBF;
+  padding-top: 20px;
+  height: calc(100vh - 60px); // 644
+  background-color: #EFF5F5;
   overflow-y: scroll;
 `
 const DefaultChatArea = styled.div`
-  height: 700px;
+  height: 100vh;
   background-color: white;
 `
 const LoadMessageButton = styled.button`
@@ -74,7 +78,8 @@ const ChatFeed: React.FC = () => {
     console.log(`send: ${messageText}`)
     const newMessage = {
       messageText: messageText, 
-      senderUsername: username
+      senderUsername: username,
+      time: getCurrentTimeString()
     }
     const newMessages = messages.concat(newMessage)
     setMessages(newMessages)
@@ -102,16 +107,20 @@ const ChatFeed: React.FC = () => {
   const handleLoadMessage = async() => {
     const friendUsername = username
     const res = await GetChatApi(friendUsername, cookies.access_token)
+    
     if (res.data !== undefined) {
       const loadedMessages = res.data.messages
+      console.log(res.data.messages)
       setMessages(messages.concat(loadedMessages))
       setIsLoadedMessage(true)
+      
     }
-    console.log()
+    
   }
 
-  const dialogue = messages.map((message, number) => {
-    return <MyMessage key={number} message={message.messageText} />
+  const dialogue = messages.map((message, index, messages) => {
+    const showOnlyMessage = (index === 0 || (messages[index].time !== messages[index - 1].time) ) ? false : true
+    return <MessageEditor key={index} showOnlyMessage={showOnlyMessage} message={message} />
   })
 
   if (isLoadedMessage === false){

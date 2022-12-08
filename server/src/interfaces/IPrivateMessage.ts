@@ -1,6 +1,7 @@
 export interface IPrivateMessage {
   chatRoomId: string
-  message: string,
+  messageText: string,
   senderUsername: string,
+  time: string
 }
   
