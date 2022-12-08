@@ -4,5 +4,6 @@ client/node_modules/*
 server/node_modules/*
 server/dist/*
 idea*
+server/cache/*.json
 
 *.env

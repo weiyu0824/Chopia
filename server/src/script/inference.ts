@@ -14,9 +14,9 @@ const predict = (filename: string) => {
     return new Promise((resolve, reject) => {
         
         const python = spawn('python3', [scriptName, filename]);
-        // python.stdout.on('data', (data: any) => {
-        //     console.log(`Python output: ${data.toString()}`)
-        // })
+        python.stdout.on('data', (data: any) => {
+            console.log(`Python output: ${data.toString()}`)
+        })
         python.on('exit', (code) => {
             console.log(`child process close all stdio with code ${code}`);
             if (code !== null) {
