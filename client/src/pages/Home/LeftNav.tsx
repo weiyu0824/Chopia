@@ -15,6 +15,12 @@ const Dash = styled.div`
 const ContactInfo = styled.div`
   height: 100%;
   width: auto;
+  padding: 10px;
+  .tag {
+    color: lightgray;
+    font-size: smaller;
+    float: left;
+  }
 `
 const UserInfo = styled.div`
   height: 50px;
@@ -29,7 +35,7 @@ const LeftNav: React.FC = () => {
         </UserInfo>
 
         <ContactInfo>
-          <span>Direct Message </span>
+          <div className='tag'>DIRECT MESSAGES </div>
         </ContactInfo>
       </Dash>    
   )
