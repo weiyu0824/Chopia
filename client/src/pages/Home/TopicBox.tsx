@@ -29,12 +29,6 @@ const TopicButtons = styled.div`
     width: 75%;
     margin-top: 50px;
 `
-const TopicButtons = styled.div`
-    margin: auto auto;
-    top: 50%;
-    width: 75%;
-    margin-top: 50px;
-`
 
 const popin = keyframes`
     from { 
