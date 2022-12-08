@@ -47,10 +47,10 @@ export class AuthController implements Controller {
     const serviceResult = await authService.login(username, password)
     if (!serviceResult.error) {
       const result: LoginResult = {
-        success: serviceResult.success ?? false,
-        message: serviceResult.message ?? '',
-        accessToken: serviceResult.accessToken ?? '',
-        refreshToken: serviceResult.refreshToken ?? ''
+        success: serviceResult.success ? serviceResult.success : false,
+        message: serviceResult.message ? serviceResult.message : '',
+        accessToken: serviceResult.accessToken ? serviceResult.accessToken: '',
+        refreshToken: serviceResult.refreshToken ? serviceResult.refreshToken: ''
       }
 
       // res.cookie('access_token', 'Bearer ' + serviceResult.accessToken)
@@ -71,10 +71,10 @@ export class AuthController implements Controller {
 
     if (!serviceResult.error) {
       const result: RegisterResult = {
-        success: serviceResult.success ?? false,
-        message: serviceResult.message ?? '',
-        accessToken: serviceResult.accessToken ?? '',
-        refreshToken: serviceResult.refreshToken ?? ''
+        success: serviceResult.success ? serviceResult.success : false,
+        message: serviceResult.message ? serviceResult.message : '',
+        accessToken: serviceResult.accessToken ? serviceResult.accessToken: '',
+        refreshToken: serviceResult.refreshToken ? serviceResult.refreshToken: ''
       }
       res.send(result)
 
@@ -90,8 +90,8 @@ export class AuthController implements Controller {
     const serviceResult = authService.logout(verifiedName)
     if (!serviceResult.error) {
       res.send({
-        succuss: serviceResult.success ?? false,
-        message: serviceResult.message ?? ''
+        success: serviceResult.success ? serviceResult.success : false,
+        message: serviceResult.message ? serviceResult.message : '',
       })
     } else {
       next(serviceResult.error)
@@ -104,8 +104,8 @@ export class AuthController implements Controller {
     console.log(serviceResult)
     if (!serviceResult.error) {
       res.send({
-        succuss: serviceResult.success ?? false,
-        accessToken: serviceResult.accessToken ?? ''
+        succuss: serviceResult.success ? serviceResult.success : false,
+        accessToken: serviceResult.accessToken ? serviceResult.accessToken : ''
       })
     } else {
       next(serviceResult.error)

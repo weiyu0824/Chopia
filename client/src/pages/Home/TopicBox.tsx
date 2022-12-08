@@ -18,10 +18,8 @@ import { Summary } from '../../utils/Summary'
 
 const Box = styled.div`
     width: auto;
-    height: 700px;
+    height: 100vh;
     background-color: white;
-    border-style: solid;
-    border-color: lightgray;
 `
 
 const popin = keyframes`

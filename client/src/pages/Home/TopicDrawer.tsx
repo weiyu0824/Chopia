@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { IconContext } from "react-icons"
 import { MdSummarize } from 'react-icons/md'
 import { RxCross1 } from 'react-icons/rx'
+import TopicBox from './TopicBox'
 
 interface IBox {
   shrink: boolean
@@ -41,6 +42,11 @@ const Box = styled.div<IBox>`
     float: right;
     display: ${props => (props.shrink) ? "none" : "inline"};
   }
+  .topicDisplay {
+    margin-top: 100px;
+    margin: auto auto;
+    display: ${props => (props.shrink) ? "none" : "inline"};
+  }
 `
 
 const TopicDrawer: React.FC = () => {
@@ -53,17 +59,22 @@ const TopicDrawer: React.FC = () => {
 
   return (
     <Box shrink={shrink}>
+      <div>
       <button className="togleBtn expandBtn" onClick={handleShrinkAndExpand}>
         <IconContext.Provider value={{ size: "1.2rem" }}>
           <MdSummarize />
         </ IconContext.Provider>
-
+      
       </button>
       <button className="togleBtn closeBtn" onClick={handleShrinkAndExpand}>
         <IconContext.Provider value={{ size: "1.2rem" }}>
           <RxCross1 />
         </ IconContext.Provider>
       </button>
+      </div>
+      <div className="topicDisplay">
+        <TopicBox></TopicBox>
+      </div>
     </Box>
   )
 }
