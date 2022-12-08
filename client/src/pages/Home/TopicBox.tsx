@@ -1,22 +1,23 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-// import './style.css'
 import { GrRefresh } from 'react-icons/gr'
 import { VscRefresh } from 'react-icons/vsc'
 import { IconContext } from "react-icons"
-
+import { useCookies } from 'react-cookie'
 import { keyframes } from 'styled-components'
 import ReactDOM from "react-dom";
 import MyTopic from './MyTopic'
 import { useSummaryStore } from '../../store/SummaryStore'
-// import { Container, Button, Alert } from 'react-bootstrap';
-import { CSSTransition } from 'react-transition-group';
-import './Transition.css'
-
+import { useAuthStore } from '../../store/AuthStore'
+import { CSSTransition } from 'react-transition-group'
+import { Button } from 'antd'
+import { GetSummaryapi } from '../../api/ml'
+import { useState } from 'react'
+import { Summary } from '../../utils/Summary'
 
 const Box = styled.div`
     width: auto;
-    height: 500px;
+    height: 700px;
     background-color: white;
     border-style: solid;
     border-color: lightgray;
@@ -63,8 +64,6 @@ const RefreshIcon = styled.button`
     background-color: lightgray;
   };
 `
-
-
 
 const data = {
     content: {
@@ -113,13 +112,24 @@ const TopicBox = () => {
     const endSum = useSummaryStore((state) => state.endSum)
     const enterSum = useSummaryStore((state) => state.enterSum)
     const leaveSum = useSummaryStore((state) => state.leaveSum)
-
+    const username = useAuthStore((state) => state.username)
+    const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
+    const [summary, setSummary] = useState<Summary[]>([])
+    const handleLoadSummary = async() => {
+        const friendUsername = username
+        const res = await GetSummaryapi(friendUsername, cookies.access_token)
+        if (res.data !== undefined) {
+            console.log('test',res.data)
+            setSummary(res.data)
+        }
+      }
+    
     const handleClickSummaryButton: React.MouseEventHandler = (e) => {
         endSum()
     }
 
-    const topics = data.content.body.map( 
-        (box, id) => <MyTopic key={id} topic={box.topic} context={box.context} id={box.id}/>
+    const topics = summary.map( 
+        (box, id) => <MyTopic key={id} topic={'test'} context={box.summary} id={'test'}/>
     )
       
     if(clickedSum){
@@ -127,8 +137,6 @@ const TopicBox = () => {
             <Box>
                 <FullSummary 
                     onClick={handleClickSummaryButton}>
-                {topicID} <br/>
-                {topicTitle} <br/>
                 {topicContext} <br/>
                 </FullSummary>
             </Box>
@@ -137,14 +145,8 @@ const TopicBox = () => {
     else{
         return(
             <Box>
-            <input></input>
-            <RefreshIcon>
-                <IconContext.Provider value={{ size: "1.2rem" }}>
-                <VscRefresh />
-                </ IconContext.Provider>
-                {/* <GrRefresh id='try'/> */}
-            </RefreshIcon>
-            {topics}
+                {topics}
+                <Button onClick={handleLoadSummary}> Get Summary </Button>
             </Box>
         )
     }
