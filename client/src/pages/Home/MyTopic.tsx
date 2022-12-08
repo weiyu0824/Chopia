@@ -23,9 +23,9 @@ const Summary = styled.button`
 `
 
 export interface Props {
-    id: string;
-    topic: string;
-    context: string;
+    topic:string,
+    context:string,
+    id:string
 };
 
 
@@ -33,7 +33,6 @@ const MyTopic = (props: Props) => {
     const enterSum = useSummaryStore((state) => state.enterSum)
 
     const handleClickSummaryButton: React.MouseEventHandler = (e) => {
-        console.log(props.id)
         enterSum(props.id, props.topic, props.context)
     }
 
@@ -41,7 +40,7 @@ const MyTopic = (props: Props) => {
     return (
         <Summary
             onClick={handleClickSummaryButton}>
-            {props.topic}
+            {props.context.slice(0,8)}
         </Summary>
     )    
       
