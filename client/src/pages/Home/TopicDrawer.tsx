@@ -73,7 +73,7 @@ const TopicDrawer: React.FC = () => {
       </button>
       </div>
       <div className="topicDisplay">
-        <TopicBox></TopicBox>
+        <TopicBox/>
       </div>
     </Box>
   )

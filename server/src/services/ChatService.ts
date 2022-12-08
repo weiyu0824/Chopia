@@ -7,8 +7,9 @@ interface ServiceResult {
 }
 
 interface Message {
-  messageText: string
-  senderUsername: string
+  messageText: string,
+  senderUsername: string,
+  time: string,
 }
 
 
@@ -54,8 +55,9 @@ export class ChatService {
       const chatRoomId = ChatService.calculateChatRoomId(username, friendUsername)
       const privateMessage = new PrivateMessage({
         chatRoomId: chatRoomId,
-        message: message.messageText,
-        senderUsername: message.senderUsername
+        messageText: message.messageText,
+        senderUsername: message.senderUsername,
+        time: message.time
       })
 
       console.log(privateMessage)
