@@ -15,7 +15,7 @@ def main(filename: str):
     docs = []
     for l in line:
         ids.append(l["_id"])
-        docs.append(l["message"])
+        docs.append(l["messageText"])
     # cluster first
     embed_model = SentenceTransformer('all-MiniLM-L6-v2')
     sentence_embeddings = embed_model.encode(docs)

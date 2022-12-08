@@ -19,11 +19,15 @@ import Button from 'react-bootstrap/Button';
 
 
 const Box = styled.div`
-    width: 100%;
-    height: 700px;
+    width: auto;
+    height: 100vh;
     background-color: white;
-    border-style: solid;
-    border-color: lightgray;
+`
+const TopicButtons = styled.div`
+    margin: auto auto;
+    top: 50%;
+    width: 75%;
+    margin-top: 50px;
 `
 const TopicButtons = styled.div`
     margin: auto auto;
