@@ -76,6 +76,7 @@ const TopicDrawer: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const username = useAuthStore((state) => state.username)
   const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
+  const [hasFetched, setHasFetched] = useState<boolean>(false)
   
 
   const handleRefresh = async () => {
@@ -92,8 +93,15 @@ const TopicDrawer: React.FC = () => {
     }
     setIsLoading(false)
   }
+
   const handleShrinkAndExpand = () => {
     setShrink(!shrink)
+    if (hasFetched == false) {
+      console.log('get ')
+      handleRefresh()
+      setHasFetched(true)
+    }
+    
   }
 
   const changeSummaryCard = (index: number) => {
