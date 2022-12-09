@@ -6,7 +6,11 @@ import { useCookies } from 'react-cookie'
 import { useAuthStore } from '../../store/AuthStore'
 import { Message } from '../../utils/Message'
 import { getCurrentTimeString } from '../../utils/time'
-import {color} from '../../utils/color'
+import { color } from '../../utils/color'
+import { AiOutlineMessage } from 'react-icons/ai'
+import { IconContext } from "react-icons"
+
+
 const C = new color()
 
 const Box = styled.div`
@@ -49,18 +53,20 @@ const ChatArea = styled.div`
 const DefaultChatArea = styled.div`
   height: 100vh;
   background-color: ${C.white};
+
+  .loadMsgBtn{
+    margin-top: 300px;
+    background-color: ${C.white};
+    color: grey;
+    border: none;
+    padding: 10px;
+  &:hover{
+    color: ${C.dblue}
+  }
+  }
 `
 const LoadMessageButton = styled.button`
-  margin-top: 300px;
-  background-color: #FCFFB2;
-  color: grey;
-  border-color: grey;
-  padding: 10px;
-  border-radius: 20px;
-  &:hover{
-    border-style: solid;
-    border-color: black;
-  }
+  
 `
 
 const ChatFeed: React.FC = () => {
@@ -128,9 +134,11 @@ const ChatFeed: React.FC = () => {
     return (
       <Box>
         <DefaultChatArea>
-          <LoadMessageButton onClick={handleLoadMessage}> 
-            Load Message 
-          </LoadMessageButton> 
+          <button className='loadMsgBtn' onClick={handleLoadMessage}>
+            <IconContext.Provider value={{size: '5rem'}}>
+              <AiOutlineMessage />
+            </IconContext.Provider >
+          </button>
         </DefaultChatArea>
       </Box>
     )
