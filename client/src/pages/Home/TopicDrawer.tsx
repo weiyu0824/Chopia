@@ -11,6 +11,7 @@ import { useAuthStore } from '../../store/AuthStore'
 import TopicButtonList from './TopicButtonList'
 import TopicCard from './TopicCard'
 import {color} from '../../utils/color'
+import { Spin } from 'antd';
 const C = new color()
 
 
@@ -30,7 +31,11 @@ const Box = styled.div<IBox>`
   transition-duration: 0.3s;
   display: flex;
   flex-direction: column;
-  
+  justify-content: ${props => (props.isLoading && !props.shrink) ? 'center' : ''};
+  align-items: ${props => (props.isLoading && !props.shrink) ? 'center' : ''};
+  .ant-spin-dot-item {
+    background-color: ${C.blue};
+  }
   .togleBtn {
     /* position: absolute;
     top:5px;
@@ -41,7 +46,6 @@ const Box = styled.div<IBox>`
     border: none;
     border-radius: 20px;
     /* color: #565151; */
-    
     
     &:hover{
       background-color: lightgray;
@@ -54,19 +58,19 @@ const Box = styled.div<IBox>`
   }
   .shrinkBtn {
     float: right;
-    display: ${props => (props.shrink) ? "none" : "inline"};
+    display: ${props => (props.shrink || props.isLoading) ? "none" : "inline"};
   }
   .refreshBtn {
     float: left;
-    display: ${props => (props.shrink) ? "none" : "inline"};
+    display: ${props => (props.shrink || props.isLoading) ? "none" : "inline"};
   }
   .loadingIcon {
-    display: ${props => (props.isLoading && !props.shrink) ? '' : 'none'}
+    display: ${props => (props.isLoading && !props.shrink) ? '' : 'none'};
   }
 `
 
 const TopicDrawer: React.FC = () => {
-  const summaryColors = [C.blue, C.dblue, C.ddblue]
+  const summaryColors = [C.dblue, C.blue, C.ddblue]
   const [shrink, setShrink] = useState(true)
   const [summaryId, setSumaryId] = useState(-1)
   const [colorId, setColorId] = useState(0)
@@ -148,7 +152,7 @@ const TopicDrawer: React.FC = () => {
       {/* <div className="topicDisplay">
         <TopicBox/>
       </div> */}
-      <span className='loadingIcon'> is loading ...</span>
+      <Spin size= 'large' className='loadingIcon'/>
       {TopicButtonListDisplay}
       {TopicCardDisplay}
     </Box>

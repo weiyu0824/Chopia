@@ -35,7 +35,7 @@ const Input = styled.input`
   margin: 10px 0px;
   padding: 5px;
   border-width: 1px;
-  border-radius: 5px;
+  border-radius: 5px
 `
 const SignInButton = styled.button`
   margin: 10px 0px;

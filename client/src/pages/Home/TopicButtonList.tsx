@@ -25,7 +25,7 @@ interface ITopicButton {
 
 
 const TopicButton = styled.button<ITopicButton>`
-  background-color: ${props => (props.pick) ? C.dblue : C.blue};
+  background-color: ${props => (props.pick) ? C.blue : C.dblue};
   color: ${C.white};
   position: relative;
   outline: none;
