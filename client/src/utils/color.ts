@@ -5,5 +5,6 @@ export class color {
   dblue = '#263159';
 	ddblue = '#251749';
   red = '#581845';
-  green = '#425F57'
+  green = '#425F57';
+  lblue = '#D6E4E5';
 }
