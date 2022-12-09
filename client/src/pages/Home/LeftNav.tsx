@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { RiLogoutCircleRLine } from 'react-icons/ri'
+import { RxAvatar } from 'react-icons/rx'
+import { IconContext } from 'react-icons'
 import {color} from '../../utils/color'
+import { useAuthStore } from '../../store/AuthStore'
 const C = new color()
 
 
@@ -25,14 +27,43 @@ const ContactInfo = styled.div`
 `
 const UserInfo = styled.div`
   height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   background-color: ${C.white};
+  color: grey;
+
+  .signoutBtn {
+    outline: none;
+    border: none;
+    background-color: ${C.white};
+    &:hover {
+      color: ${C.ddblue}
+    }
+  }
+  .avatar {
+    margin: auto 0px;
+  }
 `
 
 const LeftNav: React.FC = () => {
+  const leaveAuth = useAuthStore((state => state.leaveAuth))
+  const handlesignOut = () => {
+    leaveAuth()
+  }
+
   return (
     <Dash>
       <UserInfo > 
-        <RiLogoutCircleRLine />
+        <div className='avatar'>
+          <IconContext.Provider value={{size: '2rem'}}>
+            <RxAvatar />
+          </IconContext.Provider>
+        </div>
+        
+        <button className='signoutBtn' onClick={handlesignOut}> 
+          Sign Out
+        </button>
       </UserInfo>
 
       <ContactInfo>
