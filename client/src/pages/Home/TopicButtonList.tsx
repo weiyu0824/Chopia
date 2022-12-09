@@ -10,6 +10,7 @@ interface IButtonWindow {
   show: boolean
 }
 const ButtonWindow = styled.div`
+  display: flex;
   width: 400px;
   height: 60px;
   max-height: 50px;
@@ -25,7 +26,7 @@ interface ITopicButton {
 
 
 const TopicButton = styled.button<ITopicButton>`
-  background-color: ${props => (props.pick) ? C.blue : C.dblue};
+  background-color: ${props => (props.pick) ? C.ddblue : C.grey};
   color: ${C.white};
   position: relative;
   outline: none;

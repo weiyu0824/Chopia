@@ -7,4 +7,7 @@ export class color {
   red = '#581845';
   green = '#425F57';
   lblue = '#D6E4E5';
+  brown = '#451A00';
+  grey = 'grey';
+  lgrey = '#E1F5FE';
 }
