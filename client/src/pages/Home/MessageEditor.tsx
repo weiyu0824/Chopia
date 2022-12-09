@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Message } from '../../utils/Message'
-
+import {color} from '../../utils/color'
+const C = new color()
 // const MessageBox = styled.span`
 //   background-color: #B8F1B0;
 //   padding: 5px 20px;
@@ -21,7 +22,7 @@ const MessageWrapper = styled.div<IMessageBox>`
   display: flex;
   flex-direction: row;
   &:hover{
-    background-color: #D6E4E5;
+    background-color: ${C.me};
   }
 `
 const AvatarBox = styled.div<IMessageBox>`
