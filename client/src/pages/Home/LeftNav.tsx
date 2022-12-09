@@ -19,7 +19,7 @@ const ContactInfo = styled.div`
   padding: 10px;
   .tag {
     color: lightgray;
-    font-size: smaller;
+    font-size: 15px;
     float: left;
   }
 `

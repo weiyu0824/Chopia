@@ -39,13 +39,13 @@ const TopicCard: React.FC<Props> = (props: Props) => {
   console.log(props.summary)
   return(
     <SummaryCard summaryColor={props.summaryColor}>
-      <h1 className="summary-header">Summery</h1>
+      <h1 className="summary-header">Summary</h1>
       <p className="summary-paragraph">{props.summary.summary} </p>
       <br />
       <br />
       <br />
       <br />
-      <OriginalSentences sentences={props.summary.original}/>
+      <OriginalSentences sentencesColor={props.summaryColor} sentences={props.summary.original}/>
     </SummaryCard>
   )
   
