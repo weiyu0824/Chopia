@@ -7,5 +7,5 @@ export const getCurrentTimeString = () => {
     let year = date_ob.getFullYear();
     let hours = date_ob.getHours();
     let minutes = date_ob.getMinutes();
-    return `${year}/${month}/${date} ${hours}:${minutes}`
+    return `${year}/${month}/${date} ${hours}:${String(minutes).padStart(2, "0")}`
 }
