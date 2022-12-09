@@ -1,18 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Summary } from '../../utils/Summary'
 import OriginalSentences from './OriginalSentences'
 
 interface ISummaryCard {
-  show: boolean
+  summaryColor: string
 }
 
 const SummaryCard = styled.div<ISummaryCard>`
-  display: ${props => (props.show) ? '':'none'};
   width: auto;
   height: auto;
   flex-grow: 2;
   /* height: 100px; */
-  background-color: #D6E4E5;
+  background-color: ${props => props.summaryColor};
   border-radius: 15px;
   padding: 10px;
   margin: 10px 0px;
@@ -27,25 +27,25 @@ const SummaryCard = styled.div<ISummaryCard>`
 `
 
 interface Props {
-  show: boolean
+  summaryColor: string
+  summary: Summary
 }
 
 const TopicCard: React.FC<Props> = (props: Props) => {
-  return (
-    <SummaryCard show={props.show}>
+  console.log('topic card')
+  console.log(props.summary)
+  return(
+    <SummaryCard summaryColor={props.summaryColor}>
       <h1 className="summary-header">Summery</h1>
-      <p className="summary-paragraph">Do you have a big, blank wall you don’t know how to deco
-        rate? Check out 12 affordable large wall decor ideas that 
-        are amazing solutions for your living room, bedroom and more!
-         #''livingroomcurtains'' </p>
+      <p className="summary-paragraph">{props.summary.summary} </p>
       <br />
       <br />
       <br />
       <br />
-
-      <OriginalSentences />
+      <OriginalSentences sentences={props.summary.original}/>
     </SummaryCard>
   )
+  
 }
 
 export default TopicCard

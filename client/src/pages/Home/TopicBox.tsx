@@ -108,6 +108,8 @@ const TopicBox = () => {
   const username = useAuthStore((state) => state.username)
   const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
   const [summary, setSummary] = useState<Summary[]>([])
+  
+
   const handleLoadSummary = async () => {
     const friendUsername = username
     const res = await GetSummaryapi(friendUsername, cookies.access_token)
@@ -157,6 +159,7 @@ const TopicBox = () => {
         <TopicButtons>
           {topics}
         </TopicButtons>
+        
       </Box>
     )
   }

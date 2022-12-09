@@ -12,8 +12,8 @@ const Page: React.FC = () => {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
   return (
     <div>
-      {/* {isLoggedIn?<Home />:<div><MyNav /><Demo /></div>} */}
-      <Home />
+      {isLoggedIn?<Home />:<div><MyNav /><Demo /></div>}
+      {/* <Home /> */}
     </div>
   )
 }
