@@ -66,7 +66,7 @@ const Box = styled.div<IBox>`
 `
 
 const TopicDrawer: React.FC = () => {
-  const summaryColors = ['#D6E4E5', 'red', 'yellow']
+  const summaryColors = [C.blue, C.dblue, C.ddblue]
   const [shrink, setShrink] = useState(true)
   const [summaryId, setSumaryId] = useState(-1)
   const [colorId, setColorId] = useState(0)
