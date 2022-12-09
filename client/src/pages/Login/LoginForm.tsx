@@ -7,7 +7,8 @@ import { useAuthStore } from '../../store/AuthStore'
 import { LoginApi } from '../../api/auth'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
-
+import {color} from '../../utils/color'
+const C = new color()
 interface Props{
   isHidden: boolean
 }
@@ -20,18 +21,21 @@ const FormWrapper = styled.div`
   width: 400px;
   border-style: solid;
   border-color: lightgray;
-  padding: 20px;
-  box-shadow: 0px 2px 6px -2px rgba(0,0,0,0.3);
+  padding: 40px 25px;
+  box-shadow: 0px 2px 6px -2px rgba(0,0,0,0.3);   
+  background-color: ${C.white};
+  border-radius: 10px;
 `
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: ${C.white};
 `
 const Input = styled.input`
   margin: 10px 0px;
   padding: 5px;
   border-width: 1px;
+  border-radius: 5px;
 `
 const SignInButton = styled.button`
   margin: 10px 0px;
@@ -39,10 +43,10 @@ const SignInButton = styled.button`
   color: white;
   border-radius: 5px;
   border-style: none;
-  background-color: #B8F1B0;
+  background-color: ${C.dblue};
   &:hover {
-    opacity: 0.5;
-    background-color: black;
+    opacity: 0.8;
+    background-color: ${C.dblue};
   }
 `
 const WarningBlock = styled.div<Props>`
@@ -56,6 +60,7 @@ const WarningBlock = styled.div<Props>`
 `
 const SignInHeader = styled.h2`
   text-align: left;
+  color: ${C.dblue};
 `
 
 const LoginForm: React.FC = () => {
@@ -115,7 +120,7 @@ const LoginForm: React.FC = () => {
         <SignInHeader>
           Sign in
         </SignInHeader>
-        <Link to='/signup'> I don't have an account</Link> 
+        <Link to='/signup' style={{color: C.dblue}}> I don't have an account</Link> 
         <Input value={username} onChange={handleUsername} placeholder='Username'/>
         <Input type="password" value={password} onChange={handlePassword} placeholder='Password'/>
         <WarningBlock isHidden={warningMessage === ''}> 

@@ -2,7 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { IconContext } from "react-icons"
 import { RxAvatar } from 'react-icons/rx'
-
+import {color} from '../../utils/color'
+const C = new color()
 interface Props {
 
 }
@@ -11,7 +12,8 @@ const SentencePanal = styled.div`
     overflow-y: scroll;
 `
 const Sentence = styled.div`
-    background-color: #D6E4E5;
+    background-color: ${C.blue};
+    color: ${C.white};
     margin: 5px 0px;
     text-align: left;
 `

@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import OriginalSentences from './OriginalSentences'
-
+import {color} from '../../utils/color'
+const C = new color()
 interface ISummaryCard {
   show: boolean
 }
@@ -12,16 +13,18 @@ const SummaryCard = styled.div<ISummaryCard>`
   height: auto;
   flex-grow: 2;
   /* height: 100px; */
-  background-color: #D6E4E5;
+  background-color: ${C.blue};
   border-radius: 15px;
   padding: 10px;
   margin: 10px 0px;
 
   .summary-header {
     text-align: left;
+    color: ${C.white};
   }
   .summary-paragraph {
     text-align: left;
+    color: ${C.white};
   }
   
 `

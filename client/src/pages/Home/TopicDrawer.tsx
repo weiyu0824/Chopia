@@ -6,7 +6,8 @@ import { RxCross1 } from 'react-icons/rx'
 import TopicButtonList from './TopicButtonList'
 import TopicCard from './TopicCard'
 import TopicBox from './TopicBox'
-
+import {color} from '../../utils/color'
+const C = new color()
 
 interface IBox {
   shrink: boolean
@@ -16,7 +17,7 @@ const Box = styled.div<IBox>`
   padding: 10px;
   width: ${props => (props.shrink) ? "50px" : "800px"};
   height: 100vh;
-  background-color: white;
+  background-color: ${C.white};
   border-style: solid;
   border-color: lightgray;
   transition-property: width;
@@ -30,7 +31,7 @@ const Box = styled.div<IBox>`
     right:3px;*/
     padding: 5px 8px;
     
-    background-color: white;
+    background-color: ${C.white};
     border: none;
     border-radius: 20px;
     color: #565151;

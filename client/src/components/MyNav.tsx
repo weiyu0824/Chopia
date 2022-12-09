@@ -5,13 +5,23 @@ import { Button } from 'antd';
 import styled from 'styled-components'
 import { useAuthStore } from '../store/AuthStore'
 import { useNavigate } from 'react-router-dom'
+import {color} from '../utils/color'
+const C = new color()
 
 const Brand = styled.span`
-  color: white;
+  color: ${C.blue};
 `
 const Name = styled.span`
-  color: white;
+  color: ${C.blue};
 `
+interface isLoggedInButton {
+  isLoggedInButton: boolean
+}
+
+const SignInButton = styled.div<isLoggedInButton>` 
+  display: ${props => (props.isLoggedInButton) ? "none" : "inline"};
+`
+
 const MyNav: React.FC = () => {
   const username = useAuthStore((state) => state.username)
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
@@ -22,15 +32,15 @@ const MyNav: React.FC = () => {
     navigate('/signin')
   }
   return (
-    <Navbar color="white">
+    <Navbar color='light'>
       <Brand>brand</Brand>
-      {isLoggedIn ? 
+      {/* {isLoggedIn ? 
        <div>
         <Name> {username} </Name>
-        <Button style={{ color: "red"}} type="link" onClick={handleSignOut}> Sign Out </Button>
-        </div> : 
-       <Link to='/signin'><Button style={{ color: "red"}} type="link"> Sign In </Button></Link>}
-
+        <Button style={{ color: C.blue}} type="link" onClick={handleSignOut}> Sign Out </Button>
+        </div> :  */}
+      <Link to='/signin'><Button style={{ color: C.blue}} type="link"> Sign In </Button></Link>
+      
     </Navbar>
   )
 }
