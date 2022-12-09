@@ -3,7 +3,10 @@ import styled from 'styled-components'
 import { IconContext } from "react-icons"
 import { MdSummarize } from 'react-icons/md'
 import { RxCross1 } from 'react-icons/rx'
+import TopicButtonList from './TopicButtonList'
+import TopicCard from './TopicCard'
 import TopicBox from './TopicBox'
+
 
 interface IBox {
   shrink: boolean
@@ -17,18 +20,21 @@ const Box = styled.div<IBox>`
   border-style: solid;
   border-color: lightgray;
   transition-property: width;
-  transition-duration: 0.2s;
+  transition-duration: 0.3s;
+  display: flex;
+  flex-direction: column;
   
   .togleBtn {
-    position: absolute;
+    /* position: absolute;
     top:5px;
-    right:3px;
+    right:3px;*/
     padding: 5px 8px;
+    
     background-color: white;
     border: none;
     border-radius: 20px;
     color: #565151;
-    /* float: right; */
+    float: right;
     
     &:hover{
       background-color: lightgray;
@@ -39,12 +45,6 @@ const Box = styled.div<IBox>`
     display: ${props => (props.shrink) ? "inline" : "none"};
   }
   .closeBtn {
-    float: right;
-    display: ${props => (props.shrink) ? "none" : "inline"};
-  }
-  .topicDisplay {
-    margin-top: 100px;
-    margin: auto auto;
     display: ${props => (props.shrink) ? "none" : "inline"};
   }
 `
@@ -60,21 +60,23 @@ const TopicDrawer: React.FC = () => {
   return (
     <Box shrink={shrink}>
       <div>
-      <button className="togleBtn expandBtn" onClick={handleShrinkAndExpand}>
-        <IconContext.Provider value={{ size: "1.2rem" }}>
-          <MdSummarize />
-        </ IconContext.Provider>
-      
-      </button>
-      <button className="togleBtn closeBtn" onClick={handleShrinkAndExpand}>
-        <IconContext.Provider value={{ size: "1.2rem" }}>
-          <RxCross1 />
-        </ IconContext.Provider>
-      </button>
+        <button className="togleBtn expandBtn" onClick={handleShrinkAndExpand}>
+          <IconContext.Provider value={{ size: "1.2rem" }}>
+            <MdSummarize />
+          </ IconContext.Provider>
+        
+        </button>
+        <button className="togleBtn closeBtn" onClick={handleShrinkAndExpand}>
+          <IconContext.Provider value={{ size: "1.2rem" }}>
+            <RxCross1 />
+          </ IconContext.Provider>
+        </button>
       </div>
-      <div className="topicDisplay">
+      {/* <div className="topicDisplay">
         <TopicBox/>
-      </div>
+      </div> */}
+      <TopicButtonList show={!shrink}/>
+      <TopicCard show={!shrink} />
     </Box>
   )
 }
