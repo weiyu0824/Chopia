@@ -22,10 +22,11 @@ const MessageWrapper = styled.div<IMessageBox>`
   display: flex;
   flex-direction: row;
   &:hover{
-    background-color: ${C.me};
+    background-color: ${C.lblue};
   }
 `
 const AvatarBox = styled.div<IMessageBox>`
+  flex-shrink:0;
   height: ${props => props.showOnlyMessage ? '0px' : '50px' };
   width: 50px;
   background-color: white;
@@ -65,22 +66,22 @@ const MessageEditor = (props: Props) => {
   if (props.showOnlyMessage === true) {
     return (
       <MessageWrapper showOnlyMessage={props.showOnlyMessage}>
-      <AvatarBox showOnlyMessage={props.showOnlyMessage} />
-      <MessageBox showOnlyMessage={props.showOnlyMessage}>
-        <span className="messageText">{props.message.messageText}</span>
-      </MessageBox>
-    </MessageWrapper>
+        <AvatarBox showOnlyMessage={props.showOnlyMessage} />
+        <MessageBox showOnlyMessage={props.showOnlyMessage}>
+          <span className="messageText">{props.message.messageText}</span>
+        </MessageBox>
+      </MessageWrapper>
     )
   } else {
     return (
       <MessageWrapper showOnlyMessage={props.showOnlyMessage}>
-      <AvatarBox showOnlyMessage={props.showOnlyMessage} />
-      <MessageBox showOnlyMessage={props.showOnlyMessage}>
-        <span className="senderName">{props.message.senderUsername}</span>
-        <span className="time">{props.message.time}</span> <br />
-        <span className="messageText">{props.message.messageText}</span>
-      </MessageBox>
-    </MessageWrapper>
+        <AvatarBox showOnlyMessage={props.showOnlyMessage} />
+        <MessageBox showOnlyMessage={props.showOnlyMessage}>
+          <span className="senderName">{props.message.senderUsername}</span>
+          <span className="time">{props.message.time}</span> <br />
+          <span className="messageText">{props.message.messageText}</span>
+        </MessageBox>
+      </MessageWrapper>
     )
   }
 }
