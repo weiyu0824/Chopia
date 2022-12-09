@@ -1,16 +1,22 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { useCookies } from 'react-cookie'
 import { IconContext } from "react-icons"
 import { MdSummarize } from 'react-icons/md'
+import { VscRefresh } from 'react-icons/vsc'
 import { RxCross1 } from 'react-icons/rx'
+import { Summary } from '../../utils/Summary'
+import { GetSummaryapi } from '../../api/ml'
+import { useAuthStore } from '../../store/AuthStore'
 import TopicButtonList from './TopicButtonList'
 import TopicCard from './TopicCard'
-import TopicBox from './TopicBox'
 import {color} from '../../utils/color'
 const C = new color()
 
+
 interface IBox {
   shrink: boolean
+  isLoading: boolean
 }
 
 const Box = styled.div<IBox>`
@@ -34,8 +40,8 @@ const Box = styled.div<IBox>`
     background-color: ${C.white};
     border: none;
     border-radius: 20px;
-    color: #565151;
-    float: right;
+    /* color: #565151; */
+    
     
     &:hover{
       background-color: lightgray;
@@ -43,31 +49,89 @@ const Box = styled.div<IBox>`
     
   }
   .expandBtn {
+    float: right;
     display: ${props => (props.shrink) ? "inline" : "none"};
   }
-  .closeBtn {
+  .shrinkBtn {
+    float: right;
     display: ${props => (props.shrink) ? "none" : "inline"};
+  }
+  .refreshBtn {
+    float: left;
+    display: ${props => (props.shrink) ? "none" : "inline"};
+  }
+  .loadingIcon {
+    display: ${props => (props.isLoading && !props.shrink) ? '' : 'none'}
   }
 `
 
 const TopicDrawer: React.FC = () => {
+  const summaryColors = ['#D6E4E5', 'red', 'yellow']
   const [shrink, setShrink] = useState(true)
+  const [summaryId, setSumaryId] = useState(-1)
+  const [colorId, setColorId] = useState(0)
+  const [summarys, setSummarys] = useState<Summary[]>([])
+  const [showBtnList, setShowBtnList] = useState(false)
+  const [showSummaryCard, setShowSummaryCard] = useState(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const username = useAuthStore((state) => state.username)
+  const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
+  
 
+  const handleRefresh = async () => {
+    const friendUsername = username
+    setIsLoading(true)
+
+    const res = await GetSummaryapi(friendUsername, cookies.access_token)
+    
+    if (res.data !== undefined) {
+      setSummarys(res.data)
+      setShowBtnList(true)
+      setShowSummaryCard(false)
+      setSumaryId(-1)
+    }
+    setIsLoading(false)
+  }
   const handleShrinkAndExpand = () => {
-    console.log(shrink)
     setShrink(!shrink)
   }
 
+  const changeSummaryCard = (index: number) => {
+    setSumaryId(index)
+    const nextColorId = (colorId + 1) % summaryColors.length
+    setColorId(nextColorId)
+    setShowSummaryCard(true)
+  }
+
+  const TopicButtonListDisplay = (!shrink && showBtnList && !isLoading) ? 
+    <TopicButtonList 
+      summarys={summarys} 
+      changeSummary={changeSummaryCard} 
+    /> :
+    <div></div>
+
+  const TopicCardDisplay = (!shrink && showSummaryCard && !isLoading) ?
+    <TopicCard 
+      summary={summarys[summaryId]} 
+      summaryColor={summaryColors[colorId]} 
+    /> :
+    <div></div>
+  
+  
   return (
-    <Box shrink={shrink}>
+    <Box shrink={shrink} isLoading={isLoading}>
       <div>
+        <button className="togleBtn refreshBtn" onClick={handleRefresh}>
+          <IconContext.Provider value={{ size: "1.2rem" }}>
+            <VscRefresh />
+          </ IconContext.Provider>
+        </button>
         <button className="togleBtn expandBtn" onClick={handleShrinkAndExpand}>
           <IconContext.Provider value={{ size: "1.2rem" }}>
             <MdSummarize />
           </ IconContext.Provider>
-        
         </button>
-        <button className="togleBtn closeBtn" onClick={handleShrinkAndExpand}>
+        <button className="togleBtn shrinkBtn" onClick={handleShrinkAndExpand}>
           <IconContext.Provider value={{ size: "1.2rem" }}>
             <RxCross1 />
           </ IconContext.Provider>
@@ -76,8 +140,9 @@ const TopicDrawer: React.FC = () => {
       {/* <div className="topicDisplay">
         <TopicBox/>
       </div> */}
-      <TopicButtonList show={!shrink}/>
-      <TopicCard show={!shrink} />
+      <span className='loadingIcon'> is loading ...</span>
+      {TopicButtonListDisplay}
+      {TopicCardDisplay}
     </Box>
   )
 }

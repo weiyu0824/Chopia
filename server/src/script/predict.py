@@ -7,7 +7,6 @@ from transformers import AutoTokenizer, AutoModelWithLMHead
 
 folder_name = 'cache/'
 def main(filename: str):
-    time.sleep(2)
     print('Test Script complete {}'.format(filename))
     with open (f'{folder_name}{filename}.json', 'r') as f:
         line = json.load(f)

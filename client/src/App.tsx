@@ -13,6 +13,7 @@ const Page: React.FC = () => {
   return (
     <div>
       {isLoggedIn?<Home />:<div><MyNav /><Demo /></div>}
+      {/* <Home /> */}
     </div>
   )
 }
