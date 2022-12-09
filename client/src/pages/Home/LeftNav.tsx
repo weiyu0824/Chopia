@@ -6,12 +6,12 @@ const C = new color()
 
 
 const Dash = styled.div`
-    height: 100vh;
-    width: 300px;
-    background-color: ${C.dblue};
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column-reverse;
+  height: 100vh;
+  width: 300px;
+  background-color: ${C.dblue};
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column-reverse;
 `
 const ContactInfo = styled.div`
   height: 100%;
@@ -30,15 +30,15 @@ const UserInfo = styled.div`
 
 const LeftNav: React.FC = () => {
   return (
-      <Dash>
-        <UserInfo > 
-          <RiLogoutCircleRLine />
-        </UserInfo>
+    <Dash>
+      <UserInfo > 
+        <RiLogoutCircleRLine />
+      </UserInfo>
 
-        <ContactInfo>
-          <div className='tag'>DIRECT MESSAGES </div>
-        </ContactInfo>
-      </Dash>    
+      <ContactInfo>
+        <div className='tag'>DIRECT MESSAGES </div>
+      </ContactInfo>
+    </Dash>    
   )
 }
 export default LeftNav
