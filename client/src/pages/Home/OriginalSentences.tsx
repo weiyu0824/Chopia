@@ -29,7 +29,7 @@ const OriginalSentences: React.FC<Props> = (props: Props) => {
       <Sentence key={index} sentencesColor={props.sentencesColor}>
         <IconContext.Provider value={{}}>
           <RxAvatar />
-        </ IconContext.Provider>
+        </IconContext.Provider>
         {" "}{value}
       </Sentence>
     )

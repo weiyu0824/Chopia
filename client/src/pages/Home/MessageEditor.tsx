@@ -1,6 +1,9 @@
 import styled from 'styled-components'
 import { Message } from '../../utils/Message'
 import {color} from '../../utils/color'
+import { IconContext } from "react-icons"
+import { RxAvatar } from 'react-icons/rx'
+
 const C = new color()
 // const MessageBox = styled.span`
 //   background-color: #B8F1B0;
@@ -21,6 +24,7 @@ const MessageWrapper = styled.div<IMessageBox>`
   border-style: none;
   display: flex;
   flex-direction: row;
+  border-radius: 5px;
   &:hover{
     background-color: ${C.lblue};
   }
@@ -29,8 +33,8 @@ const AvatarBox = styled.div<IMessageBox>`
   flex-shrink:0;
   height: ${props => props.showOnlyMessage ? '0px' : '50px' };
   width: 50px;
-  background-color: white;
-  border-radius: 100%;
+  // background-color: white;
+  // border-radius: 100%;
   margin: 5px 10px;
 `
 
@@ -75,7 +79,11 @@ const MessageEditor = (props: Props) => {
   } else {
     return (
       <MessageWrapper showOnlyMessage={props.showOnlyMessage}>
-        <AvatarBox showOnlyMessage={props.showOnlyMessage} />
+        <AvatarBox showOnlyMessage={props.showOnlyMessage}>
+          <IconContext.Provider value={{size: "2rem"}}>
+            <RxAvatar />
+          </IconContext.Provider>
+        </AvatarBox>
         <MessageBox showOnlyMessage={props.showOnlyMessage}>
           <span className="senderName">{props.message.senderUsername}</span>
           <span className="time">{props.message.time}</span> <br />
