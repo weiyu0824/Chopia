@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-
+import {color} from '../../utils/color'
+const C = new color()
 interface IButtonWindow {
   show: boolean
 }
@@ -16,7 +17,8 @@ const ButtonWindow = styled.div<IButtonWindow>`
 `
 
 const TopicButton = styled.button`
-  background-color: lightblue;
+  background-color: ${C.blue};
+  color:${C.white};
   position: relative;
   outline: none;
   border: none;

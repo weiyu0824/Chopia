@@ -6,12 +6,13 @@ import { useCookies } from 'react-cookie'
 import { useAuthStore } from '../../store/AuthStore'
 import { Message } from '../../utils/Message'
 import { getCurrentTimeString } from '../../utils/time'
-
+import {color} from '../../utils/color'
+const C = new color()
 
 const Box = styled.div`
   width: 100%;
   /* height: 700px; */
-  background-color: #EFF5F5;
+  background-color: ${C.white};
   border-style: solid;
   border-right: none;
   border-color: lightgray;
@@ -36,18 +37,18 @@ const StyledSendButton = styled.button`
   border-style: none;
   background-color: white;
   border-radius: 20%;
-  color: #A0E4CB;
+  color: ${C.blue};
   border-color: #A0E4CB;
 `
 const ChatArea = styled.div`
   padding-top: 20px;
   height: calc(100vh - 60px); // 644
-  background-color: #EFF5F5;
+  background-color: ${C.white};
   overflow-y: scroll;
 `
 const DefaultChatArea = styled.div`
   height: 100vh;
-  background-color: white;
+  background-color: ${C.white};
 `
 const LoadMessageButton = styled.button`
   margin-top: 300px;

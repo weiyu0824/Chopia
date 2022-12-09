@@ -7,6 +7,8 @@ import { useAuthStore } from '../../store/AuthStore'
 import { LoginApi, RegisterApi } from '../../api/auth'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
+import {color} from '../../utils/color'
+const C = new color()
 
 interface Props{
   isHidden: boolean
@@ -17,21 +19,24 @@ const FormWrapper = styled.div`
   left: 50%;
   top: 25%;
   transform: translateX(-50%);
-  
+  padding: 40px 25px; 
   width: 400px;
   border-style: solid;
   border-color: lightgray;
-  padding: 20px;
+  border-radius: 10px;
+  background-color: ${C.white}; 
   box-shadow: 0px 2px 6px -2px rgba(0,0,0,0.3);
 `
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: ${C.white};
 `
 const Input = styled.input`
   margin: 10px 0px;
   padding: 5px;
+  border-width: 1px;
+  border-radius: 5px;
 `
 const SignInButton = styled.button`
   margin: 10px 0px;
@@ -39,7 +44,7 @@ const SignInButton = styled.button`
   color: white;
   border-radius: 5px;
   border-style: none;
-  background-color: #B8F1B0;
+  background-color: ${C.dblue};
 
   /* TODO: Why hover not working */
   &:hover {
@@ -57,6 +62,7 @@ const WarningBlock = styled.div<Props>`
   display: ${props => props.isHidden? 'none': 'block'};
 `
 const SignInHeader = styled.h2`
+  color: ${C.ddblue};
   text-align: left;
 `
 

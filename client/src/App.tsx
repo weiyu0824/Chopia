@@ -12,8 +12,7 @@ const Page: React.FC = () => {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
   return (
     <div>
-      {/* {isLoggedIn?<Home />:<div><MyNav /><Demo /></div>} */}
-      <Home />
+      {isLoggedIn?<Home />:<div><MyNav /><Demo /></div>}
     </div>
   )
 }
@@ -21,8 +20,7 @@ const App : React.FC = () => {
   
 
   return (
-    <div className="App">
-      
+    <div className="App"> 
       <Routes>
         <Route path='/signin' element={<Login />} />
         <Route path='/signup' element={<Register />} />
