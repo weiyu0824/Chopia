@@ -13,6 +13,7 @@ const Page: React.FC = () => {
   return (
     <div>
       {isLoggedIn?<Home />:<div><MyNav /><Demo /></div>}
+      {/* <Home /> */}
     </div>
   )
 }
@@ -20,8 +21,7 @@ const App : React.FC = () => {
   
 
   return (
-    <div className="App">
-      
+    <div className="App"> 
       <Routes>
         <Route path='/signin' element={<Login />} />
         <Route path='/signup' element={<Register />} />

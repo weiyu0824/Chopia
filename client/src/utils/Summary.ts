@@ -1,4 +1,5 @@
 export interface Summary {
   summary: string,
-  ids: string[]
+  ids: string[],
+  original: string[]
 }

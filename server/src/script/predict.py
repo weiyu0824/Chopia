@@ -7,7 +7,6 @@ from transformers import AutoTokenizer, AutoModelWithLMHead
 
 folder_name = 'cache/'
 def main(filename: str):
-    time.sleep(2)
     print('Test Script complete {}'.format(filename))
     with open (f'{folder_name}{filename}.json', 'r') as f:
         line = json.load(f)
@@ -15,11 +14,12 @@ def main(filename: str):
     docs = []
     for l in line:
         ids.append(l["_id"])
-        docs.append(l["message"])
+        docs.append(l["messageText"])
     # cluster first
     embed_model = SentenceTransformer('all-MiniLM-L6-v2')
     sentence_embeddings = embed_model.encode(docs)
-    kmeans = KMeans(n_clusters=2, random_state=0).fit(sentence_embeddings)
+    k_cluster = len(docs) // 10 if len(docs) > 20 else 2
+    kmeans = KMeans(n_clusters=k_cluster, random_state=0).fit(sentence_embeddings)
     labels = kmeans.labels_
     # labels is a ndarray shows the cluster type, length is text_num
     cluster = dict()
@@ -42,17 +42,21 @@ def main(filename: str):
         output = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
         cluster_summary_map[k] = output
     cluster_ids_map = dict()
+    cluster_original_map = dict()
     for i in range(len(ids)):
         key = labels[i]
         if key not in cluster_ids_map:
             cluster_ids_map[key] = []
+            cluster_original_map[key] = []
         else:
             cluster_ids_map[key].append(ids[i])
+            cluster_original_map[key].append(docs[i])
     data = []
     for key in cluster_ids_map:
         sample = dict()
         sample['summary'] = cluster_summary_map[key]
         sample['ids'] = cluster_ids_map[key]
+        sample['original'] = cluster_original_map[key]
         data.append(sample.copy())
     print(data)
     with open(f'{folder_name}{filename}.out.json', 'w') as f:

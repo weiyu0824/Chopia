@@ -45,11 +45,11 @@ const Home: React.FC = () => {
   })
   return (
       
-      <MyContainer>
-        <LeftNav/>
-        {/* <Chatting >sdf</Chatting> */}
-        <ChatFeed />
-        <TopicDrawer />
+    <MyContainer>
+      <LeftNav/>
+      {/* <Chatting >sdf</Chatting> */}
+      <ChatFeed />
+      <TopicDrawer />
     </MyContainer>
     
     // <Container fluid className='gx-0 vh-100'>
