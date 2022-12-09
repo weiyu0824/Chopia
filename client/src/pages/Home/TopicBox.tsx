@@ -96,108 +96,70 @@ const CloseIcon = styled.button`
   }
 `
 
-const data = {
-    content: {
-        body: [
-            {
-                id: "1",
-                topic: "topic1",
-                context: "summary1 bllllblaaaaaaaaaaaaaaa bllaaaaaaaaaaaaa"
-            },
-            {
-                id: "2",
-                topic: "topic2",
-                context: "summary2"
-            },
-            {
-                id: "3",
-                topic: "topic3",
-                context: "summary3"
-            },
-            {
-                id: "4",
-                topic: "topic4",
-                context: "summary4"
-            },
-            {
-                id: "5",
-                topic: "topic5",
-                context: "summary5"
-            },
-            {
-                id: "6",
-                topic: "topic6",
-                context: "summary5"
-            }
-        ]
+const TopicBox = () => {
+  const clickedSum = useSummaryStore((state) => state.clickedSum)
+  const topicID = useSummaryStore((state) => state.topicID)
+  const topicTitle = useSummaryStore((state) => state.topicTitle)
+  const topicContext = useSummaryStore((state) => state.topicContext)
+  const startSum = useSummaryStore((state) => state.startSum)
+  const endSum = useSummaryStore((state) => state.endSum)
+  const enterSum = useSummaryStore((state) => state.enterSum)
+  const leaveSum = useSummaryStore((state) => state.leaveSum)
+  const username = useAuthStore((state) => state.username)
+  const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
+  const [summary, setSummary] = useState<Summary[]>([])
+  const handleLoadSummary = async () => {
+    const friendUsername = username
+    const res = await GetSummaryapi(friendUsername, cookies.access_token)
+    if (res.data !== undefined) {
+      console.log('test', res.data)
+      setSummary(res.data)
     }
-};
+  }
 
+  const handleClickSummaryButton: React.MouseEventHandler = (e) => {
+    endSum()
+  }
 
-const TopicBox = () => {    
-    const clickedSum = useSummaryStore((state) => state.clickedSum)
-    const topicID = useSummaryStore((state) => state.topicID)
-    const topicTitle = useSummaryStore((state) => state.topicTitle)
-    const topicContext = useSummaryStore((state) => state.topicContext)
-    const startSum = useSummaryStore((state) => state.startSum)
-    const endSum = useSummaryStore((state) => state.endSum)
-    const enterSum = useSummaryStore((state) => state.enterSum)
-    const leaveSum = useSummaryStore((state) => state.leaveSum)
-    const username = useAuthStore((state) => state.username)
-    const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
-    const [summary, setSummary] = useState<Summary[]>([])
-    const handleLoadSummary = async() => {
-        const friendUsername = username
-        const res = await GetSummaryapi(friendUsername, cookies.access_token)
-        if (res.data !== undefined) {
-            console.log('test',res.data)
-            setSummary(res.data)
-        }
-      }
-    
-    const handleClickSummaryButton: React.MouseEventHandler = (e) => {
-        endSum()
-    }
+  const topics = summary.map(
+    (box, id) => <MyTopic key={id} topic={'test'} context={box.summary} id={'test'} />
+  )
 
-    const topics = summary.map( 
-        (box, id) => <MyTopic key={id} topic={'test'} context={box.summary} id={'test'}/>
-    )
-      
-    if(clickedSum){
-        return(
-            <Box>
-                {/* <FullSummary 
+  if (clickedSum) {
+    return (
+      <Box>
+        {/* <FullSummary 
                     onClick={handleClickSummaryButton}>
                 {topicContext} <br/>
                 </FullSummary> */}
-                <FullSummary  onClick={handleClickSummaryButton}>
-                <Card>
-                    {/* <Card.Img variant="top" src="holder.js/100px180" />  */}
-                    <Card.Body>
-                        <Card.Title> {topicTitle}
-                        </Card.Title>
-                        <Card.Text>
-                        {topicContext}
-                        </Card.Text>
-                        <CloseIcon  onClick={handleClickSummaryButton}>Close</CloseIcon>
-                    </Card.Body>
-                </Card>
-                </FullSummary>
-            </Box>
-        )
-    }
-    else{
-        return(
-            <Box>
-                <div>
-                <Button onClick={handleLoadSummary}> Get Summary </Button>
-                </div>
-                <TopicButtons>
-                {topics}
-                </TopicButtons>
-            </Box>
-        )
-    }
+        <FullSummary onClick={handleClickSummaryButton}>
+          <Card>
+            {/* <Card.Img variant="top" src="holder.js/100px180" />  */}
+            <Card.Body>
+              <Card.Title> {topicTitle}
+              </Card.Title>
+              <Card.Text>
+                {topicContext}
+              </Card.Text>
+              <CloseIcon onClick={handleClickSummaryButton}>Close</CloseIcon>
+            </Card.Body>
+          </Card>
+        </FullSummary>
+      </Box>
+    )
+  }
+  else {
+    return (
+      <Box>
+        <div>
+          <Button onClick={handleLoadSummary}> Get Summary </Button>
+        </div>
+        <TopicButtons>
+          {topics}
+        </TopicButtons>
+      </Box>
+    )
+  }
 }
 
 export default TopicBox
