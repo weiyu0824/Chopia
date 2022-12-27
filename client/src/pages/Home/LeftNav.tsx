@@ -2,15 +2,13 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { RxAvatar } from 'react-icons/rx'
 import { IconContext } from 'react-icons'
-import {color} from '../../utils/color'
+import { Color } from '../../utils/color'
 import { useAuthStore } from '../../store/AuthStore'
-const C = new color()
-
 
 const Dash = styled.div`
   height: 100vh;
   width: 300px;
-  background-color: ${C.dblue};
+  background-color: ${Color.dblue};
   flex-shrink: 0;
   display: flex;
   flex-direction: column-reverse;
@@ -30,15 +28,15 @@ const UserInfo = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: ${C.white};
+  background-color: ${Color.white};
   color: grey;
 
   .signoutBtn {
     outline: none;
     border: none;
-    background-color: ${C.white};
+    background-color: ${Color.white};
     &:hover {
-      color: ${C.ddblue}
+      color: ${Color.ddblue}
     }
   }
   .avatar {

@@ -5,14 +5,14 @@ import { Button } from 'antd';
 import styled from 'styled-components'
 import { useAuthStore } from '../store/AuthStore'
 import { useNavigate } from 'react-router-dom'
-import {color} from '../utils/color'
-const C = new color()
+import { Color } from '../utils/color'
+
 
 const Brand = styled.span`
-  color: ${C.blue};
+  color: ${Color.blue};
 `
 const Name = styled.span`
-  color: ${C.blue};
+  color: ${Color.blue};
 `
 interface isLoggedInButton {
   isLoggedInButton: boolean
@@ -39,7 +39,7 @@ const MyNav: React.FC = () => {
         <Name> {username} </Name>
         <Button style={{ color: C.blue}} type="link" onClick={handleSignOut}> Sign Out </Button>
         </div> :  */}
-      <Link to='/signin'><Button style={{ color: C.blue}} type="link"> Sign In </Button></Link>
+      <Link to='/signin'><Button style={{ color: Color.blue}} type="link"> Sign In </Button></Link>
       
     </Navbar>
   )

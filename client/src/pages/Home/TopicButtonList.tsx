@@ -2,9 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { Summary } from '../../utils/Summary'
-import {color} from '../../utils/color'
-
-const C = new color()
+import { Color } from '../../utils/color'
 
 interface IButtonWindow {
   show: boolean
@@ -26,8 +24,8 @@ interface ITopicButton {
 
 
 const TopicButton = styled.button<ITopicButton>`
-  background-color: ${props => (props.pick) ? C.ddblue : C.grey};
-  color: ${C.white};
+  background-color: ${props => (props.pick) ? Color.ddblue : Color.grey};
+  color: ${Color.white};
   position: relative;
   outline: none;
   border: none;

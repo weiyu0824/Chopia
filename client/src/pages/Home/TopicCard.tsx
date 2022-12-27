@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Summary } from '../../utils/Summary'
 import OriginalSentences from './OriginalSentences'
-import {color} from '../../utils/color'
-const C = new color()
+import { Color } from '../../utils/color'
+
 interface ISummaryCard {
   summaryColor: string
 }
@@ -20,11 +20,11 @@ const SummaryCard = styled.div<ISummaryCard>`
 
   .summary-header {
     text-align: left;
-    color: ${C.white};
+    color: ${Color.white};
   }
   .summary-paragraph {
     text-align: left;
-    color: ${C.white};
+    color: ${Color.white};
   }
   
 `

@@ -1,13 +1,14 @@
-export class color {
-  white = '#FFFBEB';
-  me = '#FFE7CC';
-  blue = '#495579';
-  dblue = '#263159';
-	ddblue = '#251749';
-  red = '#581845';
-  green = '#425F57';
-  lblue = '#D6E4E5';
-  brown = '#451A00';
-  grey = 'grey';
-  lgrey = '#E1F5FE';
+export class Color {
+  static white = '#FFFBEB';
+  static me = '#FFE7CC';
+  static blue = '#495579';
+  static dblue = '#263159';
+	static ddblue = '#251749';
+  static red = '#581845';
+  static green = '#425F57';
+  static lblue = '#D6E4E5';
+  static brown = '#451A00';
+  static grey = 'grey';
+  static lgrey = '#E1F5FE';
+  static lred = '#FF597B'
 }

@@ -1,10 +1,10 @@
 import LoginForm from './LoginForm'
 import MyNav from '../../components/MyNav'
 import styled from 'styled-components'
-import {color} from '../../utils/color'
-const C = new color()
+import { Color } from '../../utils/color'
+
 const LoginContainer = styled.div`
-  background-color: ${C.dblue};
+  background-color: ${Color.dblue};
   height: 100vh;
 `
 const Login: React.FC = () => {

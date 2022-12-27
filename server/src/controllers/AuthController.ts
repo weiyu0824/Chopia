@@ -40,11 +40,11 @@ export class AuthController implements Controller {
   }
 
   private login = async (req: Request, res: Response, next: NextFunction) => {
-    const username = req.body.username
+    const email = req.body.email
     const password = req.body.password
-    console.log('login', username, password)
+    console.log('login', email, password)
 
-    const serviceResult = await authService.login(username, password)
+    const serviceResult = await authService.login(email, password)
     if (!serviceResult.error) {
       const result: LoginResult = {
         success: serviceResult.success ? serviceResult.success : false,
@@ -63,11 +63,13 @@ export class AuthController implements Controller {
   }
 
   private register = async (req: Request, res: Response, next: NextFunction) => {
+    const email: string = req.body.email
+    const name: string = req.body.name
     const username: string = req.body.username
     const password: string = req.body.password
-    console.log('register', username, password)
+    console.log('register', email, name, username, password)
 
-    const serviceResult = await authService.register(username, password)
+    const serviceResult = await authService.register(email, name, username, password)
 
     if (!serviceResult.error) {
       const result: RegisterResult = {

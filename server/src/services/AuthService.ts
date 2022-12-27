@@ -34,13 +34,14 @@ export class AuthService {
   checkIsLoggedIn(verifiedName: string) {
     return this.loggedinUsers.has(verifiedName)
   }
+
   // TODO: this refresh token should be the latest one
   checkIsUpdatedToken(verifiedName: string) {
 
   }
 
-  storeRefreshToken(username: string, refreshToken: string) {
-    this.loggedinUsers.set(username, refreshToken)
+  storeRefreshToken(userId: string, refreshToken: string) {
+    this.loggedinUsers.set(userId, refreshToken)
   }
 
   removeRefreshToken(verifiedName: string) {
@@ -50,19 +51,31 @@ export class AuthService {
   }
 
   // Services
-  register = async (username: string, password: string): Promise<ServiceResult> => {
+  register = async (email: string, name: string, username: string, password: string): Promise<ServiceResult> => {
     try {
-      const exist = await User.findOne({
-        username: username
+      const emailExist = await User.findOne({
+        email: email
       })
-      if (exist !== null) {
+      if (emailExist !== null) {
         return {
           success: false,
-          message: 'The username has already existed'
+          message: 'The email has already linked to an account'
+        }
+      }
+
+      const usernameExisit = await User.findOne({
+        username: username
+      })
+      if (usernameExisit !== null) {
+        return {
+          success: false,
+          message: 'The username has already existed, please try another'
         }
       }
 
       const user = new User({
+        email: email,
+        name: name,
         username: username,
         password: password
       })
@@ -80,23 +93,24 @@ export class AuthService {
     }
   }
 
-  login = async (username: string, password: string): Promise<ServiceResult> => {
+  login = async (email: string, password: string): Promise<ServiceResult> => {
     try {
-      const correct = await User.findOne({
-        username: username,
+      const existUser = await User.findOne({
+        eamil: email,
         password: password
       })
-      console.log(correct)
-      if (correct !== null) {
-        const accessToken = this.genAccessToken({ name: username })
-        const refreshToken = this.genRefreshToken({ name: username })
-        this.storeRefreshToken(username, refreshToken)
+      console.log(existUser)
+      if (existUser !== null) {
+        const userId = existUser._id.toString()
+        const accessToken = this.genAccessToken({ userId: userId})
+        const refreshToken = this.genRefreshToken({  userId: userId})
+        this.storeRefreshToken(userId, refreshToken)
 
         return {
           success: true,
           message: 'Login successfully',
-          accessToken: accessToken,
-          refreshToken: refreshToken
+          accessToken: '',
+          refreshToken: ''
         }
 
       } else {
@@ -131,16 +145,19 @@ export class AuthService {
     // const decodedToken = jwt.verify(refreshToken, config.token.refreshSecret)
     // const accessToken = this.genAccessToken(decodedToken.)
 
-    if (this.checkIsLoggedIn(verifiedName)){
-      const accessToken = this.genAccessToken({ name: verifiedName })
-      return {
-        success: true,
-        accessToken: accessToken
-      }
-    } else {
-      return {
-        error: new AlreadyLogoutError()
-      }
+    // if (this.checkIsLoggedIn(verifiedName)){
+    //   const accessToken = this.genAccessToken({ name: verifiedName })
+    //   return {
+    //     success: true,
+    //     accessToken: accessToken
+    //   }
+    // } else {
+    //   return {
+    //     error: new AlreadyLogoutError()
+    //   }
+    // }
+    return {
+      error: new AlreadyLogoutError()
     }
 
   } // token

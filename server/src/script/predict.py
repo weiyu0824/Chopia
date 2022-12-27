@@ -18,7 +18,8 @@ def main(filename: str):
     # cluster first
     embed_model = SentenceTransformer('all-MiniLM-L6-v2')
     sentence_embeddings = embed_model.encode(docs)
-    k_cluster = len(docs) // 10 if len(docs) > 20 else 2
+    # k_cluster = len(docs) // 10 if len(docs) > 20 else 2
+    k_cluster = len(docs) // 5 if len(docs) > 10 else 2
     kmeans = KMeans(n_clusters=k_cluster, random_state=0).fit(sentence_embeddings)
     labels = kmeans.labels_
     # labels is a ndarray shows the cluster type, length is text_num

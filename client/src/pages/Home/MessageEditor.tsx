@@ -1,10 +1,9 @@
 import styled from 'styled-components'
 import { Message } from '../../utils/Message'
-import {color} from '../../utils/color'
+import { Color } from '../../utils/color'
 import { IconContext } from "react-icons"
 import { RxAvatar } from 'react-icons/rx'
 
-const C = new color()
 // const MessageBox = styled.span`
 //   background-color: #B8F1B0;
 //   padding: 5px 20px;
@@ -26,7 +25,7 @@ const MessageWrapper = styled.div<IMessageBox>`
   flex-direction: row;
   border-radius: 5px;
   &:hover{
-    background-color: ${C.lblue};
+    background-color: ${Color.lblue};
   }
 `
 const AvatarBox = styled.div<IMessageBox>`

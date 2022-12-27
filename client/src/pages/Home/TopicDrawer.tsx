@@ -10,9 +10,9 @@ import { GetSummaryapi } from '../../api/ml'
 import { useAuthStore } from '../../store/AuthStore'
 import TopicButtonList from './TopicButtonList'
 import TopicCard from './TopicCard'
-import {color} from '../../utils/color'
+import { Color } from '../../utils/color'
 import { Spin } from 'antd';
-const C = new color()
+
 
 
 interface IBox {
@@ -24,7 +24,7 @@ const Box = styled.div<IBox>`
   padding: 10px;
   width: ${props => (props.shrink) ? "50px" : "800px"};
   height: 100vh;
-  background-color: ${C.white};
+  background-color: ${Color.white};
   border-style: solid;
   border-color: lightgray;
   transition-property: width;
@@ -34,7 +34,7 @@ const Box = styled.div<IBox>`
   justify-content: ${props => (props.isLoading && !props.shrink) ? 'center' : ''};
   align-items: ${props => (props.isLoading && !props.shrink) ? 'center' : ''};
   .ant-spin-dot-item {
-    background-color: ${C.blue};
+    background-color: ${Color.blue};
   }
   .togleBtn {
     /* position: absolute;
@@ -42,7 +42,7 @@ const Box = styled.div<IBox>`
     right:3px;*/
     padding: 5px 8px;
     
-    background-color: ${C.white};
+    background-color: ${Color.white};
     border: none;
     border-radius: 20px;
     /* color: #565151; */
@@ -70,7 +70,7 @@ const Box = styled.div<IBox>`
 `
 
 const TopicDrawer: React.FC = () => {
-  const summaryColors = [C.dblue, C.blue]
+  const summaryColors = [Color.dblue, Color.blue]
   const [shrink, setShrink] = useState(true)
   const [summaryId, setSumaryId] = useState(-1)
   const [colorId, setColorId] = useState(0)

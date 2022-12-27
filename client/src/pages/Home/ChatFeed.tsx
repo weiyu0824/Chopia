@@ -6,17 +6,14 @@ import { useCookies } from 'react-cookie'
 import { useAuthStore } from '../../store/AuthStore'
 import { Message } from '../../utils/Message'
 import { getCurrentTimeString } from '../../utils/time'
-import { color } from '../../utils/color'
+import { Color } from '../../utils/color'
 import { AiOutlineMessage } from 'react-icons/ai'
 import { IconContext } from "react-icons"
-
-
-const C = new color()
 
 const Box = styled.div`
   width: 100%;
   /* height: 700px; */
-  background-color: ${C.white};
+  background-color: ${Color.white};
   border-style: solid;
   border-right: none;
   border-color: lightgray;
@@ -41,27 +38,27 @@ const StyledSendButton = styled.button`
   border-style: none;
   background-color: white;
   border-radius: 20%;
-  color: ${C.blue};
+  color: ${Color.blue};
   border-color: #A0E4CB;
 `
 const ChatArea = styled.div`
   padding-top: 20px;
   height: calc(100vh - 60px); // 644
-  background-color: ${C.white};
+  background-color: ${Color.white};
   overflow-y: scroll;
 `
 const DefaultChatArea = styled.div`
   height: 100vh;
-  background-color: ${C.white};
+  background-color: ${Color.white};
 
   .loadMsgBtn{
     margin-top: 300px;
-    background-color: ${C.white};
+    background-color: ${Color.white};
     color: grey;
     border: none;
     padding: 10px;
   &:hover{
-    color: ${C.dblue}
+    color: ${Color.dblue}
   }
   }
 `

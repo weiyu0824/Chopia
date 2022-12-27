@@ -3,11 +3,13 @@ import { setTokenHeader } from './header'
 
 const baseURL = 'http://localhost:8088/api/auth'
 
-export const RegisterApi = async (username: string, password: string) => {
+export const RegisterApi = async (email: string, name: string, username: string, password: string) => {
   const url = baseURL + '/register'
 
   try {
     const res = await axios.post(url, {
+      "email": email,
+      "name": name,
       "username": username,
       "password": password
     })
