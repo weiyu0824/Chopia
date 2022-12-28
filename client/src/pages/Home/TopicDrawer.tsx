@@ -8,8 +8,8 @@ import { RxCross1 } from 'react-icons/rx'
 import { Summary } from '../../utils/Summary'
 import { GetSummaryapi } from '../../api/ml'
 import { useAuthStore } from '../../store/AuthStore'
-import TopicButtonList from './TopicButtonList'
-import TopicCard from './TopicCard'
+import TopicButtonList from './Topic/TopicButtonList'
+import TopicCard from './Topic/TopicCard'
 import { Color } from '../../utils/color'
 import { Spin } from 'antd';
 

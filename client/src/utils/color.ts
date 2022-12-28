@@ -10,5 +10,8 @@ export class Color {
   static brown = '#451A00';
   static grey = 'grey';
   static lgrey = '#E1F5FE';
+  static dgrey ='#424242';
+  static ddgrey = '#212121';
   static lred = '#FF597B'
+  static lightblue ='lightblue'
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { IconContext } from "react-icons"
 import { RxAvatar } from 'react-icons/rx'
-import { Color } from '../../utils/color'
+import { Color } from '../../../utils/color'
 
 interface Props {
   sentences: string[]

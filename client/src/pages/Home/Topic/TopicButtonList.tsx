@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
-import { Summary } from '../../utils/Summary'
-import { Color } from '../../utils/color'
+import { Summary } from '../../../utils/Summary'
+import { Color } from '../../../utils/color'
 
 interface IButtonWindow {
   show: boolean

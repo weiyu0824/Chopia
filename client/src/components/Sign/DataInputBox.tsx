@@ -26,7 +26,8 @@ const StyledInputBox = styled.div<IStyledInputBox>`
 
   
   .inputLabel {
-    display: ${props => props.showLabel? 'block': 'none'};;
+    display: ${props => props.showLabel? 'block': 'none'};
+    /* display: 'block'; */
     position: absolute;
     font-size: 0.7rem;
     top: -0.6rem;
@@ -40,10 +41,6 @@ const StyledInputBox = styled.div<IStyledInputBox>`
     outline: none;
     font-size: 0.9rem;
     background-color: ${Color.white};
-
-    /* &:focus + label {
-      display: 'block' !important;
-    } */
   }
   .visionBtn {
     display: ${props => props.showVisionBtn? '' : 'none'};
@@ -51,7 +48,6 @@ const StyledInputBox = styled.div<IStyledInputBox>`
     outline: none;
     background-color: ${Color.white};
   }
-
   
 `
 

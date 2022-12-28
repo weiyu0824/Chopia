@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import MessageEditor from './MessageEditor'
+import MessageEditor from './Chat/MessageEditor'
 import { GetChatApi, SendMessageAPI } from '../../api/chat'
 import { useCookies } from 'react-cookie'
 import { useAuthStore } from '../../store/AuthStore'
@@ -12,11 +12,9 @@ import { IconContext } from "react-icons"
 
 const Box = styled.div`
   width: 100%;
+  height: 1vh;
   /* height: 700px; */
-  background-color: ${Color.white};
-  border-style: solid;
-  border-right: none;
-  border-color: lightgray;
+  border-style: none;
 `
 const Editor = styled.div`
   height: 40px;
@@ -49,7 +47,7 @@ const ChatArea = styled.div`
 `
 const DefaultChatArea = styled.div`
   height: 100vh;
-  background-color: ${Color.white};
+  background-color: black;
 
   .loadMsgBtn{
     margin-top: 300px;
@@ -70,7 +68,7 @@ const ChatFeed: React.FC = () => {
   const [messageText, setMessageText] = React.useState('')
   const [messages, setMessages] = React.useState<Message[]>([])
   const [isLoadedMessage, setIsLoadedMessage] = React.useState(false)
-  const bottomRef = React.useRef<null | HTMLDivElement>(null)
+  const bottomRef = useRef<null | HTMLDivElement>(null)
   const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
   const username = useAuthStore((state) => state.username)
 

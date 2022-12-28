@@ -1,15 +1,8 @@
 import styled from 'styled-components'
-import { Message } from '../../utils/Message'
-import { Color } from '../../utils/color'
+import { Message } from '../../../utils/Message'
+import { Color } from '../../../utils/color'
 import { IconContext } from "react-icons"
 import { RxAvatar } from 'react-icons/rx'
-
-// const MessageBox = styled.span`
-//   background-color: #B8F1B0;
-//   padding: 5px 20px;
-//   border-radius: 10px 0px 10px 10px;
-//   /* float: right; */
-// `
 
 interface IMessageBox {
   showOnlyMessage: boolean

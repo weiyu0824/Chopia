@@ -3,25 +3,13 @@ import ChatFeed from './ChatFeed'
 import LeftNav from './LeftNav'
 import styled from 'styled-components'
 import TopicDrawer from './TopicDrawer'
-// const MessageBox: React.FC = (props: {message: string}) => {
-//     return <div>props.message</div>
-// }
+import FriendPanal from '../Friend/FriendPanal'
+import NotificationPanal from '../Notification/NotificationPanal'
 
 const MyContainer = styled.div`
   display: flex;
   flex-direction: row;
 `
-
-// const Chatting = styled.div`
-//     height: 100vh;
-//     width: 100%;
-//     background-color: pink;
-// `
-// const Trigger = styled.div`
-//     height: 100vh;
-//     width: 80px;
-//     background-color: coral;
-// `
 
 const Home: React.FC = () => {
   const [inputMessage, setInputMessage] = useState("")
@@ -48,8 +36,10 @@ const Home: React.FC = () => {
     <MyContainer>
       <LeftNav/>
       {/* <Chatting >sdf</Chatting> */}
-      <ChatFeed />
-      <TopicDrawer />
+      {/* <NotificationPanal /> */}
+      <FriendPanal />
+      {/* <ChatFeed />
+      <TopicDrawer /> */}
     </MyContainer>
     
     // <Container fluid className='gx-0 vh-100'>

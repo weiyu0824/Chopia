@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Summary } from '../../utils/Summary'
+import { Summary } from '../../../utils/Summary'
 import OriginalSentences from './OriginalSentences'
-import { Color } from '../../utils/color'
+import { Color } from '../../../utils/color'
 
 interface ISummaryCard {
   summaryColor: string

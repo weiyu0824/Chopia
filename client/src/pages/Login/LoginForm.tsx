@@ -75,7 +75,7 @@ const LoginForm: React.FC = () => {
     <FormWrapper>
       <StyledForm>
         <h2 className='signinHeader'> Sign In</h2>
-        <Link className='signinLink' to='/signin'> I don't have an account</Link> 
+        <Link className='signinLink' to='/signup'> I don't have an account</Link> 
 
         <DataInputBox 
           data={email} 

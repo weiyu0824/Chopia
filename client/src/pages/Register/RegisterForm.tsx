@@ -15,8 +15,10 @@ const emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const InvalidMessage = [
   'Required',
   'Invalid email address',
-  'This username has already been used',
-  'Password should contain at least 8 characters'
+  'Name should be less than 30 characters',
+  'Username should not contain white space',
+  'Password should contain at least 8 characters',
+  'Username should not contain @ character'
 ]
 
 const RegisterForm: React.FC = () => {
@@ -89,6 +91,8 @@ const RegisterForm: React.FC = () => {
   const validateName = (newName: string) => {
     if (newName === ''){
       setNameWarning(InvalidMessage[0])
+    }else if (newName.length > 30){
+      setNameWarning(InvalidMessage[2])
     }else {
       setNameWarning('')
     }
@@ -97,6 +101,10 @@ const RegisterForm: React.FC = () => {
   const validateUsername = (newUsername: string) => {
     if (newUsername === ''){
       setUsernameWarning(InvalidMessage[0])
+    }else if (/\s/.test(newUsername)) {
+      setUsernameWarning(InvalidMessage[3])
+    }else if(newUsername.includes('@')) {
+      setUsernameWarning(InvalidMessage[5])
     }else {
       setUsernameWarning('')
     }
@@ -107,7 +115,7 @@ const RegisterForm: React.FC = () => {
     if (newPassword === ''){
       setPasswordWarning(InvalidMessage[0])
     }else if (newPassword.length < 8){
-      setPasswordWarning(InvalidMessage[3])
+      setPasswordWarning(InvalidMessage[4])
     }else {
       setPasswordWarning('')
     }
