@@ -1,6 +1,6 @@
 import { Router, Response, Request, NextFunction } from 'express'
 import { Controller } from '../interfaces/Controller'
-import { jwtMiddleware } from '../middlewares/JwtMiddleware'
+import { validateToken } from '../middlewares/TokenValidation'
 import { ChatService } from '../services/ChatService'
 import { InvalidAPIError } from '../utils/HttpException'
 
@@ -16,21 +16,21 @@ export class ChatController implements Controller {
     this.initRouter()
   }
   private initRouter() {
-    this.router.get('/:friendUsername', jwtMiddleware, this.getPrivateMessage)
-    this.router.post('/private', jwtMiddleware, this.sendPrivateMessage)
+    this.router.get('/:friendUserId', validateToken, this.getPrivateMessage)
+    // this.router.post('/private', validateToken, this.sendPrivateMessage)
     this.router.post('/group')
   }
 
   getPrivateMessage = async (req: Request, res: Response, next: NextFunction) => {
     // get token and page id here
-    const username = req.body.verifiedName
-    const friendUsername = req.params.friendUsername
-    if (friendUsername === undefined){
+    const userId = req.body.userId
+    const friendUserId = req.params.friendUserId
+    if (friendUserId === undefined){
       next(new InvalidAPIError())
     } else {
-      console.log(username)
-      console.log(friendUsername)
-      const serviceResult = await chatService.getMessages(username, friendUsername)
+      console.log(userId)
+      console.log(friendUserId)
+      const serviceResult = await chatService.getMessages(userId, friendUserId)
 
       if (!serviceResult.error) {
         res.send(serviceResult)
@@ -40,19 +40,19 @@ export class ChatController implements Controller {
     }
   }
 
-  sendPrivateMessage = async (req: Request, res: Response, next: NextFunction) => {
-    console.log("Send private message")
-    const username = req.body.verifiedName
-    const friendUsername = req.body.friendUsername
-    const message = req.body.message
+  // sendPrivateMessage = async (req: Request, res: Response, next: NextFunction) => {
+  //   console.log("Send private message")
+  //   const username = req.body.verifiedName
+  //   const friendUsername = req.body.friendUsername
+  //   const message = req.body.message
 
-    const serviceResult = await chatService.sendMessages(username, friendUsername, message)
+  //   const serviceResult = await chatService.sendMessages(username, friendUsername, message)
 
-    if (!serviceResult.error) {
-      res.send(serviceResult)
-    } else {
-      next(serviceResult.error)
-    }
+  //   if (!serviceResult.error) {
+  //     res.send(serviceResult)
+  //   } else {
+  //     next(serviceResult.error)
+  //   }
   
-  }
+  // }
 }

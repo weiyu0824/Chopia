@@ -4,7 +4,10 @@ import { FaSignOutAlt } from 'react-icons/fa'
 import { MdEdit } from 'react-icons/md'
 import { AiOutlineRobot } from 'react-icons/ai'
 import { GoMail } from 'react-icons/go'
-import imageToAdd from '../../../asset/gorilla.png'
+import { useAuthStore } from '../../../store/AuthStore'
+import { AvatarImgs } from '../../../utils/avatar'
+import { useNavigate } from 'react-router-dom'
+import { BsPencilFill } from 'react-icons/bs'
 
 interface IPanal {
   showPanal: boolean
@@ -82,27 +85,44 @@ const ControlPart = styled.div`
 
 interface IUserInfoPanal {
   showPanal: boolean
+  email: string
+  name: string
+  username: string
+  avatar: string
+
 }
 
 const UserInfoPanal: React.FC<IUserInfoPanal> = (props) => {
+  const leaveAuth = useAuthStore((state => state.leaveAuth))
+
+    const handlesignOut = () => {
+      leaveAuth()
+    }
+
+    const handleEditProfile = () => {
+      // useNavigate
+    }
+
     return (
       <Panal showPanal={props.showPanal}>
         <div className='editButton'>
           <MdEdit />
+          {/* <BsPencilFill /> */}
         </div>
         
         <div className='avatarBox'>
-          <img className='avatar' src={imageToAdd} alt="Image"/>
+          <img className='avatar' src={AvatarImgs[props.avatar]} alt="Image"/>
         </div>
-        <span className='fullName'>Anderson</span>
+        <span className='fullName'>{props.name}</span>
 
         <ControlPart> 
           <div className='personalInfo'>
-            <div> <AiOutlineRobot/> #andersonlin0809</div>
-            <div> <GoMail/> jcab1688@gmail.com</div>
+            <div> <AiOutlineRobot/>&nbsp; #{props.username}</div>
+            <div> <GoMail/>&nbsp; {props.email}</div>
           </div>
           
-          <div className='signoutButton'> 
+          <div className='signoutButton'
+            onClick={handlesignOut}> 
             <FaSignOutAlt /> &nbsp;
             <span>Sign out</span>
           </div>

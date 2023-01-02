@@ -1,15 +1,15 @@
 import React, { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
 import { useAuthStore } from '../../store/AuthStore'
-import { LoginApi, RegisterApi } from '../../api/auth'
+import { RegisterApi } from '../../api/auth'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
-import SubmitButton from '../../components/Sign/SubmitButton'
-import DataInputBox from '../../components/Sign/DataInputBox'
-import FormWrapper from '../../components/Sign/FormWrapper'
-import StyledForm from '../../components/Sign/StyledForm'
-import WarningBlock from '../../components/Sign/WarningBlock'
+import DataInputBox from '../../components/DataInputBox'
+import WarningBlock from '../../components/WarningBlock'
+import FormWrapper from './FormWrapper'
+import StyledForm from './StyledForm'
+import SubmitButton from './SubmitButton'
+
 
 const emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const InvalidMessage = [
@@ -66,7 +66,7 @@ const RegisterForm: React.FC = () => {
         setWarningMessage(res.data.message)
       }else {
         console.log('Registered Sucess')
-        successAuth(username) //TODO: username should be in response
+        // successAuth(username) //TODO: username should be in response
         navigate('/signin')
         setCookies('access_token', res.data.accessToken)
         setCookies('refresh_token', res.data.refreshToken)
@@ -174,40 +174,37 @@ const RegisterForm: React.FC = () => {
         <Link className='signinLink' to='/signin'> Already have an account</Link> 
 
         <DataInputBox 
+          id='registerFormEmail'
           data={email} 
           dataName='Email'
-          showWarning={showEmailWarning}
-          warning={emailWarning}
-          isPassword={false}
+          warning={(showEmailWarning)? emailWarning: ''}
           handleFocus={() => updateCheck('email')}
           handleChange={(newData: string) => handleEmail(newData)}
         />
 
         <DataInputBox 
+          id='registerFormName'
           data={name} 
           dataName='Full Name'
-          showWarning={showNameWarning}
-          warning={nameWarning}
-          isPassword={false}
+          warning={(showNameWarning)? nameWarning: ''}
           handleFocus={() => updateCheck('name')}
           handleChange={(newData: string) => handleName(newData)}
         />
 
         <DataInputBox 
+          id='registerFormUsername'
           data={username} 
           dataName='Username'
-          showWarning={showUsernameWarning}
-          warning={usernameWarning}
-          isPassword={false}
+          warning={(showUsernameWarning)? usernameWarning: ''}
           handleFocus={() => updateCheck('username')}
           handleChange={(newData: string) => handleUsername(newData)}
         />
 
         <DataInputBox 
+          id='registerFormPassword'
           data={password} 
           dataName='Password'
-          showWarning={showPasswordWarning}
-          warning={passwordWarning}
+          warning={(showPasswordWarning)? passwordWarning: ''}
           isPassword={true}
           handleFocus={() => updateCheck('password')}
           handleChange={(newData: string) => handlePassword(newData)}
@@ -225,7 +222,6 @@ const RegisterForm: React.FC = () => {
         </SubmitButton>
       </StyledForm>
     </FormWrapper>
-    
   )
 }
 

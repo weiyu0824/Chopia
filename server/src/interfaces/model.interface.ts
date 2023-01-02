@@ -1,0 +1,40 @@
+// This file contains all schema of DB collection
+
+export interface IUser {
+  email: string
+  name: string
+  username: string
+  password: string
+  groupIds: string[]
+  friendIds: string[]
+  avatar: string
+}
+
+export interface IPrivateMessage {
+  chatRoomId: string
+  messageText: string,
+  senderId: string,
+  timestamp: string
+}
+
+export interface IGroupMessage {
+  groupId: string,
+  messageText: string,
+  senderId: string,
+  timestamp: string,
+}
+
+export interface IGroup {
+  groupName: string
+  adminId: string
+  memberIds: string[]
+  avatar: string
+}
+
+export interface INotification {
+  initiatorId: string
+  receiverId: string
+  type: string // Currently 3 type: New message, Friend request, Admin
+  notificationMessage: string
+  timestamp: string
+}

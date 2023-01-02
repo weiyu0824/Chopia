@@ -3,14 +3,19 @@ import config from '../config/config'
 import { User } from '../models/User'
 import { HttpException, AccessDatabaseError, AlreadyLogoutError } from '../utils/HttpException'
 import { TokenPayload } from '../interfaces/TokenPayload'
+import { ServiceError } from '../interfaces/service.interface'
+import { initRegisterResult, RegisterResult, 
+          initLoginResult, LoginResult, 
+          initRefreshResult, RefreshResult, 
+          initLogoutResult, LogoutResult,
+          friendInfo} from '../interfaces/service.interface'
 
-interface ServiceResult {
-  error?: HttpException
-  success?: boolean
-  message?: string
-  accessToken?: string
-  refreshToken?: string
-}
+// class TokenMemory {
+//   static genAccessToken() {
+//     return ''
+//   }
+//   constructor(){}
+// }
 
 export class AuthService {
   // TODO: put this to in-memory DB
@@ -51,41 +56,48 @@ export class AuthService {
   }
 
   // Services
-  register = async (email: string, name: string, username: string, password: string): Promise<ServiceResult> => {
+  register = async (
+    email: string, 
+    name: string, 
+    username: string, 
+    password: string
+  ): Promise<ServiceError | RegisterResult> => {
     try {
       const emailExist = await User.findOne({
         email: email
       })
       if (emailExist !== null) {
-        return {
+        return initRegisterResult({
           success: false,
           message: 'The email has already linked to an account'
-        }
+        })
       }
 
-      const usernameExisit = await User.findOne({
+      const usernameExist = await User.findOne({
         username: username
       })
-      if (usernameExisit !== null) {
-        return {
+      if (usernameExist !== null) {
+        return initRegisterResult({
           success: false,
           message: 'The username has already existed, please try another'
-        }
+        })
       }
 
       const user = new User({
         email: email,
         name: name,
         username: username,
-        password: password
+        password: password,
+        avatar: 'standard'
       })
 
       await user.save()
-      return {
+
+      // TODO: email verify
+      return initRegisterResult({
         success: true,
         message: 'Succesfully create the user'
-        // TODO: email verify
-      }
+      })
     } catch (err) {
       return {
         error: new HttpException(500, 'Access Database Error')
@@ -93,31 +105,56 @@ export class AuthService {
     }
   }
 
-  login = async (email: string, password: string): Promise<ServiceResult> => {
+  login = async (
+    email: string, 
+    password: string
+  ): Promise<ServiceError | LoginResult> => {
+    console.log('[-]', email, password)
+    console.log()
     try {
       const existUser = await User.findOne({
-        eamil: email,
+        email: email,
         password: password
       })
-      console.log(existUser)
+
       if (existUser !== null) {
         const userId = existUser._id.toString()
+        console.log(userId)
         const accessToken = this.genAccessToken({ userId: userId})
         const refreshToken = this.genRefreshToken({  userId: userId})
         this.storeRefreshToken(userId, refreshToken)
+        console.log(existUser)
 
-        return {
+        const friendInfos: Array<friendInfo> = []
+        for (const friendId of existUser.friendIds) {
+          const friend = await User.findById(friendId)
+          if (friend === null) {
+            throw new AccessDatabaseError()
+          }
+          friendInfos.push({
+            userId: friendId,
+            name: friend.name,
+            username: friend.username,
+            avatar: friend.avatar,
+          })
+        }
+        return initLoginResult({
           success: true,
           message: 'Login successfully',
-          accessToken: '',
-          refreshToken: ''
-        }
-
-      } else {
-        return {
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          userId: userId,
+          email: existUser.email,
+          name: existUser.name,
+          username: existUser.username,
+          avatar: existUser.avatar,
+          friendInfos: friendInfos
+        }) 
+      }else {
+        return initLoginResult({
           success: false,
           message: 'Please provide a valid email address and password.'
-        }
+        })
       }
     } catch (err) {
       return {
@@ -126,13 +163,13 @@ export class AuthService {
     }
   }
 
-  logout = (verifiedName: string): ServiceResult => {
+  logout = (verifiedName: string): ServiceError | LogoutResult => {
     // delete token
     if (this.removeRefreshToken(verifiedName)) {
-      return {
+      return initLogoutResult({
         success: true,
         message: 'Succeesfully log out'
-      }
+      })
     } else {
       return {
         error: new AlreadyLogoutError()
@@ -140,7 +177,7 @@ export class AuthService {
     }
   }
 
-  refresh = (verifiedName: string): ServiceResult => {
+  refresh = (verifiedName: string): ServiceError | RefreshResult => {
 
     // const decodedToken = jwt.verify(refreshToken, config.token.refreshSecret)
     // const accessToken = this.genAccessToken(decodedToken.)
@@ -156,9 +193,10 @@ export class AuthService {
     //     error: new AlreadyLogoutError()
     //   }
     // }
-    return {
-      error: new AlreadyLogoutError()
-    }
-
-  } // token
+      return {
+        error: new AlreadyLogoutError()
+      }
+    } // token
+    
+    
 }

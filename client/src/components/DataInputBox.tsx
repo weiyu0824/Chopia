@@ -1,60 +1,66 @@
 import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
-import { Color } from '../../utils/color'
+import { Color } from '../utils/color'
 import { RiErrorWarningFill } from 'react-icons/ri'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { IconContext } from 'react-icons'
 
 interface IStyledInputBox {
-  showLabel: boolean
+  floatLabel: boolean
   showVisionBtn: boolean
   warn: boolean
+  readOnly: boolean
 }
 
 const StyledInputBox = styled.div<IStyledInputBox>`
-  margin: 8px 0px 5px 0px;
-  padding: 8px;
-  border-width: 1px;
-  border-radius: 5px;
-  border-style: solid;
-  border-color: ${(props) => (props.warn)? 'red' : 'green'};
-
-  background-color: ${Color.white};
-  display: flex;
-  flex-direction: row;
   position: relative;
-
+  flex-direction: row;
+  display: flex;
+  margin: 8px 0px 5px 0px;
+  border: solid 1px;
+  border-radius: 5px;
+  border-color: ${(props) => (props.warn)? 'red' : 'green'};
+  padding: 8px;
+  background-color: ${Color.white};
   
-  .inputLabel {
-    display: ${props => props.showLabel? 'block': 'none'};
-    /* display: 'block'; */
+  label {
     position: absolute;
-    font-size: 0.7rem;
-    top: -0.6rem;
-    left: 0.6rem;
+    top: ${(props) => (props.floatLabel)? '-0.5rem' : '0.5rem'};
+    left: 0.5rem;
     padding: 0rem 0.2rem;
     background-color: ${Color.white};
+    font-size: ${(props) => (props.floatLabel)? '0.7rem' : ''};
+    pointer-events: ${(props) => (props.floatLabel)? 'none' : ''};
+    transition: 0.2s;
   }
-  .inputArea {
+  input {
     width: 100%;
     border: none;
     outline: none;
-    font-size: 0.9rem;
     background-color: ${Color.white};
+    cursor: ${(props) => (props.readOnly)? 'no-drop': ''};
+    /* :valid + label{
+      font-size: 0.7rem;
+      top: -0.5rem;
+      transition: 0.2s;
+      pointer-events: none;
+    } */
+    :focus + label {
+      font-size: 0.7rem;
+      top: -0.5rem;
+      pointer-events: none;
+    }
   }
   .visionBtn {
     display: ${props => props.showVisionBtn? '' : 'none'};
-    border: none;
-    outline: none;
-    background-color: ${Color.white};
+    cursor: pointer;
   }
-  
 `
 
-interface Props {
+interface IInvalidBlock {
   isHidden: boolean
 }
-const InvalidBlock = styled.span<Props>`
+const InvalidBlock = styled.span<IInvalidBlock>`
   font-size: 0.8rem;
   color: ${Color.lred};
   text-align: left;
@@ -62,17 +68,29 @@ const InvalidBlock = styled.span<Props>`
 `
 
 interface IDataInputBox {
+  id: string // this should be unique
   data: string
   dataName: string
-  showWarning: boolean
-  warning: string
-  isPassword: boolean
-  handleFocus: () => void
   handleChange: (newData: string) => void
+  warning?: string
+  isPassword?: boolean
+  readonly?:  boolean
+  handleFocus?: () => void
 }
 
-const DataInputBox: React.FC<IDataInputBox> = (props) => {
+const defaultProps = {
+  warning: '',
+  isPassword: false,
+  readonly: false,
+  handleFocus: () => {}
+}
+
+const DataInputBox: React.FC<IDataInputBox> = (options) => {
   const [visibility, setVisibility] = useState(false)
+  const props = {
+    ...defaultProps,
+    ...options
+  }
 
   const handleOnClick = () => {
     props.handleFocus()
@@ -91,31 +109,36 @@ const DataInputBox: React.FC<IDataInputBox> = (props) => {
   return (
     <>
       <StyledInputBox 
-        showLabel={props.data !== ''}
+        floatLabel={props.data !== ''}
         showVisionBtn={props.isPassword && props.data !== ''}
-        warn={props.showWarning && props.warning !== ''}
+        warn={props.warning !== ''}
+        readOnly={props.readonly}
       >
-        
-        <input className='inputArea'
+        <input 
+          id={props.id}
           value={props.data} 
           onClick={handleOnClick} 
           onChange={handleOnChange} 
-          placeholder={props.dataName}
           type={inputType}
+          required
+          readOnly={props.readonly}
         />
-        <label className='inputLabel'> {props.dataName} </label>
-        <button 
-          className='visionBtn' 
-          type='button'
-          onClick={toggleVisibility}>
-          <IconContext.Provider value={{size: "1.6rem"}}>
+        <label 
+          htmlFor={props.id}
+        > 
+          {props.dataName}
+        </label>
+        <div
+          className='visionBtn'
+          onClick={toggleVisibility}
+        >
+          <IconContext.Provider value={{size: "1.5rem"}}>
             {visionIcon}
           </IconContext.Provider>
-        </button>
-        
+        </div>
       </StyledInputBox>
       <InvalidBlock 
-        isHidden={!props.showWarning || props.warning === ''}>
+        isHidden={props.warning === ''}>
         <RiErrorWarningFill /> {props.warning}
       </InvalidBlock>
     </>

@@ -1,10 +1,9 @@
 import React from 'react';
-import Home from './pages/Home/Home'
-import Login from './pages/Login/Login'
-import Demo from './pages/Demo/Demo'
-import Register from './pages/Register/Register'
 import { Route, Routes } from 'react-router-dom'
+import Home from './pages/Home/Home'
+import Demo from './pages/Demo/Demo'
 import MyNav from './components/MyNav'
+import Sign from './pages/Sign/Sign';
 import { useAuthStore } from './store/AuthStore'
 import './App.css'
 
@@ -19,12 +18,12 @@ const Page: React.FC = () => {
 }
 const App : React.FC = () => {
   
-
   return (
     <div className="App"> 
       <Routes>
-        <Route path='/signin' element={<Login />} />
-        <Route path='/signup' element={<Register />} />
+        {/* <Route path='/edit' element={<EditPanal />} /> */}
+        <Route path='/signin' element={<Sign for='login' />}/>
+        <Route path='/signup' element={<Sign for='register' />}/>
         <Route path="/" element={<Page />} />
       </Routes>
     </div>

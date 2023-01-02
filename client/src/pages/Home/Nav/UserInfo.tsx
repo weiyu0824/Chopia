@@ -4,6 +4,8 @@ import { Color } from '../../../utils/color'
 import imageToAdd from '../../../asset/gorilla.png'
 import UserInfoPanal from './UserInfoPanal'
 import useOnClickOutside from '../../../hook/useOnClickOutside'
+import { useAuthStore } from '../../../store/AuthStore'
+import { AvatarImgs } from '../../../utils/avatar'
 
 const UserInfoBox = styled.div`
   position: relative;
@@ -38,12 +40,16 @@ const UserInfoButton = styled.div`
     margin: auto 0;
     padding: 0.2rem;
   }
-
+   
 `
 
 const UserInfo: React.FC = () => {
   const [showPanal, setShowPanal] = useState(false)
   const panalRef = useRef<null | HTMLDivElement>(null)
+  const email = useAuthStore((state) => state.email)
+  const name = useAuthStore((state) => state.name)
+  const username = useAuthStore((state) => state.username)
+  const avatar = useAuthStore((state) => state.avatar)
   useOnClickOutside(panalRef, () => setShowPanal(false));
 
   const handleClickInfo = () => {
@@ -54,13 +60,18 @@ const UserInfo: React.FC = () => {
   return (
     <UserInfoBox>
       <div ref={panalRef}>
-        <UserInfoPanal showPanal={showPanal}/>
+        <UserInfoPanal 
+          showPanal={showPanal}
+          email={email}
+          name={name}
+          username={username}
+          avatar={avatar}/>
       </div>
       <UserInfoButton onClick={handleClickInfo}>
         <div className='avatarBox' >
-          <img className='avatar' src={imageToAdd} alt="Image" />
+          <img className='avatar' src={AvatarImgs[avatar]} alt="Image" />
         </div>
-        <span className='fullName'> Anderson </span>
+        <span className='fullName'> {name} </span>
       </UserInfoButton>
     </UserInfoBox>
   )

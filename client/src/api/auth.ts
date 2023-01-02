@@ -23,12 +23,12 @@ export const RegisterApi = async (email: string, name: string, username: string,
     }
   }
 }
-export const LoginApi = async (username: string, password: string) => {
+export const LoginApi = async (email: string, password: string) => {
   const url = baseURL + '/login'
 
   try {
     const res = await axios.post(url, {
-      "username": username,
+      "email": email,
       "password": password
     })
     console.log(res.data)

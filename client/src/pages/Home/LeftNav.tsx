@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { RxAvatar } from 'react-icons/rx'
 import { IoIosNotifications } from 'react-icons/io'
 import { IoMdPersonAdd } from 'react-icons/io'
 import { AiTwotoneSetting } from 'react-icons/ai'
@@ -8,7 +7,6 @@ import { IconContext } from 'react-icons'
 import { Color } from '../../utils/color'
 import { useAuthStore } from '../../store/AuthStore'
 import Contact from './Nav/Contact'
-import imageToAdd from '../../asset/gorilla.png'
 import UserInfo from './Nav/UserInfo'
 
 const NavWrapper = styled.div`
@@ -74,17 +72,22 @@ const DashBoard = styled.div`
 
 
 const LeftNav: React.FC = () => {
-  const leaveAuth = useAuthStore((state => state.leaveAuth))
-  const handlesignOut = () => {
-    leaveAuth()
-  }
+  const friendInfos = useAuthStore((state) => state.friendInfos)
 
+  const contacts = friendInfos.map((friendInfo, index) => {
+    return <Contact 
+              key={index}
+              contactId={friendInfo.userId}
+              name={friendInfo.name} 
+              username={friendInfo.username}
+              avatar={friendInfo.avatar}
+            />
+  })
   return (
     <NavWrapper>
       <ContactInfo>
         <div className='caption'>DIRECT MESSAGES </div>
-        <Contact />
-        <Contact />
+        {contacts}
       </ContactInfo>
 
       <DashBoard > 

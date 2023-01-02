@@ -1,18 +1,15 @@
 import React, { useState } from 'react'
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-// import { Button, Checkbox, Form, Input } from 'antd';
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { useAuthStore } from '../../store/AuthStore'
 import { LoginApi } from '../../api/auth'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
-import { Color } from '../../utils/color'
-import SubmitButton from '../../components/Sign/SubmitButton'
-import DataInputBox from '../../components/Sign/DataInputBox'
-import FormWrapper from '../../components/Sign/FormWrapper'
-import StyledForm from '../../components/Sign/StyledForm'
-import WarningBlock from '../../components/Sign/WarningBlock'
+import DataInputBox from '../../components/DataInputBox'
+import WarningBlock from '../../components/WarningBlock'
+import FormWrapper from './FormWrapper'
+import StyledForm from './StyledForm'
+import SubmitButton from './SubmitButton'
 
 const Input = styled.input`
   margin: 10px 0px;
@@ -49,7 +46,15 @@ const LoginForm: React.FC = () => {
         setWarningMessage(res.data.message)
       }else {
         console.log('sucess to login')
-        successAuth(email) //TODO: username should be in response
+        console.log(res.data)
+        successAuth(
+          res.data.userId,
+          res.data.email,
+          res.data.name,
+          res.data.username,
+          res.data.avatar,
+          res.data.friendInfos
+        ) 
         navigate('/')
         setCookies('access_token', res.data.accessToken)
         setCookies('refresh_token', res.data.refreshToken)
@@ -78,22 +83,17 @@ const LoginForm: React.FC = () => {
         <Link className='signinLink' to='/signup'> I don't have an account</Link> 
 
         <DataInputBox 
+          id='loginFormEmail'
           data={email} 
           dataName='Email'
-          showWarning={false}
-          warning={''}
-          isPassword={false}
-          handleFocus={() => {}}
           handleChange={(newData: string) => handleEmail(newData)}
         />
 
         <DataInputBox 
+          id='loginFormPassword'
           data={password} 
           dataName='Password'
-          showWarning={false}
-          warning={''}
           isPassword={true}
-          handleFocus={() => {}}
           handleChange={(newData: string) => handlePassword(newData)}
         />
         <WarningBlock isHidden={warningMessage === ''}> 

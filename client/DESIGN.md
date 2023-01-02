@@ -4,8 +4,6 @@ baseUrl/signin
 baseUrl/signup
 baseUrl/inbox
 baseUrl/notification
-baseUrl/find
-baseUrl/edit
 
 ## CSS styles:
 To organize css, please follow the order!!
