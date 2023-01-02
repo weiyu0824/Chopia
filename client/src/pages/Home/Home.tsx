@@ -10,14 +10,6 @@ import SettingPanel from '../Setting/SettingPanal'
 const MyContainer = styled.div`
   display: flex;
   flex-direction: row;
-
-  .overlay{
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    background-color: black;
-    opacity: 0.8;
-  }
 `
 
 const Home: React.FC = () => {
@@ -47,11 +39,11 @@ const Home: React.FC = () => {
       {/* <Chatting >sdf</Chatting> */}
       {/* <NotificationPanal /> */}
       
-      <FriendPanal />
-      <div className='overlay'></div>
-      <SettingPanel />
-      {/* <ChatFeed />
-      <TopicDrawer /> */}
+      
+      {/* <div className='overlay'></div>
+      <SettingPanel /> */}
+      <ChatFeed />
+      <TopicDrawer />
     </MyContainer>
     
     // <Container fluid className='gx-0 vh-100'>

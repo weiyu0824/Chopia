@@ -24,7 +24,6 @@ const Panal = styled.div<IPanal>`
   width: ${(props) => `${props.width}rem`};
   height: ${(props) => `${props.height}rem`};
   background-color: white;
-  opacity: 1 !important;
 
   #settingTitle{
     flex-direction: row;
@@ -109,7 +108,7 @@ const SettingPanel: React.FC = () => {
       settingPage = <PasswordSetting />
     }
     return (    
-      <Panal width={50} height={38} className='popOut'>
+      <Panal width={50} height={38}>
         <div id='settingTitle'>
           <Icon
             icon={<AiTwotoneSetting />}

@@ -7,5 +7,5 @@ idea*
 server/cache/*.json
 TODO
 *.env
-asset/
+assets/
 .vscode/

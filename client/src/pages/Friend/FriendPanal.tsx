@@ -3,34 +3,36 @@ import styled from 'styled-components'
 import { Color } from '../../utils/color'
 import { MdOutlineEmojiPeople } from 'react-icons/md'
 import FriendInfo from '../Friend/FriendInfo'
+import Icon from '../../components/Icon'
 
-const Wrapper = styled.div`
+
+interface IPanal {
+  width: number
+  height: number
+}
+const Panal = styled.div<IPanal>`
+  position: absolute;
+  top: ${(props) => `calc(50% - ${props.height / 2}rem)`};
+  left: ${(props) => `calc(50% - ${props.width / 2}rem)`};
   flex-direction: column;
   display: flex;
-  height: 100vh;
-  width: 100%;
-  padding: 2rem 5rem;
-  border-style: none;
+  border-style: solid black;
+  border-radius: 0.5rem;
   background-color: ${Color.white};
-  .windowTitle{
+  width: ${(props) => `${props.width}rem`};
+  height: ${(props) => `${props.height}rem`};
+  padding: 2rem 2rem;
+  color: black;
+
+  #finedFriendTitle{
     text-align: left;
     font-size: 26pt; //h2
   }
-  .info {
+  #friendPanalInfo {
     margin: 0 0 1rem 0;
     text-align: left;
   }
-  .avatarBox {
-    flex-shrink:0;
-    margin: auto 1rem;
-    width: 2rem;
-    height: 2rem;
-    .avatar {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .friendInfo {
+  #searchResult {
     margin: auto;
   }
 `
@@ -67,29 +69,33 @@ const SearchBar = styled.div`
   }
 `
 
-const FriendPanal = () => {
+const FriendPanal: React.FC = () => {
   return (
-    <Wrapper>
-      <div className='windowTitle'>
+    <Panal width={50} height={45}>
+      <div id='finedFriendTitle'>
         <span>Find new friend</span>
-        <MdOutlineEmojiPeople />
+        <Icon
+            icon={<MdOutlineEmojiPeople />}
+            size={2}
+          />
       </div>
       
-      <div className='info'>
+      <div id='friendPanalInfo'>
         <span>You can find new friend with their username or email address!</span>
       </div>
-      <SearchBar className='info'>
+      <SearchBar>
         <input className='searchInput' placeholder='Email or Username'></input>
         <button className='searchButton'>Search for friend</button>
       </SearchBar>
       
-      {/* <span>Sorry we can not find any user with this username</span> */}
-      <div className='friendInfo'>
-        <FriendInfo />
-      </div>
       
+      
+      <div id='searchResult'>
+        <span>Sorry, we can not find any user with this username or email ...</span>
+        {/* <FriendInfo /> */}
+      </div>
 
-    </Wrapper>
+    </Panal>
   ) 
 }
 
