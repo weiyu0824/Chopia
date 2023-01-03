@@ -61,3 +61,21 @@ export const refresh = async (refreshToken: string) => {
 }
 
 export const logout = () => { }
+
+
+export const loginWithToken = async (accessToken: string) => {
+  const url = `${baseURL}/login-with-token`
+  try {
+    const headerConfig = setTokenHeader(accessToken)
+    const res = await axios.post(url, {}, headerConfig)
+    
+    return {
+      data: res.data
+    }
+    
+  } catch (err) {
+    return {
+      err: err
+    }
+  }
+}

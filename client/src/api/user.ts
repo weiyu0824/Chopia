@@ -7,6 +7,24 @@ const changePassword = async (
   oldPassword: string, 
   newPassword: string, 
   accessToken: string) => {
+  const url =`${baseURL}/change-password`
+  try{
+    const headerConfig = setTokenHeader(accessToken)
+    const putData = {
+      oldPassword: oldPassword,
+      newPassword: newPassword
+    }
+    console.log(putData)
+    const res = await axios.put(url, putData, headerConfig)
+    console.log(res)
+    return {
+      data: res.data
+  }
+  } catch (err) {
+    return {
+      err: err
+    }
+  }
 
 }
 

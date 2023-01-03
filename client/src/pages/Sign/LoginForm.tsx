@@ -20,6 +20,7 @@ const Input = styled.input`
 `
 
 const LoginForm: React.FC = () => {
+
   // Form Data
   const [email, setEmail] = useState('') 
   const [password, setPassword ] = useState('')
@@ -58,8 +59,8 @@ const LoginForm: React.FC = () => {
           res.data.friendInfos
         )
         navigate('/')
-        setCookies('access_token', res.data.accessToken)
-        setCookies('refresh_token', res.data.refreshToken)
+        setCookies('access_token', res.data.accessToken, {path: '/'})
+        setCookies('refresh_token', res.data.refreshToken, {path: '/'})
       }
       
     }else {

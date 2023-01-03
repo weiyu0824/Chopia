@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { BsPencilFill } from 'react-icons/bs'
 import Icon from '../../../components/Icon'
 import Avatar from '../../../components/Avatar'
+import { useCookies } from 'react-cookie'
 
 interface IPanal {
   showPanal: boolean
@@ -74,9 +75,15 @@ interface IUserInfoPanal {
 
 const UserInfoPanal: React.FC<IUserInfoPanal> = (props) => {
   const leaveAuth = useAuthStore((state => state.leaveAuth))
+  const [cookies, setCookie, removeCookie] = useCookies(['access_token', 'refresh_token'])
 
-    const handlesignOut = () => {
+    const handleSignOut = () => {
+      console.log('sign out')
+      removeCookie('access_token')
+      removeCookie('refresh_token')
       leaveAuth()
+      
+
     }
 
     const handleEditProfile = () => {
@@ -103,7 +110,7 @@ const UserInfoPanal: React.FC<IUserInfoPanal> = (props) => {
             <div> <GoMail/>&nbsp; {props.email}</div>
           </div>
           <div className='signoutButton'
-            onClick={handlesignOut}> 
+            onClick={handleSignOut}> 
             <FaSignOutAlt /> &nbsp;
             <span>Sign out</span>
           </div>

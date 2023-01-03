@@ -1,8 +1,8 @@
 import { HttpException, AccessDatabaseError, AlreadyLogoutError, WrongDataError } from '../utils/HttpException'
 import { initSearchResult, SearchResult,
         initAddFriendresult, AddFriendresult,
-        initEditProfileResult, EditProfileResult} from '../interfaces/service.interface'
-
+        initEditProfileResult, EditProfileResult,
+        initChangePasswordResult, ChangePasswordResult} from '../interfaces/service.interface'
 import { User } from '../models/User'
 
 interface ServiceError {
@@ -88,6 +88,33 @@ export class UserService {
         avatar: avatar,
         success: true,
         message: 'Update profile successfully'
+      })
+    } catch (err) {
+      return {
+        error: new AccessDatabaseError()
+      }
+    }
+  }
+
+  changePassword = async (
+    userId: string,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<ServiceError | ChangePasswordResult> => {
+    try{
+      const originalPassword = await User.findById(userId).select('password')
+      if (oldPassword !== oldPassword){
+        return initChangePasswordResult({
+          success: false,
+          message: 'Your old password is wrong'
+        })
+      }
+      await User.updateOne({_id: userId}, {
+        password: newPassword,
+      })
+      return initChangePasswordResult({
+        success: true,
+        message: 'Your password has been updated!!!'
       })
     } catch (err) {
       return {

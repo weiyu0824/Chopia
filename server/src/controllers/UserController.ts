@@ -2,6 +2,7 @@ import { Router, Response, Request, NextFunction } from 'express'
 import { Controller } from '../interfaces/Controller'
 import { UserService } from '../services/UserService'
 import { validateToken } from '../middlewares/TokenValidation'
+import { runInThisContext } from 'vm'
 
 const userService = new UserService()
 
@@ -17,6 +18,7 @@ export class UserController implements Controller {
     this.router.get('/search', validateToken, this.searchUser)
     this.router.put('/add-friend', validateToken, this.addFriend)
     this.router.put('/edit-profile', validateToken, this.editProfile)
+    this.router.put('/change-password', validateToken, this.changePassword)
   }
 
   private searchUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -52,6 +54,19 @@ export class UserController implements Controller {
     const avatar = req.body.avatar
     console.log('edit profile:', userId, name, avatar, username)
     const serviceResult = await userService.editProfile(userId, name, username, avatar)
+    if (!serviceResult.error) {
+      res.send(serviceResult)
+    } else {
+      next(serviceResult.error)
+    }
+  }
+
+  private changePassword = async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.body.userId
+    const oldPassword = req.body.oldPassword
+    const newPassword = req.body.newPassword
+    console.log('change password:', userId, oldPassword, newPassword)
+    const serviceResult = await userService.changePassword(userId, oldPassword, newPassword)
     if (!serviceResult.error) {
       res.send(serviceResult)
     } else {

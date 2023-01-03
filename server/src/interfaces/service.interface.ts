@@ -19,20 +19,20 @@ const serviceDefaults = {
 // Auth Service 
 // There are 4 auth api routes
 export interface friendInfo {
-  userId: string,
-  name: string,
-  username: string,
-  avatar: string,
+  userId: string
+  name: string
+  username: string
+  avatar: string
 }
 export interface LoginResult extends ServiceResult {
   accessToken: string
   refreshToken: string
-  userId: string,
-  email: string,
-  name: string,
-  username: string,
-  avatar: string,
-  friendInfos: friendInfo[],
+  userId: string
+  email: string
+  name: string
+  username: string
+  avatar: string
+  friendInfos: friendInfo[]
 }
 
 export interface RegisterResult extends ServiceResult {
@@ -44,6 +44,15 @@ export interface LogoutResult extends ServiceResult {
 }
 
 export interface RefreshResult extends ServiceResult { 
+}
+
+export interface LoginWithTokenResult extends ServiceResult {
+  userId: string
+  email: string
+  name: string
+  username: string
+  avatar: string
+  friendInfos: friendInfo[]
 }
 
 export function initLoginResult(options?: Partial<LoginResult>): LoginResult {
@@ -92,6 +101,22 @@ export function initRefreshResult(options?: Partial<RefreshResult>): RefreshResu
   }
 }
 
+export function initLoginWithTokenResult (options?: Partial<LoginWithTokenResult>): LoginWithTokenResult {
+  const defaults = {
+    userId: '',
+    email: '',
+    name: '',
+    username: '',
+    avatar: '',
+    friendInfos: []
+  }
+  return {
+    ...serviceDefaults,
+    ...defaults,
+    ...options,
+  }
+}
+
 // User Service
 export interface SearchResult extends ServiceResult {
   userId: string
@@ -108,6 +133,9 @@ export interface EditProfileResult extends ServiceResult {
   password: string
   name: string
   avatar: string
+}
+
+export interface ChangePasswordResult extends ServiceResult {
 }
 
 export function initAddFriendresult(options?: Partial<AddFriendresult>): AddFriendresult {
@@ -146,6 +174,13 @@ export function initEditProfileResult(options?: Partial<EditProfileResult>): Edi
     ...options,
   }
 } 
+
+export function initChangePasswordResult(options?: Partial<ChangePasswordResult>): ChangePasswordResult{
+  return {
+    ...serviceDefaults,
+    ...options
+  }
+}
 
 // Chat Service
 interface ChatMessage {

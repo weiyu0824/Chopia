@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
+import { useCookies } from 'react-cookie'
+import { changePassword } from '../../api/user'
 import Avatar from '../../components/Avatar'
 import DataInputBox from '../../components/DataInputBox'
 import WarningBlock from '../../components/WarningBlock'
@@ -37,13 +39,27 @@ const PasswordSetting: React.FC = (props) => {
   const [oldPasswordWarning, setOldPasswordWarning] = useState('')
   const [newPasswordWarning, setNewPasswordWarning] = useState('')
   const [confirmedPasswordWarning, setConfirmedPasswordWarning] = useState('')
+  const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
+  const [warningMessage, setWarningMessage] = useState('')
 
-  const handleChangePassoword = () => {
+
+  const handleChangePassoword = async () => {
     validateOldPassword(oldPassword)
     validateNewPassword(newPassword)
     validateConfirmPassword(confirmedPassword)
     startValidation.current = true
     console.log('Able to submit')
+    if (confirmedPasswordWarning === ''
+      && newPasswordWarning === ''
+      && oldPasswordWarning === '') {
+        const res = await changePassword(oldPassword, newPassword, cookies.access_token)
+        if (res.data.success) {
+          console.log('update password !')
+          setWarningMessage(res.data.message)
+        }else {
+          setWarningMessage(res.data.message)
+        }
+      }
   }
   
   // TODO in server side:
@@ -58,7 +74,7 @@ const PasswordSetting: React.FC = (props) => {
   }
   const validateConfirmPassword = (password: string) => {
     const warning = (password === newPassword) ? '': 'Please make both passwords matched'
-    setConfirmedPassword(warning)
+    setConfirmedPasswordWarning(warning)
   }
 
   const handleOldPassword = (password: string) => {
@@ -114,7 +130,7 @@ const PasswordSetting: React.FC = (props) => {
         handleChange={(password)=>{handleConfirmedPassword(password)}}
       />
      <WarningBlock isHidden={false}>
-      test !!!
+      {warningMessage}
      </WarningBlock>
      <div id='buttonWrapper'>
       <button 

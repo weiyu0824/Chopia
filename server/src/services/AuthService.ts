@@ -8,6 +8,7 @@ import { initRegisterResult, RegisterResult,
           initLoginResult, LoginResult, 
           initRefreshResult, RefreshResult, 
           initLogoutResult, LogoutResult,
+          initLoginWithTokenResult, LoginWithTokenResult,
           friendInfo} from '../interfaces/service.interface'
 
 // class TokenMemory {
@@ -193,10 +194,51 @@ export class AuthService {
     //     error: new AlreadyLogoutError()
     //   }
     // }
-      return {
-        error: new AlreadyLogoutError()
+    return {
+      error: new AlreadyLogoutError()
+    }
+  } // token
+    
+  loginWithToken = async (
+    userId: string
+  ): Promise<ServiceError | LoginWithTokenResult> => {
+    try{
+      const existUser = await User.findById(userId)
+      if (existUser !== null) {
+        const friendInfos: Array<friendInfo> = []
+        for (const friendId of existUser.friendIds) {
+          const friend = await User.findById(friendId)
+          if (friend === null) {
+            throw new AccessDatabaseError()
+          }
+          friendInfos.push({
+            userId: friendId,
+            name: friend.name,
+            username: friend.username,
+            avatar: friend.avatar,
+          })
+        }
+        return initLoginWithTokenResult({
+          success: true,
+          message: 'Login successfully',
+          userId: userId,
+          email: existUser.email,
+          name: existUser.name,
+          username: existUser.username,
+          avatar: existUser.avatar,
+          friendInfos: friendInfos
+        }) 
+      }else {
+        return initLoginResult({
+          success: false,
+          message: 'Wrong userId, please logout!'
+        })
       }
-    } // token
-    
-    
+
+    } catch(err) {
+      return {
+        error: new AccessDatabaseError()
+      }
+    }
+  }
 }

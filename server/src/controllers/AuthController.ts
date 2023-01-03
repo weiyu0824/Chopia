@@ -19,6 +19,7 @@ export class AuthController implements Controller {
     this.router.post('/register', this.register)
     this.router.delete('/logout', validateToken, this.logout)
     this.router.get('/refresh', refreshMiddleware, this.refresh)
+    this.router.post('/login-with-token', validateToken, this.loginWithToken)
   }
 
   private login = async (req: Request, res: Response, next: NextFunction) => {
@@ -76,4 +77,13 @@ export class AuthController implements Controller {
     }
   }
 
+  private loginWithToken = async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.body.userId;
+    const serviceResult = await authService.loginWithToken(userId)
+    if (!serviceResult.error) {
+      res.send(serviceResult)
+    } else {
+      next(serviceResult.error)
+    }
+  }
 }
