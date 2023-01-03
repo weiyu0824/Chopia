@@ -1,6 +1,7 @@
 import { Router, Response, Request, NextFunction } from 'express'
 import { Controller } from '../interfaces/Controller'
 import { UserService } from '../services/UserService'
+import { validateToken } from '../middlewares/TokenValidation'
 
 const userService = new UserService()
 
@@ -13,9 +14,9 @@ export class UserController implements Controller {
   }
 
   private initRouter() {
-    this.router.get('/search', this.searchUser)
-    this.router.put('/add-friend', this.addFriend)
-    this.router.put('/edit-profile', this.editProfile)
+    this.router.get('/search', validateToken, this.searchUser)
+    this.router.put('/add-friend', validateToken, this.addFriend)
+    this.router.put('/edit-profile', validateToken, this.editProfile)
   }
 
   private searchUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -47,9 +48,10 @@ export class UserController implements Controller {
   private editProfile = async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.body.userId
     const name = req.body.name
-    const password = req.body.password
+    const username = req.body.username
     const avatar = req.body.avatar
-    const serviceResult = await userService.editProfile(userId, name, password, avatar)
+    console.log('edit profile:', userId, name, avatar, username)
+    const serviceResult = await userService.editProfile(userId, name, username, avatar)
     if (!serviceResult.error) {
       res.send(serviceResult)
     } else {

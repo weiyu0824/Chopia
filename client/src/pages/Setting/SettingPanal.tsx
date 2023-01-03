@@ -6,6 +6,7 @@ import PasswordSetting from './PasswordSetting'
 import { AiTwotoneSetting } from 'react-icons/ai'
 import Icon from '../../components/Icon'
 import AvatarBoard from './AvatarBoard'
+import { useUserInfoStore } from '../../store/UserInfoStore'
 
 
 interface IPanal {
@@ -66,9 +67,13 @@ const NavButton = styled.button<INavButton>`
 `
 
 const SettingPanel: React.FC = () => {
+  const name = useUserInfoStore((state) => state.name)
+  const username = useUserInfoStore((state) => state.username)
+  const email = useUserInfoStore((state) => state.email)
+  const avatar = useUserInfoStore((state) => state.avatar)
   const [pageIndex, setPageIndex] = useState(0)
   const [showAvatarBoard, setShowAvatarBoard] = useState(false)
-  const [confirmedAvatar, setConfirmedAvatar] = useState('fox')
+  const [confirmedAvatar, setConfirmedAvatar] = useState(avatar)
 
   const changePageIndex = (index: number) => {
     console.log(index)
@@ -101,6 +106,9 @@ const SettingPanel: React.FC = () => {
     if (pageIndex === 0) {
       settingPage = (
         <ProfileSetting 
+          currentName={name}
+          currentEmail={email}
+          currentUsername={username}
           confirmedAvatar={confirmedAvatar}
           onClickEditAvatar={handleOnClickEditIcon}/>
       )

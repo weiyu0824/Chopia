@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { useAuthStore } from '../../store/AuthStore'
+import { useUserInfoStore} from '../../store/UserInfoStore'
 import { LoginApi } from '../../api/auth'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
@@ -27,11 +28,11 @@ const LoginForm: React.FC = () => {
   const [warningMessage, setWarningMessage ] = useState('')
   const navigate = useNavigate()
   const loading = useAuthStore((state) => state.loading)
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   const startAuth = useAuthStore((state) => state.startAuth)
   const endAuth = useAuthStore((state) => state.endAuth)
   const successAuth = useAuthStore((state => state.successAuth))
+  const initUserInfo = useUserInfoStore((state) => state.initUserInfo)
 
   const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
 
@@ -47,14 +48,15 @@ const LoginForm: React.FC = () => {
       }else {
         console.log('sucess to login')
         console.log(res.data)
-        successAuth(
+        successAuth() 
+        initUserInfo(
           res.data.userId,
           res.data.email,
           res.data.name,
           res.data.username,
           res.data.avatar,
           res.data.friendInfos
-        ) 
+        )
         navigate('/')
         setCookies('access_token', res.data.accessToken)
         setCookies('refresh_token', res.data.refreshToken)

@@ -23,24 +23,10 @@ const SignInButton = styled.div<isLoggedInButton>`
 `
 
 const MyNav: React.FC = () => {
-  const username = useAuthStore((state) => state.username)
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
-  const leaveAuth = useAuthStore((state => state.leaveAuth))
-  const navigate = useNavigate()
-  const handleSignOut = async () => {
-    leaveAuth() //TODO: username should be in response
-    navigate('/signin')
-  }
   return (
     <Navbar color='light'>
       <Brand>brand</Brand>
-      {/* {isLoggedIn ? 
-       <div>
-        <Name> {username} </Name>
-        <Button style={{ color: C.blue}} type="link" onClick={handleSignOut}> Sign Out </Button>
-        </div> :  */}
       <Link to='/signin'><Button style={{ color: Color.blue}} type="link"> Sign In </Button></Link>
-      
     </Navbar>
   )
 }

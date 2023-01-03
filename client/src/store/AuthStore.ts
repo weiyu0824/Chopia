@@ -1,87 +1,42 @@
 import create from 'zustand'
 
-interface friendInfo {
-  userId: string,
-  name: string,
-  username: string,
-  avatar: string,
-}
-
 export type AuthState = {
   isLoggedIn: boolean
   loading: boolean
-  userId: string
-  email: string
-  name: string
-  username: string
-  avatar: string
-  friendInfos: friendInfo[]
 }
 
 export type AuthAction = {
   startAuth: () => void
   endAuth: () => void
-  successAuth: (
-    userId: string,
-    email: string,
-    name: string,
-    username: string,
-    avatar: string,
-    friendInfos: friendInfo[]
-  ) => void
+  successAuth: () => void
   leaveAuth: () => void
 }
 
 export const useAuthStore = create<AuthState & AuthAction>()((set) => ({
   isLoggedIn: false,
   loading: false,
-  userId: '',
-  email: '',
-  name: '',
-  username: '',
-  avatar: '',
-  friendInfos: [],
 
   startAuth: () => {
-    set(
-      () => (
-        { loading: true }
-      )
-    )
+    set(() => ({ 
+      loading: true 
+    }))
   },
   endAuth: () => {
-    set(
-      () => (
-        {loading: false}
-      )
-    )
+    set(() => ({
+      loading: false
+    }))
   },
   successAuth: (
-    userId: string,
-    email: string,
-    name: string,
-    username: string,
-    avatar: string,
-    friendInfos: friendInfo[]
   ) => {
-    set(
-      () => ({ 
+    set(() => ({ 
         isLoggedIn: true, 
-        loading: false,
-        userId: userId,
-        email: email,
-        name: name,
-        username: username,
-        avatar: avatar,
-        friendInfos: friendInfos
-      })
-    )
+        loading: false
+    }))
   },
   leaveAuth: () => {
-    set(
-      () => (
-        { isLoggedIn: false, loading: false, username: '' }
-      )
-    )
-  }
+    set(() => ({ 
+      isLoggedIn: false, 
+      loading: false
+    }))
+  },
 }))

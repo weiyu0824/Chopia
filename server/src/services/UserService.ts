@@ -73,18 +73,18 @@ export class UserService {
   editProfile = async (
     userId: string,
     name: string,
-    password: string,
+    username: string,
     avatar: string
   ): Promise<ServiceError | EditProfileResult> => {
     try {
       await User.updateOne({_id: userId}, {
         name: name,
-        password: password,
+        username: username,
         avatar: avatar
       })
       return initEditProfileResult({
         name: name,
-        password: password,
+        password: username,
         avatar: avatar,
         success: true,
         message: 'Update profile successfully'

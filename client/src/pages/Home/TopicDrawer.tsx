@@ -7,11 +7,11 @@ import { VscRefresh } from 'react-icons/vsc'
 import { RxCross1 } from 'react-icons/rx'
 import { Summary } from '../../utils/Summary'
 import { GetSummaryapi } from '../../api/ml'
-import { useAuthStore } from '../../store/AuthStore'
 import TopicButtonList from './Topic/TopicButtonList'
 import TopicCard from './Topic/TopicCard'
 import { Color } from '../../utils/color'
 import { Spin } from 'antd';
+import { useUserInfoStore } from '../../store/UserInfoStore'
 
 
 
@@ -78,7 +78,7 @@ const TopicDrawer: React.FC = () => {
   const [showBtnList, setShowBtnList] = useState(false)
   const [showSummaryCard, setShowSummaryCard] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const username = useAuthStore((state) => state.username)
+  const username = useUserInfoStore((state) => state.username)
   const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
   const [hasFetched, setHasFetched] = useState<boolean>(false)
   

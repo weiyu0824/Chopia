@@ -9,17 +9,7 @@ import WarningBlock from '../../components/WarningBlock'
 import FormWrapper from './FormWrapper'
 import StyledForm from './StyledForm'
 import SubmitButton from './SubmitButton'
-
-
-const emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const InvalidMessage = [
-  'Required',
-  'Invalid email address',
-  'Name should be less than 30 characters',
-  'Username should not contain white space',
-  'Password should contain at least 8 characters',
-  'Username should not contain @ character'
-]
+import { validate } from '../../utils/validate'
 
 const RegisterForm: React.FC = () => {
   // Form Data
@@ -79,46 +69,23 @@ const RegisterForm: React.FC = () => {
   }
 
   const validateEmail = (newEmail: string) => {
-    if (newEmail === '') {
-      setEmailWarning(InvalidMessage[0])
-    }else if(newEmail.match(emailformat)) {
-      setEmailWarning('')
-    }else {
-      setEmailWarning(InvalidMessage[1])
-    }
+    const warning = validate(newEmail, {type: 'email'})
+    setEmailWarning(warning)
   }
   
   const validateName = (newName: string) => {
-    if (newName === ''){
-      setNameWarning(InvalidMessage[0])
-    }else if (newName.length > 30){
-      setNameWarning(InvalidMessage[2])
-    }else {
-      setNameWarning('')
-    }
+    const warning = validate(newName, {allowWhiteSpace: true, type: 'name'})
+    setNameWarning(warning)
   }
 
   const validateUsername = (newUsername: string) => {
-    if (newUsername === ''){
-      setUsernameWarning(InvalidMessage[0])
-    }else if (/\s/.test(newUsername)) {
-      setUsernameWarning(InvalidMessage[3])
-    }else if(newUsername.includes('@')) {
-      setUsernameWarning(InvalidMessage[5])
-    }else {
-      setUsernameWarning('')
-    }
+    const warning = validate(newUsername, {type: 'username'})
+    setUsernameWarning(warning)
   }
 
   const validatePassword = (newPassword: string) => {
-    console.log(newPassword.length)
-    if (newPassword === ''){
-      setPasswordWarning(InvalidMessage[0])
-    }else if (newPassword.length < 8){
-      setPasswordWarning(InvalidMessage[4])
-    }else {
-      setPasswordWarning('')
-    }
+    const warning = validate(newPassword, {type: 'password'})
+    setPasswordWarning(warning)
   }
 
   const handleEmail = (newData: string) => {

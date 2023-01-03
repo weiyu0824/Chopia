@@ -8,6 +8,8 @@ import { useAuthStore } from '../../../store/AuthStore'
 import { AvatarImgs } from '../../../utils/avatar'
 import { useNavigate } from 'react-router-dom'
 import { BsPencilFill } from 'react-icons/bs'
+import Icon from '../../../components/Icon'
+import Avatar from '../../../components/Avatar'
 
 interface IPanal {
   showPanal: boolean
@@ -24,32 +26,11 @@ const Panal = styled.div<IPanal>`
   background-color: orange;
   cursor: default;
   
-  .editButton {
+  #userInfoEditButton {
     position: absolute;
-    top: 0.5rem;
-    left: 14.5rem;
-    border-radius: 19rem;
-    padding: 0rem 0.3rem;
-    background-color: grey;
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: white;
-
-    &:hover{
-      background-color: lightblue;
-    }
+    left: 85%;
   }
-
-  .avatarBox{
-    height: 6rem;
-    width: 100%;
-    .avatar {
-      height: 6rem;
-      width: 6rem;
-    }
-  }
-
-  .fullName {
+  #userInfoFullName {
     font-size: 1.8rem;
   }
 `
@@ -89,7 +70,6 @@ interface IUserInfoPanal {
   name: string
   username: string
   avatar: string
-
 }
 
 const UserInfoPanal: React.FC<IUserInfoPanal> = (props) => {
@@ -105,29 +85,29 @@ const UserInfoPanal: React.FC<IUserInfoPanal> = (props) => {
 
     return (
       <Panal showPanal={props.showPanal}>
-        <div className='editButton'>
-          <MdEdit />
-          {/* <BsPencilFill /> */}
+        <div id='userInfoEditButton'>
+          <Icon 
+            icon={<BsPencilFill /> }
+            size={1}
+            hoverColor='lightgrey'
+          />
         </div>
-        
-        <div className='avatarBox'>
-          <img className='avatar' src={AvatarImgs[props.avatar]} alt="Image"/>
-        </div>
-        <span className='fullName'>{props.name}</span>
+        <Avatar 
+          avatarName={props.avatar}
+          size={6}/>
+        <span id='userInfoFullName'>{props.name}</span>
 
         <ControlPart> 
           <div className='personalInfo'>
             <div> <AiOutlineRobot/>&nbsp; #{props.username}</div>
             <div> <GoMail/>&nbsp; {props.email}</div>
           </div>
-          
           <div className='signoutButton'
             onClick={handlesignOut}> 
             <FaSignOutAlt /> &nbsp;
             <span>Sign out</span>
           </div>
         </ControlPart>
-        
       </Panal>
     )
       

@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
-import { AvatarImgs } from '../../utils/avatar'
-import { BsPencilFill } from 'react-icons/bs'
+import { useCookies } from 'react-cookie'
 import { MdAddPhotoAlternate } from 'react-icons/md'
-import AvatarBoard from './AvatarBoard'
 import DataInputBox from '../../components/DataInputBox'
 import Avatar from '../../components/Avatar'
 import Icon from '../../components/Icon'
+import { editProfile } from '../../api/user'
+import { validate } from '../../utils/validate'
+import { useUserInfoStore } from '../../store/UserInfoStore'
 
 const Wrapper = styled.div`
   flex-grow: 1;
@@ -40,18 +41,47 @@ const Wrapper = styled.div`
 
 `
 interface IProfileSetting {
+  currentName: string,
+  currentEmail: string,
+  currentUsername: string,
   confirmedAvatar: string
   onClickEditAvatar: () => void
 }
 const ProfileSetting: React.FC<IProfileSetting> = (props) => {
-  const [name, setName] = useState('Anderson')
-  const [email, setEmail] = useState('jcab1688@gmail.com')
-  const [username, setUsername] = useState('andersonl.0809')
-  const [showAvatarBoard, setShowAvatarBoard] = useState(false)
+  const [name, setName] = useState(props.currentName)
+  const [email, setEmail] = useState(props.currentEmail)
+  const [username, setUsername] = useState(props.currentUsername)
+  const [nameWarning, setNameWarning] = useState('')
+  const startValidation = useRef(false)
+  const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
+  const updateName = useUserInfoStore((state) => state.updateName)
+  const updateAvatar = useUserInfoStore((state) => state.updateAvatar)
 
+  const handleSubmitProfile = async () => {
+    validateName(name)
+    startValidation.current = true
+    // Check if there still any error then update!
+    if (nameWarning === ''){
+      console.log('edit')
+      const res = await editProfile(name, username, props.confirmedAvatar, cookies.access_token)
+      if (res.data.success) {
+        console.log('sucessfully update profile')
+        updateAvatar(res.data.avatar)
+        updateName(res.data.name)
+      }
+    }
+  }
+
+  const validateName = (name: string) => {
+    const warning = validate(name, {type: 'name'})
+    setNameWarning(warning)
+  }
 
   const handleName = (name: string) => {
     setName(name)
+    if (startValidation.current) {
+      validateName(name)
+    }
   }
   const handleEmail = (email: string) => {
     setEmail(email)
@@ -59,9 +89,6 @@ const ProfileSetting: React.FC<IProfileSetting> = (props) => {
   const handleUsername = (username: string) => {
     setUsername(username)
   }
-  // const handleOnClickEditIcon = () => {
-  //   setShowAvatarBoard(true)
-  // }
   return (
     <Wrapper>
       <div id='avatarEditor'>
@@ -83,7 +110,7 @@ const ProfileSetting: React.FC<IProfileSetting> = (props) => {
           id='profile-name'
           data={name}
           dataName='Full name'
-          warning=''
+          warning={nameWarning}
           handleChange={(name: string)=>{handleName(name)}}
         />
         <DataInputBox 
@@ -92,6 +119,7 @@ const ProfileSetting: React.FC<IProfileSetting> = (props) => {
           dataName='Username'
           warning=''
           handleChange={(username: string)=>{handleUsername(username)}}
+          readonly={true}
         />
         <DataInputBox 
           id='profile-email'
@@ -101,7 +129,9 @@ const ProfileSetting: React.FC<IProfileSetting> = (props) => {
           handleChange={(email: string)=>{handleEmail(email)}}
           readonly={true}
         />
-        <div id='buttonWrapper'>
+        <div 
+          id='buttonWrapper'
+          onClick={handleSubmitProfile}>
           <button id='submitProfileButton'>Submit</button>
         </div>
     </ Wrapper>

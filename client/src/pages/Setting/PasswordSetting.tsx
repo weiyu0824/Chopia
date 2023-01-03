@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import Avatar from '../../components/Avatar'
 import DataInputBox from '../../components/DataInputBox'
 import WarningBlock from '../../components/WarningBlock'
+import { validate } from '../../utils/validate'
 
 const Wrapper = styled.div`
   flex-grow: 1;
@@ -32,24 +33,51 @@ const PasswordSetting: React.FC = (props) => {
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmedPassword, setConfirmedPassword] = useState('')
-  const [warning, setWarnining] = useState('')
+  const startValidation = useRef(false)
+  const [oldPasswordWarning, setOldPasswordWarning] = useState('')
+  const [newPasswordWarning, setNewPasswordWarning] = useState('')
+  const [confirmedPasswordWarning, setConfirmedPasswordWarning] = useState('')
 
-  const handleChangePassword = () => {
-    // TODO in client side: 
-    // password align, new password is valid
-    // every input is required
-    // TODO in server side:
-    // match old password
+  const handleChangePassoword = () => {
+    validateOldPassword(oldPassword)
+    validateNewPassword(newPassword)
+    validateConfirmPassword(confirmedPassword)
+    startValidation.current = true
+    console.log('Able to submit')
+  }
+  
+  // TODO in server side:
+  const validateOldPassword = (password: string) => {
+    const warning = validate(password, {})
+    setOldPasswordWarning(warning)
+  }
+
+  const validateNewPassword = (password: string) => {
+    const warning = validate(password, {type: 'password'})
+    setNewPasswordWarning(warning)
+  }
+  const validateConfirmPassword = (password: string) => {
+    const warning = (password === newPassword) ? '': 'Please make both passwords matched'
+    setConfirmedPassword(warning)
   }
 
   const handleOldPassword = (password: string) => {
     setOldPassword(password)
+    if (startValidation.current) {
+      validateOldPassword(password)
+    }
   }
   const handleNewPassword = (password: string) => {
     setNewPassword(password)
+    if (startValidation.current) {
+      validateNewPassword(password)
+    }
   }
   const handleConfirmedPassword = (password: string) => {
     setConfirmedPassword(password)
+    if (startValidation.current) {
+      validateConfirmPassword(password)
+    }
   }
   return (
     <Wrapper>
@@ -65,7 +93,7 @@ const PasswordSetting: React.FC = (props) => {
         id='old-password'
         data={oldPassword}
         dataName='Old password'
-        warning=''
+        warning={oldPasswordWarning}
         isPassword={true}
         handleChange={(password) => handleOldPassword(password)}
       />
@@ -73,7 +101,7 @@ const PasswordSetting: React.FC = (props) => {
         id='new-password'
         data={newPassword}
         dataName='New Password'
-        warning=''
+        warning={newPasswordWarning}
         isPassword={true}
         handleChange={(password)=>{handleNewPassword(password)}}
       />
@@ -81,7 +109,7 @@ const PasswordSetting: React.FC = (props) => {
         id='confirm-password'
         data={confirmedPassword}
         dataName='Confirmation'
-        warning=''
+        warning={confirmedPasswordWarning}
         isPassword={true}
         handleChange={(password)=>{handleConfirmedPassword(password)}}
       />
@@ -89,7 +117,11 @@ const PasswordSetting: React.FC = (props) => {
       test !!!
      </WarningBlock>
      <div id='buttonWrapper'>
-      <button id='changePasswordButton'>Change Password</button>
+      <button 
+        id='changePasswordButton'
+        onClick={handleChangePassoword}>
+        Change Password
+      </button>
      </div>
       
     </ Wrapper>

@@ -16,7 +16,7 @@ export function validateToken(req: Request, res: Response, next: NextFunction) {
   try {
     const decoded = jwt.verify(token, config.token.accessSecret) as TokenPayload
     console.log('[v] JWT is verified ')
-    req.headers.userId = decoded.userId // TODO: Set in other pos
+    req.body.userId = decoded.userId // TODO: Set in other pos
     next()
   } catch (err) {
     next(new InvalidTokenError())

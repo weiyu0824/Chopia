@@ -4,6 +4,7 @@ import MessageEditor from './Chat/MessageEditor'
 import { GetChatApi, SendMessageAPI } from '../../api/chat'
 import { useCookies } from 'react-cookie'
 import { useAuthStore } from '../../store/AuthStore'
+import { useUserInfoStore } from '../../store/UserInfoStore'
 import { Message } from '../../utils/Message'
 import { getCurrentTimeString } from '../../utils/time'
 import { Color } from '../../utils/color'
@@ -60,9 +61,6 @@ const DefaultChatArea = styled.div`
   }
   }
 `
-const LoadMessageButton = styled.button`
-  
-`
 
 const ChatFeed: React.FC = () => {
   const [messageText, setMessageText] = React.useState('')
@@ -70,7 +68,7 @@ const ChatFeed: React.FC = () => {
   const [isLoadedMessage, setIsLoadedMessage] = React.useState(false)
   const bottomRef = useRef<null | HTMLDivElement>(null)
   const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
-  const username = useAuthStore((state) => state.username)
+  const username = useUserInfoStore((state) => state.username)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({behavior: 'smooth'})

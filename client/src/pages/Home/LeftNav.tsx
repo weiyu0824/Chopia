@@ -3,14 +3,13 @@ import styled from 'styled-components'
 import { IoIosNotifications } from 'react-icons/io'
 import { IoMdPersonAdd } from 'react-icons/io'
 import { AiTwotoneSetting } from 'react-icons/ai'
-import { IconContext } from 'react-icons'
 import { Color } from '../../utils/color'
-import { useAuthStore } from '../../store/AuthStore'
 import Contact from './Nav/Contact'
 import UserInfo from './Nav/UserInfo'
 import SettingPanel from '../Setting/SettingPanal'
 import FriendPanal from '../Friend/FriendPanal'
 import useOnClickOutside from '../../hook/useOnClickOutside'
+import { useUserInfoStore } from '../../store/UserInfoStore'
 
 
 interface IWrapper {
@@ -23,13 +22,6 @@ const Wrapper = styled.div<IWrapper>`
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-
-  #settingPopOutPanal{
-    display: ${(props) => (props.popOutName === 'setting')? '': 'none'};
-  }
-  #friendPopOutPanal {
-    display: ${(props) => (props.popOutName === 'friend')? '': 'none'};   
-  }
 
   .overlay{
     position: absolute;
@@ -66,7 +58,6 @@ const ContactInfo = styled.div`
 `
 
 const DashBoard = styled.div`
-  height: 3rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -95,16 +86,10 @@ const DashBoard = styled.div`
     }
   }
 `
-interface IPopOutPanal {
-  showPanal: boolean
-}
-const PopOutPanal = styled.div<IPopOutPanal>`
-  display: ${(props) => (props.showPanal)? '': 'none'};
-`
 
 const LeftNav: React.FC = () => {
   const [popOutName, setPopOutName] = useState('')
-  const friendInfos = useAuthStore((state) => state.friendInfos)
+  const friendInfos = useUserInfoStore((state) => state.friendInfos)
   const settingPanalRef = useRef<null |  HTMLDivElement>(null)
   const friendPanalRef = useRef<null |  HTMLDivElement>(null)
   useOnClickOutside(settingPanalRef, () => {
@@ -127,11 +112,21 @@ const LeftNav: React.FC = () => {
               avatar={friendInfo.avatar}
             />
   })
-  // const closePanal = () => {
 
-  // }
-  // let popOutPanal = <></>
-  
+  let popOutPanal = <></>
+  if (popOutName === 'setting') {
+    popOutPanal = (
+      <div ref={settingPanalRef}>
+        <SettingPanel />
+      </div>
+    )
+  } else if (popOutName === 'friend') {
+    popOutPanal = (
+      <div ref={friendPanalRef}>
+        <FriendPanal />
+      </div>
+    )
+  }
 
   return (
     <Wrapper popOutName={popOutName}>
@@ -159,19 +154,10 @@ const LeftNav: React.FC = () => {
             <AiTwotoneSetting />
         </button>
         
+        {/* Popout */}
+        <div className='overlay'/>
+        {popOutPanal}
 
-        <div className='overlay' />
-        <div id='settingPopOutPanal' ref={settingPanalRef}>
-          <SettingPanel />
-        </div>
-
-        <div id='friendPopOutPanal' ref={friendPanalRef}>
-          <FriendPanal />
-        </div>
-        
-        {/* <button className='signoutBtn' onClick={handlesignOut}> 
-          Sign Out
-        </button> */}
       </DashBoard>
     </Wrapper>    
   )

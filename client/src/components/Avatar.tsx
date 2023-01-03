@@ -5,12 +5,13 @@ import { AvatarImgs } from '../utils/avatar'
 interface IBox {
   imgSize: number
   respond: boolean
+  withMargin: boolean
 }
 
 const Box = styled.div<IBox>`
   flex-shrink: 0;
   display: inline-block;
-  margin: 5px;
+  margin: ${(props) => (props.withMargin) ? '5px': '0px'};
   cursor: ${(props) => (props.respond) ? 'pointer': ''};
   img {
     width: ${(props) => `${props.imgSize}rem`};
@@ -25,10 +26,12 @@ interface IAvatar {
   avatarName: string
   size: number
   respond?: boolean // Dim when mouse over
+  withMargin?: boolean
   onClick?: () => void
 }
 const defaultProps = {
   respond: false,
+  withMargin: true,
   onClick: () => {}
 }
 const Avatar: React.FC<IAvatar> = (options) => {
@@ -42,6 +45,7 @@ const Avatar: React.FC<IAvatar> = (options) => {
       imgSize={props.size}
       respond={props.respond}
       onClick={props.onClick}
+      withMargin={props.withMargin}
     >
       <img src={AvatarImgs[props.avatarName]} alt="Image" />
     </Box>
