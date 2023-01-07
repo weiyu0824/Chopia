@@ -18,15 +18,10 @@ import { useNavigate } from 'react-router-dom'
 const scrollWidth = '15px';
 const Wrapper = styled.div`
   flex-grow: 1;
-  /* flex-grow: 1; */
-  /* flex-shrink: 1; */
   border-style: none;
-  /* margin-left: ${scrollWidth}; */
   flex-direction: column;
   display: flex;
   height: 100vh;
-  /* width: 100vw; */
-  /* overflow-y: scroll; */
 `
 const FriendBar = styled.div`
   border-bottom: solid gray;
@@ -41,6 +36,22 @@ const ChatArea = styled.div`
   flex-grow: 1;
   background-color: ${Color.white};;
   overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+    background: ${Color.white};
+  }
+
+  ::-webkit-scrollbar-thumb {
+      background: #393812;
+      -webkit-border-radius: 1ex;
+      -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+  }
+
+  ::-webkit-scrollbar-corner {
+      background: #000;
+  }
 `
 
 const Editor = styled.div`
