@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Summary } from '../../../utils/Summary'
+import { Summary } from '../../../interfaces/Summary'
 import OriginalSentences from './OriginalSentences'
 import { Color } from '../../../utils/color'
 

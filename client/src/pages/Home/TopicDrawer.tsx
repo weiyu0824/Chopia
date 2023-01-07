@@ -5,7 +5,7 @@ import { IconContext } from "react-icons"
 import { MdSummarize } from 'react-icons/md'
 import { VscRefresh } from 'react-icons/vsc'
 import { RxCross1 } from 'react-icons/rx'
-import { Summary } from '../../utils/Summary'
+import { Summary } from '../../interfaces/Summary'
 import { GetSummaryapi } from '../../api/ml'
 import TopicButtonList from './Topic/TopicButtonList'
 import TopicCard from './Topic/TopicCard'
@@ -24,10 +24,7 @@ const Box = styled.div<IBox>`
   padding: 10px;
   width: ${props => (props.shrink) ? "50px" : "800px"};
   height: 100vh;
-  background-color: ${Color.white};
-  border-style: solid;
-  border-color: lightgray;
-  transition-property: width;
+  background-color: lightblue;
   transition-duration: 0.3s;
   display: flex;
   flex-direction: column;
@@ -79,7 +76,7 @@ const TopicDrawer: React.FC = () => {
   const [showSummaryCard, setShowSummaryCard] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const username = useUserInfoStore((state) => state.username)
-  const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
+  const [cookies] = useCookies(['access_token', 'refresh_token'])
   const [hasFetched, setHasFetched] = useState<boolean>(false)
   
 
@@ -100,7 +97,7 @@ const TopicDrawer: React.FC = () => {
 
   const handleShrinkAndExpand = () => {
     setShrink(!shrink)
-    if (hasFetched == false) {
+    if (hasFetched === false) {
       console.log('get ')
       handleRefresh()
       setHasFetched(true)

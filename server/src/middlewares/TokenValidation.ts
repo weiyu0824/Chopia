@@ -5,7 +5,6 @@ import { InvalidTokenError, NoTokenError } from '../utils/HttpException'
 import { TokenPayload } from '../interfaces/TokenPayload'
 
 export function validateToken(req: Request, res: Response, next: NextFunction) {
-  console.log('Validate token...')
   const authHeader = req.headers['authorization']
   
   const token = authHeader && authHeader.split(' ')[1]
@@ -14,7 +13,6 @@ export function validateToken(req: Request, res: Response, next: NextFunction) {
     next(new NoTokenError())
     return
   }
-  console.log(token)
   try {
     const decoded = jwt.verify(token, config.token.accessSecret) as TokenPayload
     console.log('[v] JWT is verified ')

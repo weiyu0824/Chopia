@@ -1,6 +1,7 @@
 import create from 'zustand'
+import FriendInfo from '../pages/Friend/FriendInfo'
 
-interface friendInfo {
+interface FriendInfo {
   userId: string,
   name: string,
   username: string,
@@ -13,7 +14,7 @@ export type UserInfoState = {
   name: string
   username: string
   avatar: string
-  friendInfos: friendInfo[]
+  friendInfos: {[userId: string]: FriendInfo}
 }
 
 export type UserInfoAction = {
@@ -23,7 +24,7 @@ export type UserInfoAction = {
     name: string,
     username: string,
     avatar: string,
-    friendInfos: friendInfo[]
+    friendInfos: FriendInfo[]
   ) => void
   updateName: (
     name: string
@@ -32,7 +33,7 @@ export type UserInfoAction = {
     avatar: string
   ) => void
   updateFriendInfos: (
-    friendInfos: friendInfo[]
+    friendInfo: FriendInfo
   ) => void
   removeInfo: () => void // when logout
 }
@@ -43,7 +44,7 @@ export const useUserInfoStore = create<UserInfoState & UserInfoAction>()((set) =
   name: '',
   username: '',
   avatar: '',
-  friendInfos: [],
+  friendInfos: {}, //new Map<String, FriendInfo>(),
 
   initUserInfo: (
     userId: string,
@@ -51,8 +52,13 @@ export const useUserInfoStore = create<UserInfoState & UserInfoAction>()((set) =
     name: string,
     username: string,
     avatar: string,
-    friendInfos: friendInfo[]
+    friendInfoList: FriendInfo[]
   ) => {
+    const friendInfos: {[userId: string]: FriendInfo} = {}//new Map<string, FriendInfo>()
+    for (const info of friendInfoList) {
+      const userId: string = info.userId
+      friendInfos[userId] = info
+    }
     set(() => ({
       userId: userId,
       email: email,
@@ -77,10 +83,12 @@ export const useUserInfoStore = create<UserInfoState & UserInfoAction>()((set) =
     }))
   },
   updateFriendInfos: (
-    friendInfos: friendInfo[]
+    friendInfo: FriendInfo
   ) => {
-    set(() => ({
-      friendInfos: friendInfos
+    const newInfo: {[userId: string]: FriendInfo} = {}
+    newInfo[friendInfo.userId] = friendInfo
+    set((state) => ({
+      friendInfos: {...state.friendInfos, ...newInfo}
     }))
   }, 
   removeInfo: () => {
@@ -90,7 +98,7 @@ export const useUserInfoStore = create<UserInfoState & UserInfoAction>()((set) =
       name: '',
       username: '',
       avatar: '',
-      friendInfos: [],
+      friendInfos: {}
     }))
   }
 }))

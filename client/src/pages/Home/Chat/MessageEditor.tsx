@@ -1,87 +1,77 @@
 import styled from 'styled-components'
-import { Message } from '../../../utils/Message'
 import { Color } from '../../../utils/color'
-import { IconContext } from "react-icons"
-import { RxAvatar } from 'react-icons/rx'
+import Avatar from '../../../components/Avatar'
 
-interface IMessageBox {
-  showOnlyMessage: boolean
+interface IWrapper {
+  noAvatar: boolean
 }
 
-const MessageWrapper = styled.div<IMessageBox>`
-  margin: ${props => props.showOnlyMessage ? "0px 25px" : "0px 25px 0px 25px"};
-  /* margin: 3px 25px 3px 25px; */
-  /* border-color: lightgray;
-  border-style: ${props => props.showOnlyMessage ? 'none none none none' : 'solid none none none'}; */
+const Wrapper = styled.div<IWrapper>`
+  margin-top: ${props => props.noAvatar ? '' : '10px'};
   border-style: none;
   display: flex;
   flex-direction: row;
-  border-radius: 5px;
+  border-radius: 3px;
+
   &:hover{
     background-color: ${Color.lblue};
   }
-`
-const AvatarBox = styled.div<IMessageBox>`
-  flex-shrink:0;
-  height: ${props => props.showOnlyMessage ? '0px' : '50px' };
-  width: 50px;
-  // background-color: white;
-  // border-radius: 100%;
-  margin: 5px 10px;
-`
-
-const MessageBox = styled.div<IMessageBox>`
-  /* padding: 10px; */
-  text-align: left;
-  .senderName{
-    display: ${props => props.showOnlyMessage ? 'none' : 'inline' };
-    font-weight: 600;
-    font-size: 1.5rem;
-    padding-right: 10px;
-    margin: 0px;
-  };
-  .time{
-    display: ${props => props.showOnlyMessage ? 'none' : 'inline' };
-    font-size: 0.8rem;
-    color: grey;
-    margin: 0px;
+  .avatarSquare{
+    flex-shrink: 0;
+    width: 70px;
   }
-  .messageText{
-    font-size: 1rem;
-    margin: 0px;
+  .messageRectangle{
+    flex-direction: column;
+    display: flex;
+    text-align: left;
+    .senderName{
+      font-weight: 500;
+      font-size: 1.1rem;
+      padding-right: 10px;
+    }
+    .time{
+      font-size: 0.8rem;
+      color: grey;
+    }
+    .messageText{
+      font-size: 1rem;
+      white-space: pre-line;
+    }
   }
 `
-
 
 export interface Props {
-  message: Message,
-  showOnlyMessage: boolean
-};
+  messageText: string,
+  senderName: string,
+  timestamp: string,
+  avatar: string,
+  noAvatar: boolean
+}
 
 const MessageEditor = (props: Props) => {
-  if (props.showOnlyMessage === true) {
+  if (props.noAvatar === true) {
     return (
-      <MessageWrapper showOnlyMessage={props.showOnlyMessage}>
-        <AvatarBox showOnlyMessage={props.showOnlyMessage} />
-        <MessageBox showOnlyMessage={props.showOnlyMessage}>
-          <span className="messageText">{props.message.messageText}</span>
-        </MessageBox>
-      </MessageWrapper>
+      <Wrapper noAvatar={props.noAvatar}>
+        <div className='avatarSquare'></div>
+        <div className='messageRectangle'>
+          <span className="messageText">{props.messageText}</span>
+        </div>
+      </Wrapper>
     )
   } else {
     return (
-      <MessageWrapper showOnlyMessage={props.showOnlyMessage}>
-        <AvatarBox showOnlyMessage={props.showOnlyMessage}>
-          <IconContext.Provider value={{size: "2rem"}}>
-            <RxAvatar />
-          </IconContext.Provider>
-        </AvatarBox>
-        <MessageBox showOnlyMessage={props.showOnlyMessage}>
-          <span className="senderName">{props.message.senderUsername}</span>
-          <span className="time">{props.message.time}</span> <br />
-          <span className="messageText">{props.message.messageText}</span>
-        </MessageBox>
-      </MessageWrapper>
+      <Wrapper noAvatar={props.noAvatar}>
+        <div className='avatarSquare'>
+          <Avatar avatarName={props.avatar} size={2.5}/>
+        </div>
+        <div className='messageRectangle'>
+          <div>
+            <span className="senderName">{props.senderName}</span>
+            <span className="time">{props.timestamp}</span>
+          </div>
+          <span className="messageText">{props.messageText}</span>
+          </div>
+      </Wrapper>
     )
   }
 }

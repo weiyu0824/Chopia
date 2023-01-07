@@ -1,20 +1,23 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { IconContext } from "react-icons"
-import { RxAvatar } from 'react-icons/rx'
 import { Color } from '../../../utils/color'
 import { AvatarImgs } from '../../../utils/avatar'
+import { useNavigate, useParams } from 'react-router-dom'
 
-const ContactBox = styled.div`
+interface IContactBox {
+  pick: boolean
+}
+const ContactBox = styled.div<IContactBox>`
   display: flex;
   flex-direction: row;
   color: ${Color.lgrey};
   border-radius: 0.2rem;
   padding: 0.2rem;
   /* border-radius: 0.1rem; */
+  background-color: ${(props) => (props.pick)? `${Color.lblue}`: ''};
 
   &:hover{
-    background-color: ${Color.grey};
+    background-color: ${Color.lblue};
     cursor: pointer;
   }
 
@@ -41,8 +44,16 @@ interface IContact {
   avatar: string
 }
 const Contact: React.FC<IContact> = (props) => {
+  const params = useParams()
+  const navigate = useNavigate()
+
+  const clickContact = () => {
+    navigate(`/inbox/${props.contactId}`)
+  }
   return (
-    <ContactBox>
+    <ContactBox 
+      pick={props.contactId === params.friendId}
+      onClick={clickContact}>
       <div className='avatarBox'>
         <img className='avatar' src={AvatarImgs[props.avatar]} alt="Image"/>
       </div>

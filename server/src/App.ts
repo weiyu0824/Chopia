@@ -54,16 +54,8 @@ class App {
 
     const wss = this.wsServer
     server.on('upgrade', (req: http.IncomingMessage, socket, head) => {
-      const userId = authenticate(req)
-      console.log('complete validation', userId)
-      if (userId === '') {
-        console.log('error')
-        socket.destroy()
-        return
-      }
-      console.log('emit')
       wss.handleUpgrade(req, socket, head, function done(ws) {
-        wss.emit('connection', ws, req, userId)
+        wss.emit('connection', ws, req)
       })
     })
   }

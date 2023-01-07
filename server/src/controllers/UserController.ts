@@ -22,10 +22,8 @@ export class UserController implements Controller {
   }
 
   private searchUser = async (req: Request, res: Response, next: NextFunction) => {
-    const email = req.body.email;
-    const username = req.body.username;
-    console.log('search user')
-
+    const email = ((req.query.email)? req.query.email : '' ) as string;
+    const username = ((req.query.username)? req.query.username : '') as string;
     const serviceResult = await userService.search(email, username)
     if (!serviceResult.error) {
       res.send(serviceResult)

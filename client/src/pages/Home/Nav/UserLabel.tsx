@@ -6,7 +6,7 @@ import useOnClickOutside from '../../../hook/useOnClickOutside'
 import { useUserInfoStore } from '../../../store/UserInfoStore'
 import Avatar from '../../../components/Avatar'
 
-const UserInfoBox = styled.div`
+const Wrapper = styled.div`
   position: relative;
   flex-grow: 2;
   margin: 0rem 0.2rem;
@@ -29,7 +29,7 @@ const UserInfoButton = styled.div`
   }
 `
 
-const UserInfo: React.FC = () => {
+const UserLabel: React.FC = () => {
   const [showPanal, setShowPanal] = useState(false)
   const panalRef = useRef<null | HTMLDivElement>(null)
   const email = useUserInfoStore((state) => state.email)
@@ -44,7 +44,7 @@ const UserInfo: React.FC = () => {
   }
 
   return (
-    <UserInfoBox>
+    <Wrapper>
       <div ref={panalRef}>
         <UserInfoPanal 
           showPanal={showPanal}
@@ -61,8 +61,8 @@ const UserInfo: React.FC = () => {
         />
         <span className='fullName'> {name} </span>
       </UserInfoButton>
-    </UserInfoBox>
+    </Wrapper>
   )
 }
 
-export default UserInfo
+export default UserLabel

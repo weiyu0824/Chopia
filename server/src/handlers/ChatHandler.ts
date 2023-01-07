@@ -11,11 +11,14 @@ export class ChatHandler {
     // 1. write to DB (Mark the timestamp here)
     const timestamp = getCurrentTimeStamp()
     chatService.sendMessages(senderId, friendId, messageText, timestamp)
+    const chatRoomId = ChatService.calculateChatRoomId(senderId, friendId)
     // 2. send to other user
     const message = {
+      friendId: friendId,
       senderId: senderId,
       messageText: messageText,
       timestamp: timestamp,
+      chatRoomId: chatRoomId
     }
     // chatServer.sendMessage(message, friendId)
     // 3. if other is off line push to notification ()

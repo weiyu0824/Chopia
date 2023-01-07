@@ -1,10 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { FaSignOutAlt } from 'react-icons/fa'
-import { MdEdit } from 'react-icons/md'
-import { AiOutlineRobot } from 'react-icons/ai'
-import { GoMail } from 'react-icons/go'
-import imageToAdd from '../../asset/fox.png'
+import Avatar from '../../components/Avatar'
+import ActionButton from '../../components/ActionButton'
+import { useUserInfoStore } from '../../store/UserInfoStore'
 
 
 const Panal = styled.div`
@@ -15,48 +13,62 @@ const Panal = styled.div`
   border-radius: 0.8rem;
   padding: 2rem;
   background-color: lightblue;
-  cursor: default;
 
-  .avatarBoxx{
-    /* height: 6rem;
-    width: 100%; */
-    .avatarr {
-      height: 10rem;
-      width: auto;
-    }
-  }
-
-  .fullName {
-    margin: 2rem auto;
+  #friendFullName {
+    margin: 1.5rem auto;
     font-size: 1.8rem;
   }
-
-  .newFriendButton {
-    margin: 0.3rem;
-    border: none;
-    border-radius: 0.2rem;
-    width: 6rem;
-    height: 2.5rem;
-    outline: none;
-    &:hover {
-      background-color: lightyellow;
-    }
+  #friendWarning {
+    margin-bottom: 1rem;
   }
 `
 
 interface IFriendInfo {
+  friendId: string,
+  name: string,
+  avatar: string
+  onClickAdd: () => void
+  onClickCancel: () => void
 }
 
+
 const FriendInfo: React.FC<IFriendInfo> = (props) => {
+  const userId = useUserInfoStore((state) => state.userId)
+  const friendInfo = useUserInfoStore((state) => state.friendInfos)
+
+  let allowToAdd = true
+  let wierdWarning = ''
+  if (userId === props.friendId || friendInfo[userId]){
+    allowToAdd = false
+    wierdWarning = 'This is you!'
+  } else if (friendInfo[props.friendId]) {
+    allowToAdd = false
+    wierdWarning = 'You are already friends'
+  }
+
   return (
     <Panal>
-      <div className='avatarBoxx'>
-        <img className='avatarr' src={imageToAdd} alt="Image" />
-      </div>
-      <span className='fullName'>Anderson</span>
+      <Avatar 
+        avatarName={props.avatar}
+        size={10}
+      />
+      <span id='friendFullName'>{props.name}</span>
+      <span id='friendWarning'>{wierdWarning}</span>
       <div>
-        <button className='newFriendButton'>Cancel</button>
-        <button className='newFriendButton'>Add</button>
+        <ActionButton 
+          word='Cancel'
+          margin='0.3rem' 
+          width='6rem'
+          height='2.5rem'
+          hoverColor='lightyellow'
+          onClick={props.onClickCancel} />
+        <ActionButton 
+          word='Add'
+          margin='0.3rem'
+          width='6rem'
+          height='2.5rem'
+          hoverColor='lightyellow'
+          onClick={props.onClickAdd} />
       </div>
 
     </Panal>

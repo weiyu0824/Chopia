@@ -2,8 +2,9 @@
 ## URL
 baseUrl/signin
 baseUrl/signup
-baseUrl/inbox
+baseUrl/inbox/userId
 baseUrl/notification
+baseUrl/
 
 ## CSS styles:
 To organize css, please follow the order!!

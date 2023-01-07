@@ -1,15 +1,17 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { IoIosNotifications } from 'react-icons/io'
 import { IoMdPersonAdd } from 'react-icons/io'
 import { AiTwotoneSetting } from 'react-icons/ai'
 import { Color } from '../../utils/color'
 import Contact from './Nav/Contact'
-import UserInfo from './Nav/UserInfo'
+import UserLabel from './Nav/UserLabel'
 import SettingPanel from '../Setting/SettingPanal'
 import FriendPanal from '../Friend/FriendPanal'
 import useOnClickOutside from '../../hook/useOnClickOutside'
 import { useUserInfoStore } from '../../store/UserInfoStore'
+import { useNavigate } from 'react-router-dom'
+import { setConstantValue } from 'typescript'
 
 
 interface IWrapper {
@@ -31,7 +33,7 @@ const Wrapper = styled.div<IWrapper>`
     height: 100vh;
     display: ${(props) => (props.popOutName !== '')? '': 'none'};
     background-color: black;
-    opacity: 0.6;
+    opacity: 0.9;
   }
 `
 
@@ -41,6 +43,15 @@ const ContactInfo = styled.div`
   padding: 10px;
   display: flex;
   flex-direction: column;
+  input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+    border: none;
+    padding: 5px;
+    outline: none;
+    background-color: lightgrey;
+  }
 
   .caption {
     color: lightgray;
@@ -92,6 +103,7 @@ const LeftNav: React.FC = () => {
   const friendInfos = useUserInfoStore((state) => state.friendInfos)
   const settingPanalRef = useRef<null |  HTMLDivElement>(null)
   const friendPanalRef = useRef<null |  HTMLDivElement>(null)
+  const navigate = useNavigate()
   useOnClickOutside(settingPanalRef, () => {
     if (popOutName === 'setting') {
       setPopOutName('')
@@ -102,8 +114,14 @@ const LeftNav: React.FC = () => {
       setPopOutName('')
     }
   })
+  useEffect(() => {
+    console.log('mount left nav')
+  })
+  const goToNotification = () => {
+    navigate('/notification')
+  }
 
-  const contacts = friendInfos.map((friendInfo, index) => {
+  const contacts = Object.values(friendInfos).map((friendInfo, index) => {
     return <Contact 
               key={index}
               contactId={friendInfo.userId}
@@ -131,14 +149,17 @@ const LeftNav: React.FC = () => {
   return (
     <Wrapper popOutName={popOutName}>
       <ContactInfo>
+        <input placeholder='Search for friend'/>
         <div className='caption'>DIRECT MESSAGES </div>
         {contacts}
       </ContactInfo>
 
       <DashBoard > 
-        <UserInfo />
+        <UserLabel />
 
-        <button className='controlButton'>
+        <button 
+          className='controlButton'
+          onClick={goToNotification}>
             <IoIosNotifications />
         </button>
 

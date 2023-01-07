@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Color } from '../../utils/color'
 import { MdOutlineEmojiPeople } from 'react-icons/md'
 import FriendInfo from '../Friend/FriendInfo'
+import { GiThreeFriends } from 'react-icons/gi'
 import Icon from '../../components/Icon'
-
+import { Spin } from 'antd'
+import { searchUser } from '../../api/user'
+import { useCookies } from 'react-cookie'
+import ActionButton from '../../components/ActionButton'
+import { setTimeout } from 'timers/promises'
 
 interface IPanal {
   width: number
@@ -24,7 +29,7 @@ const Panal = styled.div<IPanal>`
   padding: 2rem 2rem;
   color: black;
 
-  #finedFriendTitle{
+  #findFriendTitle{
     text-align: left;
     font-size: 26pt; //h2
   }
@@ -36,7 +41,10 @@ const Panal = styled.div<IPanal>`
     margin: auto;
   }
 `
-const SearchBar = styled.div`
+
+interface ISearchBar {
+}
+const SearchBar = styled.div<ISearchBar>`
   flex-direction: row;
   display: flex;
   border: 0.1rem solid darkgray;
@@ -54,25 +62,73 @@ const SearchBar = styled.div`
       color: black;
     }
   }
-  .searchButton {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 0.2rem;
-    outline: none;
-    color: black;
-    &:hover {
-      background-color: ${Color.lightblue};
-    }
-  }
   &:focus-within {
     border-color: ${Color.ddgrey}
   }
 `
-
+type SearchState = 'empty' | 'withResult' | 'withoutResult' | 'loading'
 const FriendPanal: React.FC = () => {
+  const [searchStr, setSearchStr] = useState('')
+  const [searchState, setSearchState] = useState<SearchState>('empty')
+  const [cookies] = useCookies(['access_token', 'refresh_token'])  
+  interface SearchInfo {
+    userId: string,
+    avatar: string,
+    name: string,
+  }
+  const [searchInfo, setSearchInfo] = useState<SearchInfo>({userId: '', avatar:'', name:''})
+  
+  const onChangeSearchStr:  React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setSearchStr(e.target.value)
+  }
+
+  const searchForFriend = async () => {
+    setSearchState('loading')
+    const res = await searchUser(searchStr, cookies.access_token)
+    if (res.data.success) {
+      setSearchState('withResult')
+      setSearchInfo({
+        userId: res.data.userId,
+        avatar: res.data.avatar,
+        name: res.data.name
+      })
+    } else {
+      setSearchState('withoutResult')
+    }
+  }
+
+  const sendFriendRequest = async () => {
+    // set
+    // await setTimeout(10)
+  }
+
+  let result = <></>
+  if (searchState === 'empty'){
+    result = (<Icon
+              icon={<GiThreeFriends />}
+              size={5}
+              color='red'
+            />)
+  } else if (searchState === 'withResult') {
+    result = <FriendInfo 
+                friendId={searchInfo.userId}
+                name={searchInfo.name}
+                avatar={searchInfo.avatar}
+                onClickAdd={sendFriendRequest}
+                onClickCancel={() => {
+                  setSearchStr('')
+                  setSearchState('empty')
+                }}
+              />
+  } else if (searchState === 'withoutResult') {
+    result = <span>Sorry, we can not find any user with this username or email ...</span> 
+  } else if (searchState === 'loading') {
+    result = <Spin />
+  }
+
   return (
-    <Panal width={50} height={45}>
-      <div id='finedFriendTitle'>
+    <Panal width={40} height={45}>
+      <div id='findFriendTitle'>
         <span>Find new friend</span>
         <Icon
             icon={<MdOutlineEmojiPeople />}
@@ -84,17 +140,25 @@ const FriendPanal: React.FC = () => {
         <span>You can find new friend with their username or email address!</span>
       </div>
       <SearchBar>
-        <input className='searchInput' placeholder='Email or Username'></input>
-        <button className='searchButton'>Search for friend</button>
+        <input 
+          value={searchStr}
+          className='searchInput' 
+          placeholder='Email or Username'
+          onChange={onChangeSearchStr}>
+        </input>
+        <ActionButton
+          word='Search for friend'
+          padding='0.5rem 1rem'
+          backgroundColor='lightgrey'
+          hoverColor='lightblue'
+          onClick={searchForFriend}
+          allowToAct={searchStr !== ''} />
       </SearchBar>
       
-      
-      
-      <div id='searchResult'>
-        <span>Sorry, we can not find any user with this username or email ...</span>
-        {/* <FriendInfo /> */}
-      </div>
 
+      <div id='searchResult'>
+        {result}
+      </div>
     </Panal>
   ) 
 }

@@ -42,10 +42,7 @@ const editProfile = async (
       username: username, 
       avatar: avatar
     }
-    console.log(putData)
     const res = await axios.put(url, putData, headerConfig)
-    console.log(res)
-
     return {
         data: res.data
     }
@@ -56,7 +53,40 @@ const editProfile = async (
   }
 }
 
+const searchUser = async (
+  searchStr: string,
+  accessToken: string
+) => {
+  let username = ''
+  let email = ''
+  if (searchStr.includes('@')){
+    email = searchStr
+  } else {
+    username = searchStr
+  }
+  const url = `${baseURL}/search`
+  try {
+    const headerConfig = setTokenHeader(accessToken)
+    const searchParam = {
+      params: {
+        username: username,
+        email: email
+      }
+    }
+    const res = await axios.get(url, {...searchParam, ...headerConfig})
+    console.log(res)
+    return {
+      data: res.data
+    }
+  } catch (err) {
+    return {
+      err: err
+    }
+  }
+}
+
 export {
   changePassword,
-  editProfile
+  editProfile,
+  searchUser
 }

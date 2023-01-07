@@ -3,10 +3,11 @@ import { HttpException } from '../utils/HttpException'
 import { ServiceError } from '../interfaces/service.interface'
 import { GetMessageResult, initGetMessageResult, 
         SendMessageResult, initSendMessageResult } from '../interfaces/service.interface'
+import e from 'express'
 
 export class ChatService {
   static calculateChatRoomId(user1Id: string, user2Id: string): string {
-    return (user1Id < user2Id) ? `${user1Id}.${user2Id}` : `${user2Id}.${user1Id}`
+    return (user1Id < user2Id) ? `${user1Id}${user2Id}` : `${user2Id}${user1Id}`
   }
 
   getMessages = async (
@@ -17,13 +18,19 @@ export class ChatService {
       const chatRoomId = ChatService.calculateChatRoomId(userId, friendUserId)
       const messages = await PrivateMessage.find({
         chatRoomId: chatRoomId
-      })
-
-      return initGetMessageResult({
-        success: true,
-        chatMessages: messages
-      })
-        
+      }).select('messageText senderId timestamp')
+ 
+      if (chatRoomId === null) {
+        return initGetMessageResult({
+          success: true,
+          chatMessages: []
+        })
+      }else {
+        return initGetMessageResult({
+          success: true,
+          chatMessages: messages
+        })
+      }
     } catch (err) {
       return {
         error: new HttpException(500, 'Access Database Error')

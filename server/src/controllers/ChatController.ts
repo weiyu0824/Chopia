@@ -16,8 +16,7 @@ export class ChatController implements Controller {
     this.initRouter()
   }
   private initRouter() {
-    this.router.get('/:friendUserId', validateToken, this.getPrivateMessage)
-    // this.router.post('/private', validateToken, this.sendPrivateMessage)
+    this.router.get('/private/:friendUserId', validateToken, this.getPrivateMessage)
     this.router.post('/group')
   }
 
@@ -25,13 +24,12 @@ export class ChatController implements Controller {
     // get token and page id here
     const userId = req.body.userId
     const friendUserId = req.params.friendUserId
+
+    console.log('get private message')
     if (friendUserId === undefined){
       next(new InvalidAPIError())
     } else {
-      console.log(userId)
-      console.log(friendUserId)
       const serviceResult = await chatService.getMessages(userId, friendUserId)
-
       if (!serviceResult.error) {
         res.send(serviceResult)
       } else {
