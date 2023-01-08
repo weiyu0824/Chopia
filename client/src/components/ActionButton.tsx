@@ -1,3 +1,4 @@
+import { hover } from '@testing-library/user-event/dist/hover'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -32,42 +33,42 @@ interface IAButton {
   onClick?: () => void
 }
 interface IActionButton extends IAButton {
-  word?: string
-}
-const defaultProps = {
-  margin: '',
-  width: '',
-  height: '',
-  padding: '',
-  backgroundColor: '',
-  hoverColor: '',
-  color: '',
-  allowToAct: true,
-  onClick: () => {},
-  word: ''
+  word: string
 }
 
-const ActionButton: React.FC<IActionButton> =  (options) => {
-  const props = {
-    ...defaultProps,
-    ...options
-  }
-  const onClick = () => {
-    if (props.allowToAct){
-      props.onClick()
+
+const ActionButton: React.FC<IActionButton> =  ({
+  word,
+  margin ='',
+  width='',
+  height='',
+  padding='',
+  backgroundColor='',
+  hoverColor='red',
+  color='',
+  allowToAct=true,
+  onClick=(() =>{})
+}) => {
+
+  const onAct = () => {
+    if (allowToAct){
+      console.log('click Abutton')
+      onClick()
+      console.log(hoverColor)
     }
   }
   return (
     <AButton 
-      margin={props.margin}
-      width={props.width}
-      height={props.height}
-      padding={props.padding}
-      backgroundColor={props.backgroundColor}
-      color={props.color}
-      allowToAct={props.allowToAct}
-      onClick={onClick}
-    > {props.word}</AButton>
+      margin={margin}
+      width={width}
+      height={height}
+      padding={padding}
+      backgroundColor={backgroundColor}
+      color={color}
+      hoverColor={hoverColor}
+      allowToAct={allowToAct}
+      onClick={onAct}
+    > {word}</AButton>
   )
 }
 

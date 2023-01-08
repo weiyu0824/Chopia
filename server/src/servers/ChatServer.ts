@@ -1,5 +1,4 @@
-import http from 'http'
-import ws, { Server, WebSocket } from 'ws'
+import { Server, WebSocket } from 'ws'
 import { ChatHandler } from '../handlers/ChatHandler'
 import { authenticate } from '../middlewares/SocketAuthentication'
 
@@ -15,7 +14,7 @@ export class ChatServer {
 
   public mount(wsServer: Server) {
     wsServer.on('connection', (ws, req) => {
-      console.log('connection establish')
+      console.log('connection establish in chat server')
 
       this.unAuthSockets.add(ws)
       setTimeout(() => {
@@ -47,9 +46,6 @@ export class ChatServer {
             this.onlineUsers.set(userId, sockets)
             this.unAuthSockets.delete(ws)
           }
-        } else if (dmessage.type === 'chat') {
-          const notification = this.chatHandler.receiveMessage(dmessage.senderId, dmessage.friendId, dmessage.messageText)
-          this.sendMessage(notification, [dmessage.friendId])
         } else {
           ws.close()
         }
@@ -61,12 +57,9 @@ export class ChatServer {
     })
   }
 
-  public sendMessage(message: Object, targetUserIds: string[]) {
-    console.log('send message to friend')
+  public sendNotification(message: Object, targetUserIds: string[]) {
+    console.log('send notification to friend')
     console.log('target: ', targetUserIds)
-    // console.log('----------------')
-    // console.log(message)
-    // console.log(this.onlineUsers)    
     for (const userId of targetUserIds) {
       const sockets = this.onlineUsers.get(userId)
       if (sockets !== undefined) {
@@ -77,4 +70,5 @@ export class ChatServer {
       }
     }
   }
+
 }

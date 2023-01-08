@@ -82,7 +82,6 @@ const Editor = styled.div`
   }
 `
 
-
 interface IChatFeed {
   friendId: string,
   sendMessage: (messageText: string, friendId: string) => void

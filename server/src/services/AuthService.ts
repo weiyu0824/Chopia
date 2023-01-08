@@ -9,7 +9,7 @@ import { initRegisterResult, RegisterResult,
           initRefreshResult, RefreshResult, 
           initLogoutResult, LogoutResult,
           initLoginWithTokenResult, LoginWithTokenResult,
-          friendInfo} from '../interfaces/service.interface'
+          FriendInfo} from '../interfaces/service.interface'
 
 // class TokenMemory {
 //   static genAccessToken() {
@@ -126,7 +126,7 @@ export class AuthService {
         this.storeRefreshToken(userId, refreshToken)
         console.log(existUser)
 
-        const friendInfos: Array<friendInfo> = []
+        const friendInfos: Array<FriendInfo> = []
         for (const friendId of existUser.friendIds) {
           const friend = await User.findById(friendId)
           if (friend === null) {
@@ -205,7 +205,7 @@ export class AuthService {
     try{
       const existUser = await User.findById(userId)
       if (existUser !== null) {
-        const friendInfos: Array<friendInfo> = []
+        const friendInfos: Array<FriendInfo> = []
         for (const friendId of existUser.friendIds) {
           const friend = await User.findById(friendId)
           if (friend === null) {

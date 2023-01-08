@@ -6,10 +6,9 @@ import FriendInfo from '../Friend/FriendInfo'
 import { GiThreeFriends } from 'react-icons/gi'
 import Icon from '../../components/Icon'
 import { Spin } from 'antd'
-import { searchUser } from '../../api/user'
+import { searchUser, addFriend } from '../../api/user'
 import { useCookies } from 'react-cookie'
 import ActionButton from '../../components/ActionButton'
-import { setTimeout } from 'timers/promises'
 
 interface IPanal {
   width: number
@@ -81,6 +80,11 @@ const FriendPanal: React.FC = () => {
   const onChangeSearchStr:  React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearchStr(e.target.value)
   }
+  const onPressEnter: React.KeyboardEventHandler = (e) => {
+    if (e.key === 'Enter') {
+      searchForFriend()
+    }
+  }
 
   const searchForFriend = async () => {
     setSearchState('loading')
@@ -97,11 +101,6 @@ const FriendPanal: React.FC = () => {
     }
   }
 
-  const sendFriendRequest = async () => {
-    // set
-    // await setTimeout(10)
-  }
-
   let result = <></>
   if (searchState === 'empty'){
     result = (<Icon
@@ -114,7 +113,6 @@ const FriendPanal: React.FC = () => {
                 friendId={searchInfo.userId}
                 name={searchInfo.name}
                 avatar={searchInfo.avatar}
-                onClickAdd={sendFriendRequest}
                 onClickCancel={() => {
                   setSearchStr('')
                   setSearchState('empty')
@@ -144,7 +142,8 @@ const FriendPanal: React.FC = () => {
           value={searchStr}
           className='searchInput' 
           placeholder='Email or Username'
-          onChange={onChangeSearchStr}>
+          onChange={onChangeSearchStr}
+          onKeyDown={onPressEnter}>
         </input>
         <ActionButton
           word='Search for friend'

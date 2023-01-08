@@ -21,5 +21,3 @@ app.listen()
 // declare a route with a response
 // app.get('/api', )
 
-// // start the server
-const t = App.testStr

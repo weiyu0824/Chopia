@@ -6,15 +6,17 @@ import { MLController } from '../controllers/MLController'
 import { UserController } from '../controllers/UserController'
 import { Controller } from '../interfaces/Controller'
 import { handleError } from '../middlewares/ErrorHandler'
+import { NotifServer } from './NotifServer'
+import { NotifController } from '../controllers/NotifController'
 
 export class APIServer {
   private apiUrl: string
   private controllers: Controller[]
 
-  constructor() {
+  constructor(notifServer: NotifServer) {
     this.apiUrl = '/api'
     this.controllers = [
-      new AuthController(), new ChatController(), new MLController(), new UserController()
+      new AuthController(), new ChatController(), new MLController(), new UserController(), new NotifController()
     ]
 
   }
@@ -23,6 +25,10 @@ export class APIServer {
     this.mountMiddlewares(app)
     this.mountControllers(app)
     this.mountErrorHandler(app)
+    app.use((req, res, next) => {
+      // console.log('notif service')
+      // console.log(res.locals)
+    })
   }
 
   private mountMiddlewares(app: Application) {

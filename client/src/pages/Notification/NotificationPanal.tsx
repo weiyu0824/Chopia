@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Color } from '../../utils/color'
 import imageToAdd from '../../asset/hamster.png'
+import { useCookies } from 'react-cookie'
+import { useNotifStore } from '../../store/NotifStore'
+import Avatar from '../../components/Avatar'
+import { deleteNotif } from '../../api/notif'
 
 interface IReplyButton {
   funcType: string
@@ -52,17 +56,58 @@ const Notification = styled.div`
 `
 
 const NotificationPanal = () => {
+  const [cookies, _] = useCookies(['access_token', 'refresh_token'])
+  const notifications = useNotifStore((state) => state.notificatoins)
+  const removeNotif = useNotifStore((state) => state.removeNotif)
+
+  const onAcceptRequest = (notifId: string) => {
+
+  }
+  const onDeleteNotif = async (notifId: string) => {
+    console.log('notifId')
+    const res = await deleteNotif(notifId, cookies.access_token)
+    if (res.data.success) {
+      removeNotif(notifId)
+    }
+  }
+
+
+  const notifBars = notifications.map((notif, index) => {
+    console.log(notif.receiverId)
+    let news = <></>
+    if (notif.type === 'friend-request') {
+      news = (
+        <>
+          <span className='notificationMessage'>
+            <strong>{notif.initiatorInfo.name}</strong> send you a friend request</span>
+          <ReplyButton funcType='confirm' onClick={() => onAcceptRequest(notif.notifId)}>Confirm</ReplyButton>
+          <ReplyButton funcType='delete' onClick={() => onDeleteNotif(notif.notifId)}>Delete</ReplyButton>
+        </>
+      )
+    } else if (notif.type === 'new-friend') {
+      news = (
+        <>
+          <span className='notificationMessage'>
+            <strong>{notif.initiatorInfo.name}</strong> become your new friend !!</span>
+        </>
+      )
+    }
+    return (
+      <Notification key={index}>
+        <Avatar 
+          avatarName={notif.initiatorInfo.avatar}
+          size={2.5}
+        />
+        {news}
+      </Notification>
+    )
+  })
+
   return (
     <Wrapper>
       <h2 className='windowTitle'>Notification</h2>
-      <Notification>
-        <div className='avatarBox'>
-          <img className='avatar' src={imageToAdd} alt="Image" />
-        </div>
-        <span className='notificationMessage'><strong>Anderson</strong> send you a friend request</span>
-        <ReplyButton funcType='confirm'>Confirm</ReplyButton>
-        <ReplyButton funcType='delete'>Delete</ReplyButton>
-      </Notification>
+      {notifBars}
+      {/* <span> you dont have any notifications right now</span> */}
     </Wrapper>
   )
 }

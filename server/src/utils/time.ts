@@ -1,4 +1,4 @@
-export const getCurrentTimeStamp = () => {
+export const getCurrTimestamp = () => {
     let ts = Date.now();
 
     let date_ob = new Date(ts);

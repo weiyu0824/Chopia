@@ -57,6 +57,7 @@ const searchUser = async (
   searchStr: string,
   accessToken: string
 ) => {
+  
   let username = ''
   let email = ''
   if (searchStr.includes('@')){
@@ -85,8 +86,31 @@ const searchUser = async (
   }
 }
 
+const addFriend = async (
+  friendId: string,
+  accessToken: string
+) => {
+  try {
+    const url = `${baseURL}/add-friend`
+    const headerConfig = setTokenHeader(accessToken)
+    const putData = {
+      friendId
+    }
+    const res = await axios.put(url, putData, headerConfig)
+    return {
+      data: res.data
+    }
+  } catch (err) {
+    return {
+      err: err
+    }
+  }
+}
+
+
 export {
   changePassword,
   editProfile,
-  searchUser
+  searchUser,
+  addFriend
 }

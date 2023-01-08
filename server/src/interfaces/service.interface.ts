@@ -15,10 +15,15 @@ const serviceDefaults = {
   message: 'Api default message',
   error: undefined
 }
-
+export const initServiceResult = (options?: Partial<ServiceResult>) => {
+  return {
+    ...serviceDefaults,
+    ...options
+  }
+}
 // Auth Service 
 // There are 4 auth api routes
-export interface friendInfo {
+export interface FriendInfo {
   userId: string
   name: string
   username: string
@@ -32,7 +37,7 @@ export interface LoginResult extends ServiceResult {
   name: string
   username: string
   avatar: string
-  friendInfos: friendInfo[]
+  friendInfos: FriendInfo[]
 }
 
 export interface RegisterResult extends ServiceResult {
@@ -52,7 +57,7 @@ export interface LoginWithTokenResult extends ServiceResult {
   name: string
   username: string
   avatar: string
-  friendInfos: friendInfo[]
+  friendInfos: FriendInfo[]
 }
 
 export function initLoginResult(options?: Partial<LoginResult>): LoginResult {
@@ -125,7 +130,7 @@ export interface SearchResult extends ServiceResult {
   avatar: string
 }
 
-export interface AddFriendresult extends ServiceResult {
+export interface AddFriendResult extends ServiceResult {
 }
 
 export interface EditProfileResult extends ServiceResult {
@@ -138,7 +143,7 @@ export interface EditProfileResult extends ServiceResult {
 export interface ChangePasswordResult extends ServiceResult {
 }
 
-export function initAddFriendresult(options?: Partial<AddFriendresult>): AddFriendresult {
+export function initAddFriendresult(options?: Partial<AddFriendResult>): AddFriendResult {
   return {
     ...serviceDefaults,
     ...options
@@ -220,3 +225,25 @@ export function initSendMessageResult(options?: Partial<SendMessageResult>): Sen
 } 
 
 // ML Service
+
+// Notif Service
+export interface NotifInfo {
+  notifId: string
+  initiatorId: string
+  receiverId: string
+  type: string
+  timestamp: string
+}
+export interface GetNotifsResult extends ServiceResult{
+  notifs: NotifInfo[]
+}
+export function initGetNotifsResult (options?: Partial<GetNotifsResult>): GetNotifsResult{
+  const defaults = {
+    notifs: []
+  }
+  return {
+    ...serviceDefaults,
+    ...defaults,
+    ...options
+  }
+}

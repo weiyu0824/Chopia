@@ -1,6 +1,6 @@
 import { HttpException, AccessDatabaseError, AlreadyLogoutError, WrongDataError } from '../utils/HttpException'
 import { initSearchResult, SearchResult,
-        initAddFriendresult, AddFriendresult,
+        initAddFriendresult, AddFriendResult,
         initEditProfileResult, EditProfileResult,
         initChangePasswordResult, ChangePasswordResult} from '../interfaces/service.interface'
 import { User } from '../models/User'
@@ -43,7 +43,7 @@ export class UserService {
   addFriend = async (
     userId: string,
     friendUserId: string
-  ): Promise<ServiceError | AddFriendresult> =>   {
+  ): Promise<ServiceError | AddFriendResult> =>   {
     try {
       const user = await User.findById(userId)
       const friend = await User.findById(friendUserId)
@@ -102,8 +102,8 @@ export class UserService {
     newPassword: string
   ): Promise<ServiceError | ChangePasswordResult> => {
     try{
-      const originalPassword = await User.findById(userId).select('password')
-      if (oldPassword !== oldPassword){
+      const existUser = await User.findById(userId).select('password')
+      if (oldPassword !== existUser?.password){
         return initChangePasswordResult({
           success: false,
           message: 'Your old password is wrong'

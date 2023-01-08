@@ -34,7 +34,6 @@ export interface IGroup {
 export interface INotification {
   initiatorId: string
   receiverId: string
-  type: string // Currently 3 type: New message, Friend request, Admin
-  notificationMessage: string
+  type: string // Currently 2 type: new-friend, friend-request
   timestamp: string
 }

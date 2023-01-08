@@ -3,18 +3,20 @@ import express, { Application } from 'express'
 import http from 'http'
 import mongoose from 'mongoose'
 import ws, { Server } from 'ws'
+import { parse } from 'url'
 import { APIServer } from './servers/APIServer'
 import { ChatServer } from './servers/ChatServer'
-import { authenticate } from './middlewares/SocketAuthentication'
+import { NotifServer } from './servers/NotifServer'
 
 class App {
   public express: Application
   public port: number
   public dbUrl: string
-  public wsServer: ws.Server
-  public static apiServer = new APIServer()
+  public wsServer1: ws.Server
+  public wsServer2: ws.Server
   public static chatServer = new ChatServer()
-  public static testStr = 'hello world'
+  public static notifServer = new NotifServer()
+  public static apiServer = new APIServer(App.notifServer)
   
   
 
@@ -22,7 +24,8 @@ class App {
     this.express = express()
     this.port = port
     this.dbUrl = dbUrl
-    this.wsServer = new ws.Server({ noServer: true })
+    this.wsServer1 = new ws.Server({ noServer: true })
+    this.wsServer2 = new ws.Server({ noServer: true })
 
     // Micro servers
     // App.apiServer = new APIServer()
@@ -35,7 +38,8 @@ class App {
     App.apiServer.mount(this.express)
 
     // mount WS-based service
-    App.chatServer.mount(this.wsServer)
+    App.chatServer.mount(this.wsServer1)
+    App.notifServer.mount(this.wsServer2)
   }
 
   private async mountDatabase() {
@@ -52,11 +56,28 @@ class App {
       console.log(`App listening on the port ${this.port} ...`)
     })
 
-    const wss = this.wsServer
+    
     server.on('upgrade', (req: http.IncomingMessage, socket, head) => {
-      wss.handleUpgrade(req, socket, head, function done(ws) {
-        wss.emit('connection', ws, req)
-      })
+      console.log('hello new conn')
+      if (req.url) {
+        const { pathname } = parse(req.url)
+        if (pathname === '/chat') {
+          const wss = this.wsServer1
+          wss.handleUpgrade(req, socket, head, function done(ws) {
+            wss.emit('connection', ws, req)
+          })
+        } else if (pathname === '/notif') {
+          const wss = this.wsServer2
+          wss.handleUpgrade(req, socket, head, function done(ws) {
+            wss.emit('connection', ws, req)
+          })
+        } else {
+          socket.destroy()
+        }
+      }else {
+        socket.destroy()
+      }
+      
     })
   }
 }

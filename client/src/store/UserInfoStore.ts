@@ -1,7 +1,7 @@
 import create from 'zustand'
 import FriendInfo from '../pages/Friend/FriendInfo'
 
-interface FriendInfo {
+export interface FriendInfo {
   userId: string,
   name: string,
   username: string,

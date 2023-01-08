@@ -14,7 +14,6 @@ import { useCookies } from 'react-cookie';
 import { loginWithToken } from '../../api/auth';
 import Demo from '../../pages/Demo/Demo'
 import MyNav from '../../components/MyNav'
-import { redirect, useNavigate } from "react-router-dom";
 import { useChatStore } from '../../store/ChatStore'
 
 
@@ -31,7 +30,8 @@ const Home: React.FC<IHome> = (props) => {
 
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
   const userId = useUserInfoStore((state => state.userId))
-  const ws = useRef<WebSocket | null>(null)
+  const wsChat = useRef<WebSocket | null>(null)
+  const wsNotif = useRef<WebSocket | null>(null)
   const [cookies] = useCookies(['access_token', 'refresh_token'])  
   const params = useParams()
   const addNewMessage = useChatStore((state) => state.addNewMessage)
@@ -41,26 +41,24 @@ const Home: React.FC<IHome> = (props) => {
   useEffect(() => {
     if (isLoggedIn) {
       console.log('Use effect in Home')
-      ws.current = new WebSocket('ws://localhost:8088')
-      ws.current.onopen = (event) => {
-        console.log('open ws')
-        if (ws.current) {
-          ws.current.send(JSON.stringify({
+      // Socket for chat server
+      wsChat.current = new WebSocket('ws://localhost:8088/chat')
+      wsChat.current.onopen = (event) => {
+        console.log('open ws (chat)')
+        if (wsChat.current) {
+          wsChat.current.send(JSON.stringify({
             type: 'auth',
             token: `${cookies.access_token}`
           }))
         }
       }
-  
-      ws.current.onclose = (event) => {
-        console.log('close ws')
+      wsChat.current.onclose = (event) => {
+        console.log('close ws (chat)')
       }
-  
-      ws.current.onerror = (event) => {
-        console.log('error ws')
+      wsChat.current.onerror = (event) => {
+        console.log('error ws (chat)')
       }
-  
-      ws.current.onmessage = (event) => {
+      wsChat.current.onmessage = (event) => {
         console.log('message ws')
         const message = JSON.parse(event.data)
 
@@ -72,6 +70,26 @@ const Home: React.FC<IHome> = (props) => {
 
         console.log(message)
       }
+      // Socket for notification server
+      wsNotif.current = new WebSocket('ws://localhost:8088/notif')
+      wsNotif.current.onopen = () => {
+        console.log('open ws (notif)')
+        if (wsNotif.current) {
+          wsNotif.current.send(JSON.stringify({
+            type: 'auth',
+            token: `${cookies.access_token}`
+          }))
+        }
+      }
+      wsNotif.current.onclose = () => {
+        console.log('close ws (notif)')
+      }
+      wsNotif.current.onerror = () => {
+        console.log('error ws (notif)')
+      }
+      wsNotif.current.onmessage = () => {
+        console.log('message ws (notif)')
+      }
     }
   }, [isLoggedIn])
 
@@ -82,8 +100,8 @@ const Home: React.FC<IHome> = (props) => {
       messageText: messageText,
       friendId: friendId,
     }
-    if (ws.current) {
-      ws.current.send(JSON.stringify(message))
+    if (wsChat.current) {
+      wsChat.current.send(JSON.stringify(message))
     }
   }
    

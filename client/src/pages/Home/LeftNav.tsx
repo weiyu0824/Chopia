@@ -11,7 +11,9 @@ import FriendPanal from '../Friend/FriendPanal'
 import useOnClickOutside from '../../hook/useOnClickOutside'
 import { useUserInfoStore } from '../../store/UserInfoStore'
 import { useNavigate } from 'react-router-dom'
-import { setConstantValue } from 'typescript'
+import { useNotifStore } from '../../store/NotifStore'
+import { useCookies } from 'react-cookie'
+import { getNotifs } from '../../api/notif'
 
 
 interface IWrapper {
@@ -104,6 +106,20 @@ const LeftNav: React.FC = () => {
   const settingPanalRef = useRef<null |  HTMLDivElement>(null)
   const friendPanalRef = useRef<null |  HTMLDivElement>(null)
   const navigate = useNavigate()
+  const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
+  const addOldNotification = useNotifStore((state) => state.addOldNotification)
+
+  const fetchNotifs = async () => {
+    console.log('fetch notifs')
+    const res = await getNotifs(cookies.access_token)
+    if (res.data.success) {
+      addOldNotification(res.data.notifs)
+    }
+  }
+  useEffect(() => {
+    fetchNotifs()
+  }, [])
+
   useOnClickOutside(settingPanalRef, () => {
     if (popOutName === 'setting') {
       setPopOutName('')
