@@ -24,10 +24,14 @@ export class MLController implements Controller {
     const friendUsername = req.params.friendUsername
     if (friendUsername === undefined){
       next(new InvalidAPIError())
-    } else {
+      return 
+    }
+    try {
       const chatRoomId = ChatService.calculateChatRoomId(username, friendUsername)
       const prediction = await mlService.getSummary(chatRoomId)
       res.send(prediction)
+    } catch (err) {
+      next(err)
     }
   }
 }

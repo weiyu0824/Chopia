@@ -25,16 +25,15 @@ export class ChatController implements Controller {
     const userId = req.body.userId
     const friendUserId = req.params.friendUserId
 
-    console.log('get private message')
     if (friendUserId === undefined){
       next(new InvalidAPIError())
-    } else {
+      return
+    } 
+
+    try {
       const serviceResult = await chatService.getMessages(userId, friendUserId)
-      if (!serviceResult.error) {
-        res.send(serviceResult)
-      } else {
-        next(serviceResult.error)
-      }
+    } catch (err) {
+      next(err)
     }
   }
 

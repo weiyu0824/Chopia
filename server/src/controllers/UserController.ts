@@ -30,11 +30,11 @@ export class UserController implements Controller {
     await setTimeout(1000)
     const email = ((req.query.email)? req.query.email : '' ) as string;
     const username = ((req.query.username)? req.query.username : '') as string;
-    const serviceResult = await userService.search(email, username)
-    if (!serviceResult.error) {
+    try {
+      const serviceResult = await userService.search(email, username)
       res.send(serviceResult)
-    } else {
-      next(serviceResult.error)
+    } catch (err) {
+      next(err)
     }
   }
 
@@ -43,12 +43,12 @@ export class UserController implements Controller {
     const name = req.body.name
     const username = req.body.username
     const avatar = req.body.avatar
-    console.log('edit profile:', userId, name, avatar, username)
-    const serviceResult = await userService.editProfile(userId, name, username, avatar)
-    if (!serviceResult.error) {
+
+    try {
+      const serviceResult = await userService.editProfile(userId, name, username, avatar)
       res.send(serviceResult)
-    } else {
-      next(serviceResult.error)
+    } catch (err) {
+      next(err)
     }
   }
 
@@ -56,12 +56,12 @@ export class UserController implements Controller {
     const userId = req.body.userId
     const oldPassword = req.body.oldPassword
     const newPassword = req.body.newPassword
-    console.log('change password:', userId, oldPassword, newPassword)
-    const serviceResult = await userService.changePassword(userId, oldPassword, newPassword)
-    if (!serviceResult.error) {
+
+    try {
+      const serviceResult = await userService.changePassword(userId, oldPassword, newPassword)
       res.send(serviceResult)
-    } else {
-      next(serviceResult.error)
+    } catch (err) {
+      next(err)
     }
   }
 
@@ -74,17 +74,18 @@ export class UserController implements Controller {
     const friendId = req.body.friendId
     const type = 'friend-request'
     const timestamp = getCurrTimestamp()
-    const serviceResult = await notifService.addNotif(userId, friendId, type, timestamp)
-    if (!serviceResult.error) {
-      res.json(serviceResult)
+
+    try {
+      const serviceResult = await notifService.addNotif(userId, friendId, type, timestamp)
+      res.send(serviceResult)
       res.locals = {
         notifs: [
           {initiatorId: userId, receiverId: friendId, type, timestamp},
         ] 
       }
       next()
-    }else {
-      next(serviceResult.error)
+    } catch (err) {
+      next(err)
     }
   }
 
@@ -97,9 +98,9 @@ export class UserController implements Controller {
     const userId = req.body.userId
     const friendId = req.body.friendId
     const notifId = req.body.notifId
-    const serviceResult = await userService.addFriend(userId, friendId)
 
-    if (!serviceResult.error) {
+    try {
+      const serviceResult = await userService.addFriend(userId, friendId)
       const timestamp = getCurrTimestamp()
       await notifService.removeNotif(notifId)
       await notifService.addNotif(userId, friendId, 'new-friend', timestamp)
@@ -111,11 +112,10 @@ export class UserController implements Controller {
           {initiatorId: friendId, receiverId: userId, type:'new-friend', timestamp}
         ]
       }
-
-
       res.send(serviceResult)
-    } else {
-      next(serviceResult.error)
+      next()
+    } catch (err) {
+      next(err)
     }
   }
 }

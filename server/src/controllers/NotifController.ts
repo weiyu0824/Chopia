@@ -21,11 +21,12 @@ export class NotifController implements Controller {
 
   private getNotifs = async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.body.userId
-    const serviceResult = await notifService.getNotifs(userId)
-    if (!serviceResult.error) {
-      res.json(serviceResult)
-    } else {
-      next (serviceResult.error)
+
+    try {
+      const serviceResult = await notifService.getNotifs(userId)
+      res.send(serviceResult)
+    } catch (err) {
+      next(err)
     }
   }
 
@@ -33,17 +34,15 @@ export class NotifController implements Controller {
     // 1. remove the notif from the notification DB
     const notifId = req.params.notifId
 
-    console.log(notifId)
     if (!notifId){
       next(new InvalidAPIError())
-    } else {
+      return 
+    } 
+    try {
       const serviceResult = await notifService.removeNotif(notifId)
-      if (!serviceResult.error) {
-        res.json(serviceResult)
-      } else {
-        next (serviceResult.error)
-      }
+      res.send(serviceResult)
+    } catch (err) {
+      next(err)
     }
   }
-
 }

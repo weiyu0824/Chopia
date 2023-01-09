@@ -27,15 +27,13 @@ export class AuthController implements Controller {
     const password = req.body.password
     console.log('login', email, password)
 
-    const serviceResult = await authService.login(email, password)
-
-    if (!serviceResult.error) {
-      // res.cookie('access_token', 'Bearer ' + serviceResult.accessToken)
-      // res.cookie('refresh_token', 'Bearer ' + serviceResult.refreshToken)
+    try {
+      const serviceResult = await authService.login(email, password)
       res.send(serviceResult)
-    } else {
-      next(serviceResult.error)
+    } catch(err) {
+      next(err)
     }
+
   }
 
   private register = async (req: Request, res: Response, next: NextFunction) => {
@@ -45,45 +43,46 @@ export class AuthController implements Controller {
     const password: string = req.body.password
     console.log('register', email, name, username, password)
 
-    const serviceResult = await authService.register(email, name, username, password)
-
-    if (!serviceResult.error) {
+    try {
+      const serviceResult = await authService.register(email, name, username, password)
       res.send(serviceResult)
-    } else {
-      next(serviceResult.error)
+      next()
+    } catch (err) {
+      next(err)
     }
   }
 
   private logout = (req: Request, res: Response, next: NextFunction) => {
     const verifiedName: string = req.body.verifiedName
     console.log('logout', verifiedName)
-
-    const serviceResult = authService.logout(verifiedName)
-    if (!serviceResult.error) {
+    try {
+      const serviceResult = authService.logout(verifiedName)
       res.send(serviceResult)
-    } else {
-      next(serviceResult.error)
+      next()
+    } catch (err) {
+      next(err)
     }
   }
 
   private refresh = (req: Request, res: Response, next: NextFunction) => {
     const verifiedName: string = req.body.verifiedName
-    const serviceResult = authService.refresh(verifiedName)
-    console.log(serviceResult)
-    if (!serviceResult.error) {
+    try {
+      const serviceResult = authService.refresh(verifiedName)
       res.send(serviceResult)
-    } else {
-      next(serviceResult.error)
+      next()
+    } catch (err) {
+      next(err)
     }
   }
 
   private loginWithToken = async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.body.userId;
-    const serviceResult = await authService.loginWithToken(userId)
-    if (!serviceResult.error) {
+    try {
+      const serviceResult = await authService.loginWithToken(userId)
       res.send(serviceResult)
-    } else {
-      next(serviceResult.error)
+      next()
+    } catch (err) {
+      next(err)
     }
   }
 }

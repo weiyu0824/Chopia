@@ -6,10 +6,15 @@ export class MLService {
   constructor() { }
 
   getSummary = async (chatRoomId: string) => {
-    const rawMessages = await PrivateMessage.find({
-      chatRoomId: chatRoomId
-    })
-    const prediction = await inference(rawMessages)
-    return prediction
+    try {
+      const rawMessages = await PrivateMessage.find({
+        chatRoomId: chatRoomId
+      })
+      const prediction = await inference(rawMessages)
+      return prediction
+    } catch (err) {
+      throw (err)
+    }
+
   }   
 }

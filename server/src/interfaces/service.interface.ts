@@ -1,19 +1,19 @@
 import { HttpException } from "../utils/HttpException"
 
-export interface ServiceError {
-  error: HttpException
-}
+// export interface ServiceError {
+//   error: HttpException
+// }
 
 // This is a main interface for all data layer service
 export interface ServiceResult {
   success: boolean
   message: string
-  error: HttpException | undefined
+  // error: HttpException | undefined
 }
 const serviceDefaults = {
   success: true,
   message: 'Api default message',
-  error: undefined
+  // error: undefined
 }
 export const initServiceResult = (options?: Partial<ServiceResult>) => {
   return {

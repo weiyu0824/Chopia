@@ -34,6 +34,7 @@
     "http": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.7.2",
+    "nodemailer": "^6.8.0",
     "react-cookie": "^4.1.1",
     "ws": "^8.11.0"
   }

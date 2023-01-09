@@ -1,4 +1,3 @@
-import { ServiceError } from '../interfaces/service.interface'
 import { Notification } from '../models/Notification'
 import { User } from '../models/User'
 import { AccessDatabaseError } from '../utils/HttpException'
@@ -13,7 +12,7 @@ export class NotifService {
 
   getNotifs = async (
     userId: string
-  ): Promise<ServiceError | GetNotifsResult> => {
+  ): Promise<GetNotifsResult> => {
     try {
       let notifs = await Notification.find({ receiverId: userId })
       console.log(notifs)
@@ -47,9 +46,7 @@ export class NotifService {
         notifs: completeNotifs
       })        
     } catch (err) {
-      return {
-        error: new AccessDatabaseError()
-      }
+      throw new AccessDatabaseError()
     }
   }
 
@@ -58,7 +55,7 @@ export class NotifService {
     receiverId: string,
     type: 'friend-request' | 'new-friend',
     timestamp: string
-  ): Promise<ServiceError | AddFriendResult> => {
+  ): Promise<AddFriendResult> => {
     console.log('add notif')
     try {
       if (type === 'friend-request'){
@@ -84,24 +81,20 @@ export class NotifService {
         message: 'Your friend request has been sent'
       })
     } catch (err) {
-      return {
-        error: new AccessDatabaseError()
-      }
+      throw new AccessDatabaseError()
     }
   }
 
   removeNotif = async (
     notifId: string
-  ): Promise<ServiceError | ServiceResult> => {
+  ): Promise<ServiceResult> => {
     try {
       await Notification.deleteOne({_id: notifId})
       return initServiceResult({
         message: 'successfully remove the notification'
       })      
     } catch (err) {
-      return {
-        error: new AccessDatabaseError()
-      }
+      throw new AccessDatabaseError()
     }
   }
 }

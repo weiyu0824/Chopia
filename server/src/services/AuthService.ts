@@ -3,7 +3,6 @@ import config from '../config/config'
 import { User } from '../models/User'
 import { HttpException, AccessDatabaseError, AlreadyLogoutError } from '../utils/HttpException'
 import { TokenPayload } from '../interfaces/TokenPayload'
-import { ServiceError } from '../interfaces/service.interface'
 import { initRegisterResult, RegisterResult, 
           initLoginResult, LoginResult, 
           initRefreshResult, RefreshResult, 
@@ -62,7 +61,7 @@ export class AuthService {
     name: string, 
     username: string, 
     password: string
-  ): Promise<ServiceError | RegisterResult> => {
+  ): Promise<RegisterResult> => {
     try {
       const emailExist = await User.findOne({
         email: email
@@ -100,71 +99,78 @@ export class AuthService {
         message: 'Succesfully create the user'
       })
     } catch (err) {
-      return {
-        error: new HttpException(500, 'Access Database Error')
-      }
+      throw new AccessDatabaseError()
     }
   }
 
+  test = async () => {
+    throw new Error('test error')
+  }
   login = async (
     email: string, 
     password: string
-  ): Promise<ServiceError | LoginResult> => {
-    console.log('[-]', email, password)
-    console.log()
+  ): Promise<LoginResult> => {
+
     try {
-      const existUser = await User.findOne({
-        email: email,
-        password: password
-      })
-
-      if (existUser !== null) {
-        const userId = existUser._id.toString()
-        console.log(userId)
-        const accessToken = this.genAccessToken({ userId: userId})
-        const refreshToken = this.genRefreshToken({  userId: userId})
-        this.storeRefreshToken(userId, refreshToken)
-        console.log(existUser)
-
-        const friendInfos: Array<FriendInfo> = []
-        for (const friendId of existUser.friendIds) {
-          const friend = await User.findById(friendId)
-          if (friend === null) {
-            throw new AccessDatabaseError()
-          }
-          friendInfos.push({
-            userId: friendId,
-            name: friend.name,
-            username: friend.username,
-            avatar: friend.avatar,
-          })
-        }
-        return initLoginResult({
-          success: true,
-          message: 'Login successfully',
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-          userId: userId,
-          email: existUser.email,
-          name: existUser.name,
-          username: existUser.username,
-          avatar: existUser.avatar,
-          friendInfos: friendInfos
-        }) 
-      }else {
-        return initLoginResult({
-          success: false,
-          message: 'Please provide a valid email address and password.'
-        })
-      }
-    } catch (err) {
-      return {
-        error: new AccessDatabaseError()
-      }
+      await this.test()
+      return initLoginResult()
+    } catch(err) {
+      throw err
     }
+    // try {
+      
+    //   const existUser = await User.findOne({
+    //     email: email,
+    //     password: password
+    //   })
+      
+    //   if (existUser !== null) {
+    //     const userId = existUser._id.toString()
+    //     console.log(userId)
+    //     const accessToken = this.genAccessToken({ userId: userId})
+    //     const refreshToken = this.genRefreshToken({  userId: userId})
+    //     this.storeRefreshToken(userId, refreshToken)
+    //     console.log(existUser)
+
+    //     const friendInfos: Array<FriendInfo> = []
+    //     for (const friendId of existUser.friendIds) {
+    //       const friend = await User.findById(friendId)
+    //       if (friend === null) {
+    //         throw new AccessDatabaseError()
+    //       }
+    //       friendInfos.push({
+    //         userId: friendId,
+    //         name: friend.name,
+    //         username: friend.username,
+    //         avatar: friend.avatar,
+    //       })
+    //     }
+    //     return initLoginResult({
+    //       success: true,
+    //       message: 'Login successfully',
+    //       accessToken: accessToken,
+    //       refreshToken: refreshToken,
+    //       userId: userId,
+    //       email: existUser.email,
+    //       name: existUser.name,
+    //       username: existUser.username,
+    //       avatar: existUser.avatar,
+    //       friendInfos: friendInfos
+    //     }) 
+    //   }else {
+    //     return initLoginResult({
+    //       success: false,
+    //       message: 'Please provide a valid email address and password.'
+    //     })
+    //   }
+    // } catch (err) {
+    //   return {
+    //     error: new AccessDatabaseError()
+    //   }
+    // }
   }
 
-  logout = (verifiedName: string): ServiceError | LogoutResult => {
+  logout = (verifiedName: string): LogoutResult => {
     // delete token
     if (this.removeRefreshToken(verifiedName)) {
       return initLogoutResult({
@@ -172,13 +178,12 @@ export class AuthService {
         message: 'Succeesfully log out'
       })
     } else {
-      return {
-        error: new AlreadyLogoutError()
-      }
+      throw new AlreadyLogoutError()
+      
     }
   }
 
-  refresh = (verifiedName: string): ServiceError | RefreshResult => {
+  refresh = (verifiedName: string): RefreshResult => {
 
     // const decodedToken = jwt.verify(refreshToken, config.token.refreshSecret)
     // const accessToken = this.genAccessToken(decodedToken.)
@@ -194,14 +199,13 @@ export class AuthService {
     //     error: new AlreadyLogoutError()
     //   }
     // }
-    return {
-      error: new AlreadyLogoutError()
-    }
+    throw new AlreadyLogoutError()
+    
   } // token
     
   loginWithToken = async (
     userId: string
-  ): Promise<ServiceError | LoginWithTokenResult> => {
+  ): Promise<LoginWithTokenResult> => {
     try{
       const existUser = await User.findById(userId)
       if (existUser !== null) {
@@ -236,9 +240,7 @@ export class AuthService {
       }
 
     } catch(err) {
-      return {
-        error: new AccessDatabaseError()
-      }
+      throw new AccessDatabaseError()
     }
   }
 }

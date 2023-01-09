@@ -13,7 +13,7 @@ export class UserService {
   search = async (
     email: string, 
     username: string
-  ): Promise<ServiceError | SearchResult> => {
+  ): Promise<SearchResult> => {
     try {
       const condition = (email !== '') ? { email: email } : { username: username }
       const existUser = await User.findOne(condition)
@@ -34,23 +34,20 @@ export class UserService {
       }
 
     } catch (err) {
-      return {
-        error: new AccessDatabaseError()
-      }
+      throw new AccessDatabaseError()
     }
   }
 
   addFriend = async (
     userId: string,
     friendUserId: string
-  ): Promise<ServiceError | AddFriendResult> =>   {
+  ): Promise<AddFriendResult> =>   {
     try {
       const user = await User.findById(userId)
       const friend = await User.findById(friendUserId)
       if (user === null || friend === null) {
-        return {
-          error: new WrongDataError()
-        }
+        throw new WrongDataError()
+        
       } else {
         user.friendIds.push(friendUserId)
         friend.friendIds.push(userId)
@@ -64,9 +61,7 @@ export class UserService {
         })
       }
     } catch (err) {
-      return {
-        error: new AccessDatabaseError()
-      }
+      throw new AccessDatabaseError()
     }
   }
 
@@ -75,7 +70,7 @@ export class UserService {
     name: string,
     username: string,
     avatar: string
-  ): Promise<ServiceError | EditProfileResult> => {
+  ): Promise<EditProfileResult> => {
     try {
       await User.updateOne({_id: userId}, {
         name: name,
@@ -90,9 +85,7 @@ export class UserService {
         message: 'Update profile successfully'
       })
     } catch (err) {
-      return {
-        error: new AccessDatabaseError()
-      }
+      throw new AccessDatabaseError()
     }
   }
 
@@ -100,7 +93,7 @@ export class UserService {
     userId: string,
     oldPassword: string,
     newPassword: string
-  ): Promise<ServiceError | ChangePasswordResult> => {
+  ): Promise<ChangePasswordResult> => {
     try{
       const existUser = await User.findById(userId).select('password')
       if (oldPassword !== existUser?.password){
@@ -117,9 +110,7 @@ export class UserService {
         message: 'Your password has been updated!!!'
       })
     } catch (err) {
-      return {
-        error: new AccessDatabaseError()
-      }
+      throw new AccessDatabaseError()
     }
   }
 }
