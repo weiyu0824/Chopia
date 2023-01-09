@@ -22,6 +22,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   display: flex;
   height: 100vh;
+
+  .loadingSpin{
+    margin: auto
+  }
 `
 const FriendBar = styled.div`
   border-bottom: solid gray;
@@ -114,9 +118,14 @@ const ChatFeed: React.FC<IChatFeed> = (props) => {
     bottomRef.current?.scrollIntoView({behavior: 'auto'})
   }, [chatHistory])
 
+  // useEffect(() => {
+  //   console.log('fetch history in use effect')
+  //   fetchChatHistory()
+  // }, [])
   useEffect(() => {
+    console.log('use effect in chatfeed when friendId change')
     fetchChatHistory()
-  }, [])
+  }, [props.friendId])
 
   const sendMessage = () => {
     if (currText.replace(/\s+/g, '') !== ''){
@@ -159,8 +168,6 @@ const ChatFeed: React.FC<IChatFeed> = (props) => {
       || (history[idx].timestamp !== history[idx - 1].timestamp)){
       noAvatar = false
     }
-
-
     let senderName = ''
     let senderAvatar = 'standard'
     if (message.senderId === userId){
@@ -182,23 +189,23 @@ const ChatFeed: React.FC<IChatFeed> = (props) => {
     )
   })
 
+  const chatHistArea = (loading)? (
+    <Spin className='loadingSpin'/>
+  ) : (
+    <ChatArea>
+      {dialogue}
+      <div ref={bottomRef}></div>
+    </ChatArea>
+  )
+
 
     return (
       <Wrapper>
         <h1></h1>
         <FriendBar>
-          {/* <Avatar 
-            avatarName={friendInfos[props.friendId].avatar}
-            size={2}
-          /> */}
           <span>{friendInfos[props.friendId].name}</span>
         </FriendBar>
-        <ChatArea>
-          {dialogue}
-          <div ref={bottomRef}></div>
-        </ChatArea>
-        
-
+        {chatHistArea}
         <div style={{margin: '0 15px 25px 15px'}}>
           <Editor>
               <TextareaAutosize 

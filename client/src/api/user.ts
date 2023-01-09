@@ -107,10 +107,34 @@ const addFriend = async (
   }
 }
 
+const acceptFriend = async (
+  friendId: string,
+  notifId: string,
+  accessToken: string
+) => {
+  try {
+    const url = `${baseURL}/accept-friend`
+    const headerConfig = setTokenHeader(accessToken)
+    const putData = {
+      friendId,
+      notifId
+    }
+    const res = await axios.put(url, putData, headerConfig)
+    return {
+      data: res.data
+    }
+  } catch (err) {
+    return {
+      err: err
+    }
+  }
+ }
+
 
 export {
   changePassword,
   editProfile,
   searchUser,
-  addFriend
+  addFriend,
+  acceptFriend
 }

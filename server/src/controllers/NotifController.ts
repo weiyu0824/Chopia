@@ -45,4 +45,5 @@ export class NotifController implements Controller {
       }
     }
   }
+
 }

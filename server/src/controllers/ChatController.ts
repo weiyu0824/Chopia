@@ -3,8 +3,7 @@ import { Controller } from '../interfaces/Controller'
 import { validateToken } from '../middlewares/TokenValidation'
 import { ChatService } from '../services/ChatService'
 import { InvalidAPIError } from '../utils/HttpException'
-
-
+import { setTimeout } from 'timers/promises'
 
 const chatService = new ChatService()
 
@@ -21,6 +20,7 @@ export class ChatController implements Controller {
   }
 
   getPrivateMessage = async (req: Request, res: Response, next: NextFunction) => {
+    await setTimeout(500)
     // get token and page id here
     const userId = req.body.userId
     const friendUserId = req.params.friendUserId

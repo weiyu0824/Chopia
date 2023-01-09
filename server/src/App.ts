@@ -14,9 +14,9 @@ class App {
   public dbUrl: string
   public wsServer1: ws.Server
   public wsServer2: ws.Server
-  public static chatServer = new ChatServer()
-  public static notifServer = new NotifServer()
-  public static apiServer = new APIServer(App.notifServer)
+  private chatServer: ChatServer
+  private notifServer: NotifServer
+  private apiServer: APIServer
   
   
 
@@ -27,6 +27,11 @@ class App {
     this.wsServer1 = new ws.Server({ noServer: true })
     this.wsServer2 = new ws.Server({ noServer: true })
 
+    // 
+    this.chatServer = ChatServer.getInstance()
+    this.notifServer = NotifServer.getInstance()
+    this.apiServer = APIServer.getInstance()
+
     // Micro servers
     // App.apiServer = new APIServer()
     // App.chatServer = new ChatServer()
@@ -35,11 +40,11 @@ class App {
     
 
     // mount Http-based service
-    App.apiServer.mount(this.express)
+    this.apiServer.mount(this.express)
 
     // mount WS-based service
-    App.chatServer.mount(this.wsServer1)
-    App.notifServer.mount(this.wsServer2)
+    this.chatServer.mount(this.wsServer1)
+    this.notifServer.mount(this.wsServer2)
   }
 
   private async mountDatabase() {

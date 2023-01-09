@@ -12,14 +12,24 @@ import { NotifController } from '../controllers/NotifController'
 export class APIServer {
   private apiUrl: string
   private controllers: Controller[]
+  private notifServer: NotifServer
+  private static INSTANCE: APIServer | undefined = undefined
 
-  constructor(notifServer: NotifServer) {
+  private constructor() {
     this.apiUrl = '/api'
     this.controllers = [
       new AuthController(), new ChatController(), new MLController(), new UserController(), new NotifController()
     ]
-
+    this.notifServer = NotifServer.getInstance()
   }
+
+  public static getInstance = () => {
+    if (!this.INSTANCE){
+      this.INSTANCE = new APIServer()
+    }
+    return this.INSTANCE
+  }
+  
 
   public mount(app: Application) {
     this.mountMiddlewares(app)

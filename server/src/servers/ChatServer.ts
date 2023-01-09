@@ -6,10 +6,19 @@ export class ChatServer {
   private onlineUsers: Map<string, WebSocket[]>
   private chatHandler: ChatHandler
   private unAuthSockets: Set<WebSocket>
-  constructor (){
+  private static INSTANCE: ChatServer | null = null
+  
+  private constructor (){
     this.onlineUsers = new Map()
     this.chatHandler = new ChatHandler()
     this.unAuthSockets = new Set()
+  }
+
+  public static getInstance = () => {
+    if (!this.INSTANCE){
+      this.INSTANCE = new ChatServer()
+    }
+    return this.INSTANCE
   }
 
   public mount(wsServer: Server) {
@@ -46,6 +55,9 @@ export class ChatServer {
             this.onlineUsers.set(userId, sockets)
             this.unAuthSockets.delete(ws)
           }
+        } else if (dmessage.type === 'chat') {
+          const notification = this.chatHandler.receiveMessage(dmessage.senderId, dmessage.friendId, dmessage.messageText)
+          this.sendMessage(notification, [dmessage.friendId])
         } else {
           ws.close()
         }
@@ -57,8 +69,8 @@ export class ChatServer {
     })
   }
 
-  public sendNotification(message: Object, targetUserIds: string[]) {
-    console.log('send notification to friend')
+  public sendMessage(message: Object, targetUserIds: string[]) {
+    console.log('send message to friend')
     console.log('target: ', targetUserIds)
     for (const userId of targetUserIds) {
       const sockets = this.onlineUsers.get(userId)

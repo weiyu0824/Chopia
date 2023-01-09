@@ -1,13 +1,22 @@
 import { Server, WebSocket } from 'ws'
 import { authenticate } from '../middlewares/SocketAuthentication'
+import { ChatHandler } from '../handlers/ChatHandler'
 
 export class NotifServer {
     private onlineUsers: Map<string, WebSocket[]>
     private unAuthSockets: Set<WebSocket>
+    private static INSTANCE: NotifServer | null = null
 
-    constructor (){
+    private constructor () {
       this.onlineUsers = new Map()
       this.unAuthSockets = new Set()
+    }
+
+    public static getInstance = () => {
+      if (!this.INSTANCE){
+        this.INSTANCE = new NotifServer()
+      }
+      return this.INSTANCE
     }
   
     public mount(wsServer: Server) {

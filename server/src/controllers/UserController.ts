@@ -23,6 +23,7 @@ export class UserController implements Controller {
     this.router.put('/add-friend', validateToken, this.addFriend)
     this.router.put('/edit-profile', validateToken, this.editProfile)
     this.router.put('/change-password', validateToken, this.changePassword)
+    this.router.put('/accept-friend', validateToken, this.acceptFriend)
   }
 
   private searchUser = async (req: Request, res: Response, next: NextFunction) => {

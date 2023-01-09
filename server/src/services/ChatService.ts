@@ -44,7 +44,6 @@ export class ChatService {
     messageText: string, 
     timestamp: string
   ): Promise<ServiceError | SendMessageResult> => {
-
     try {
       const chatRoomId = ChatService.calculateChatRoomId(senderId, friendUserId)
       const privateMessage = new PrivateMessage({
@@ -53,6 +52,7 @@ export class ChatService {
         senderId: senderId,
         timestamp: timestamp
       })
+      console.log(privateMessage)
       privateMessage.save()
       // TODO: check return type
       return initSendMessageResult({

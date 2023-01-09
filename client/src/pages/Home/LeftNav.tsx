@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { IoIosNotifications } from 'react-icons/io'
 import { IoMdPersonAdd } from 'react-icons/io'
 import { AiTwotoneSetting } from 'react-icons/ai'
+import { VscBellDot, VscBell } from 'react-icons/vsc'
 import { Color } from '../../utils/color'
 import Contact from './Nav/Contact'
 import UserLabel from './Nav/UserLabel'
@@ -117,6 +118,7 @@ const LeftNav: React.FC = () => {
     }
   }
   useEffect(() => {
+    console.log('left nev use effect')
     fetchNotifs()
   }, [])
 
@@ -129,9 +131,6 @@ const LeftNav: React.FC = () => {
     if (popOutName === 'friend') {
       setPopOutName('')
     }
-  })
-  useEffect(() => {
-    console.log('mount left nav')
   })
   const goToNotification = () => {
     navigate('/notification')
@@ -176,7 +175,9 @@ const LeftNav: React.FC = () => {
         <button 
           className='controlButton'
           onClick={goToNotification}>
-            <IoIosNotifications />
+            {/* <IoIosNotifications /> */}
+            {/* <VscBellDot /> */}
+            <VscBell />
         </button>
 
         <button 

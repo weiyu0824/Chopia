@@ -6,6 +6,7 @@ import { useCookies } from 'react-cookie'
 import { useNotifStore } from '../../store/NotifStore'
 import Avatar from '../../components/Avatar'
 import { deleteNotif } from '../../api/notif'
+import { acceptFriend } from '../../api/user'
 
 interface IReplyButton {
   funcType: string
@@ -60,8 +61,11 @@ const NotificationPanal = () => {
   const notifications = useNotifStore((state) => state.notificatoins)
   const removeNotif = useNotifStore((state) => state.removeNotif)
 
-  const onAcceptRequest = (notifId: string) => {
-
+  const onAcceptRequest = async (friendId: string, notifId: string) => {
+    const res = await acceptFriend(friendId, notifId, cookies.access_token)
+    if (res.data.success) {
+      removeNotif(notifId)
+    }
   }
   const onDeleteNotif = async (notifId: string) => {
     console.log('notifId')
@@ -80,7 +84,8 @@ const NotificationPanal = () => {
         <>
           <span className='notificationMessage'>
             <strong>{notif.initiatorInfo.name}</strong> send you a friend request</span>
-          <ReplyButton funcType='confirm' onClick={() => onAcceptRequest(notif.notifId)}>Confirm</ReplyButton>
+          <ReplyButton funcType='confirm'
+           onClick={() => onAcceptRequest(notif.initiatorId, notif.notifId)}>Confirm</ReplyButton>
           <ReplyButton funcType='delete' onClick={() => onDeleteNotif(notif.notifId)}>Delete</ReplyButton>
         </>
       )

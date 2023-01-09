@@ -7,6 +7,7 @@ interface CompleteNotification extends Notification{
 }
 export type NotifState = {
   notificatoins: CompleteNotification[]
+  newNotifCome: boolean
 }
 
 export type NotifAction = {
@@ -17,6 +18,7 @@ export type NotifAction = {
 
 export const useNotifStore = create<NotifState & NotifAction>()((set) => ({
   notificatoins: [],
+  newNotifCome: false,
   addNewNotif: (notification: CompleteNotification) => {
     set((state) => ({
       notificatoins: [...state.notificatoins, notification]
