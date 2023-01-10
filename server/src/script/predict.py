@@ -7,9 +7,10 @@ from transformers import AutoTokenizer, AutoModelWithLMHead
 
 folder_name = 'cache/'
 def main(filename: str):
-    print('Test Script complete {}'.format(filename))
+    
     with open (f'{folder_name}{filename}.json', 'r') as f:
         line = json.load(f)
+    print('Test Script complete 1 {}'.format(filename))
     ids = []
     docs = []
     for l in line:
@@ -17,6 +18,7 @@ def main(filename: str):
         docs.append(l["messageText"])
     # cluster first
     embed_model = SentenceTransformer('all-MiniLM-L6-v2')
+    print('Test Script complete 2 {}'.format(filename))
     sentence_embeddings = embed_model.encode(docs)
     # k_cluster = len(docs) // 10 if len(docs) > 20 else 2
     k_cluster = len(docs) // 5 if len(docs) > 10 else 2
@@ -59,7 +61,8 @@ def main(filename: str):
         sample['ids'] = cluster_ids_map[key]
         sample['original'] = cluster_original_map[key]
         data.append(sample.copy())
-    print(data)
+    # print(data)
+    print('Test Script complete {}'.format(filename))
     with open(f'{folder_name}{filename}.out.json', 'w') as f:
         json.dump(data, f, indent=4) 
 if __name__ =="__main__":

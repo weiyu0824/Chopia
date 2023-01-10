@@ -25,6 +25,7 @@ export class NotifController implements Controller {
     try {
       const serviceResult = await notifService.getNotifs(userId)
       res.send(serviceResult)
+      next()
     } catch (err) {
       next(err)
     }

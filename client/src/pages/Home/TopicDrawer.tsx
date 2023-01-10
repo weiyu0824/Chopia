@@ -6,12 +6,13 @@ import { MdSummarize } from 'react-icons/md'
 import { VscRefresh } from 'react-icons/vsc'
 import { RxCross1 } from 'react-icons/rx'
 import { Summary } from '../../interfaces/Summary'
-import { GetSummaryapi } from '../../api/ml'
+import { getSummary } from '../../api/ml'
 import TopicButtonList from './Topic/TopicButtonList'
 import TopicCard from './Topic/TopicCard'
 import { Color } from '../../utils/color'
 import { Spin } from 'antd';
 import { useUserInfoStore } from '../../store/UserInfoStore'
+import Icon from '../../components/Icon'
 
 
 
@@ -22,7 +23,7 @@ interface IBox {
 
 const Box = styled.div<IBox>`
   padding: 10px;
-  width: ${props => (props.shrink) ? "50px" : "800px"};
+  width: ${props => (props.shrink) ? "50px" : "400px"};
   height: 100vh;
   background-color: lightblue;
   transition-duration: 0.3s;
@@ -33,40 +34,20 @@ const Box = styled.div<IBox>`
   .ant-spin-dot-item {
     background-color: ${Color.blue};
   }
-  .togleBtn {
-    /* position: absolute;
-    top:5px;
-    right:3px;*/
-    padding: 5px 8px;
-    
-    background-color: ${Color.white};
-    border: none;
-    border-radius: 20px;
-    /* color: #565151; */
-    
-    &:hover{
-      background-color: lightgray;
-    };
-    
-  }
-  .expandBtn {
-    float: right;
-    display: ${props => (props.shrink) ? "inline" : "none"};
-  }
-  .shrinkBtn {
-    float: right;
-    display: ${props => (props.shrink || props.isLoading) ? "none" : "inline"};
-  }
-  .refreshBtn {
-    float: left;
-    display: ${props => (props.shrink || props.isLoading) ? "none" : "inline"};
-  }
   .loadingIcon {
     display: ${props => (props.isLoading && !props.shrink) ? '' : 'none'};
   }
+  .topicDrawerBtns{
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between
+  }
 `
 
-const TopicDrawer: React.FC = () => {
+interface ITopicDrawer {
+  friendId: string
+}
+const TopicDrawer: React.FC<ITopicDrawer> = (props) => {
   const summaryColors = [Color.dblue, Color.blue]
   const [shrink, setShrink] = useState(true)
   const [summaryId, setSumaryId] = useState(-1)
@@ -81,16 +62,17 @@ const TopicDrawer: React.FC = () => {
   
 
   const handleRefresh = async () => {
-    const friendUsername = username
+    // console.log('refresh')
     setIsLoading(true)
-
-    const res = await GetSummaryapi(friendUsername, cookies.access_token)
+    const res = await getSummary(props.friendId, cookies.access_token)
     
     if (res.data !== undefined) {
       setSummarys(res.data)
       setShowBtnList(true)
       setShowSummaryCard(false)
       setSumaryId(-1)
+    }else {
+
     }
     setIsLoading(false)
   }
@@ -127,28 +109,42 @@ const TopicDrawer: React.FC = () => {
     <div></div>
   
   
+  let controlBtns = <></>
+  if (shrink) {
+    controlBtns = (
+      <div className='topicDrawerBtns'>
+        <Icon 
+          icon={<MdSummarize />}
+          size={1.2}
+          backgroundColor='white'
+          hoverColor='lightgray'
+          onClick={handleShrinkAndExpand}
+        />
+     </div>
+    ) 
+  }else if (!shrink && !isLoading){
+    controlBtns = (
+      <div className='topicDrawerBtns'>
+        <Icon 
+          icon={<VscRefresh />}
+          size={1.2}
+          backgroundColor='white'
+          hoverColor='lightgray'
+          onClick={handleRefresh}
+        />
+        <Icon 
+          icon={<RxCross1 />}
+          size={1.2}
+          backgroundColor='white'
+          hoverColor='lightgray'
+          onClick={handleShrinkAndExpand}
+        />
+      </div>
+    )
+  }
   return (
     <Box shrink={shrink} isLoading={isLoading}>
-      <div>
-        <button className="togleBtn refreshBtn" onClick={handleRefresh}>
-          <IconContext.Provider value={{ size: "1.2rem" }}>
-            <VscRefresh />
-          </ IconContext.Provider>
-        </button>
-        <button className="togleBtn expandBtn" onClick={handleShrinkAndExpand}>
-          <IconContext.Provider value={{ size: "1.2rem" }}>
-            <MdSummarize />
-          </ IconContext.Provider>
-        </button>
-        <button className="togleBtn shrinkBtn" onClick={handleShrinkAndExpand}>
-          <IconContext.Provider value={{ size: "1.2rem" }}>
-            <RxCross1 />
-          </ IconContext.Provider>
-        </button>
-      </div>
-      {/* <div className="topicDisplay">
-        <TopicBox/>
-      </div> */}
+      {controlBtns}
       <Spin size= 'large' className='loadingIcon'/>
       {TopicButtonListDisplay}
       {TopicCardDisplay}

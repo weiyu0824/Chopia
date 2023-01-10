@@ -26,6 +26,7 @@ const Wrapper = styled.div`
   padding: 2rem 5rem;
   border-style: none;
   background-color: ${Color.white};
+  overflow: scroll;
   .windowTitle{
     text-align: left;
   }

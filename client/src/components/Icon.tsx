@@ -9,6 +9,7 @@ interface IBox {
   hoverColor: string
   size: number
   color: string
+  clickable: boolean
 }
 
 const Box = styled.div<IBox>`
@@ -26,7 +27,7 @@ const Box = styled.div<IBox>`
   color: ${(props) => `${props.color}`};
   font-size: ${(props) => `${props.size}rem`};
   vertical-align: center;
-
+  cursor: ${(props) => `${props.clickable}`? 'pointer' : ''};
   &:hover{
     background-color: ${(props) => props.hoverColor};
   }
@@ -39,6 +40,7 @@ interface IconProps {
   shape?: string // round or square
   hoverColor?: string
   color?: string
+  onClick?: () => void
 }
 
 const defaultProps = {
@@ -46,7 +48,8 @@ const defaultProps = {
   size: 2,
   backgroundColor: '',
   hoverColor: '',
-  color: ''
+  color: '',
+  onClick: () => {}
 }
 
 const Icon: React.FC<IconProps> = (options) => {
@@ -62,6 +65,8 @@ const Icon: React.FC<IconProps> = (options) => {
       size={props.size}
       hoverColor={props.hoverColor}
       color={props.color}
+      onClick={props.onClick}
+      clickable={props.hoverColor === ''}
     > 
       {props.icon}
     </Box>

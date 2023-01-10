@@ -8,10 +8,8 @@ import { useUserInfoStore } from '../../store/UserInfoStore'
 import { getCurrentTimeString } from '../../utils/time'
 import { Color } from '../../utils/color'
 import TextareaAutosize from 'react-textarea-autosize'
-import Avatar from '../../components/Avatar'
 import { calculateChatRoomId } from '../../utils/chatroom'
 import { Spin } from 'antd';
-import { useNavigate } from 'react-router-dom'
 
 
 
@@ -107,6 +105,7 @@ const ChatFeed: React.FC<IChatFeed> = (props) => {
     console.log('fetch history')
     setLoading(true)
     const res = await getChat(props.friendId, cookies.access_token)
+    console.log('fetch hist good??')
     if (res.data.success) {
       const chatRoomId = calculateChatRoomId(userId, props.friendId)
       console.log('chat room id', chatRoomId)
@@ -118,10 +117,6 @@ const ChatFeed: React.FC<IChatFeed> = (props) => {
     bottomRef.current?.scrollIntoView({behavior: 'auto'})
   }, [chatHistory])
 
-  // useEffect(() => {
-  //   console.log('fetch history in use effect')
-  //   fetchChatHistory()
-  // }, [])
   useEffect(() => {
     console.log('use effect in chatfeed when friendId change')
     fetchChatHistory()

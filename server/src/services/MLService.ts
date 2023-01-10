@@ -7,10 +7,13 @@ export class MLService {
 
   getSummary = async (chatRoomId: string) => {
     try {
-      const rawMessages = await PrivateMessage.find({
+      const chatMessages = await PrivateMessage.find({
         chatRoomId: chatRoomId
       })
-      const prediction = await inference(rawMessages)
+      if (chatMessages.length < 5) {
+        throw new Error('Your should have over 10 messages so that we could generate summary')
+      }
+      const prediction = await inference(chatMessages)
       return prediction
     } catch (err) {
       throw (err)

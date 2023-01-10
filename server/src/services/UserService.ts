@@ -5,9 +5,9 @@ import { initSearchResult, SearchResult,
         initChangePasswordResult, ChangePasswordResult} from '../interfaces/service.interface'
 import { User } from '../models/User'
 
-interface ServiceError {
-  error: HttpException
-}
+// interface ServiceError {
+//   error: HttpException
+// }
 
 export class UserService {
   search = async (

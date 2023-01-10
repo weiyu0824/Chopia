@@ -7,6 +7,7 @@ import { parse } from 'url'
 import { APIServer } from './servers/APIServer'
 import { ChatServer } from './servers/ChatServer'
 import { NotifServer } from './servers/NotifServer'
+import { sendVerificationEmail } from './services/EmailService'
 
 class App {
   public express: Application
@@ -60,7 +61,6 @@ class App {
     const server = this.express.listen(this.port, () => {
       console.log(`App listening on the port ${this.port} ...`)
     })
-
     
     server.on('upgrade', (req: http.IncomingMessage, socket, head) => {
       console.log('hello new conn')

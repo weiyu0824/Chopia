@@ -24,7 +24,7 @@ export class ChatServer {
   public mount(wsServer: Server) {
     wsServer.on('connection', (ws, req) => {
       console.log('connection establish in chat server')
-
+      
       this.unAuthSockets.add(ws)
       setTimeout(() => {
         if (this.unAuthSockets.has(ws)) {

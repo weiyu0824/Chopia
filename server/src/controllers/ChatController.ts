@@ -24,6 +24,7 @@ export class ChatController implements Controller {
     // get token and page id here
     const userId = req.body.userId
     const friendUserId = req.params.friendUserId
+    console.log('get private message')
 
     if (friendUserId === undefined){
       next(new InvalidAPIError())
@@ -32,6 +33,8 @@ export class ChatController implements Controller {
 
     try {
       const serviceResult = await chatService.getMessages(userId, friendUserId)
+      res.send(serviceResult)
+      next()
     } catch (err) {
       next(err)
     }

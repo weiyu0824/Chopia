@@ -112,62 +112,54 @@ export class AuthService {
   ): Promise<LoginResult> => {
 
     try {
-      await this.test()
-      return initLoginResult()
-    } catch(err) {
-      throw err
-    }
-    // try {
       
-    //   const existUser = await User.findOne({
-    //     email: email,
-    //     password: password
-    //   })
+      const existUser = await User.findOne({
+        email: email,
+        password: password
+      })
       
-    //   if (existUser !== null) {
-    //     const userId = existUser._id.toString()
-    //     console.log(userId)
-    //     const accessToken = this.genAccessToken({ userId: userId})
-    //     const refreshToken = this.genRefreshToken({  userId: userId})
-    //     this.storeRefreshToken(userId, refreshToken)
-    //     console.log(existUser)
+      if (existUser !== null) {
+        const userId = existUser._id.toString()
+        console.log(userId)
+        const accessToken = this.genAccessToken({ userId: userId})
+        const refreshToken = this.genRefreshToken({  userId: userId})
+        this.storeRefreshToken(userId, refreshToken)
+        console.log(existUser)
 
-    //     const friendInfos: Array<FriendInfo> = []
-    //     for (const friendId of existUser.friendIds) {
-    //       const friend = await User.findById(friendId)
-    //       if (friend === null) {
-    //         throw new AccessDatabaseError()
-    //       }
-    //       friendInfos.push({
-    //         userId: friendId,
-    //         name: friend.name,
-    //         username: friend.username,
-    //         avatar: friend.avatar,
-    //       })
-    //     }
-    //     return initLoginResult({
-    //       success: true,
-    //       message: 'Login successfully',
-    //       accessToken: accessToken,
-    //       refreshToken: refreshToken,
-    //       userId: userId,
-    //       email: existUser.email,
-    //       name: existUser.name,
-    //       username: existUser.username,
-    //       avatar: existUser.avatar,
-    //       friendInfos: friendInfos
-    //     }) 
-    //   }else {
-    //     return initLoginResult({
-    //       success: false,
-    //       message: 'Please provide a valid email address and password.'
-    //     })
-    //   }
-    // } catch (err) {
-    //   return {
-    //     error: new AccessDatabaseError()
-    //   }
-    // }
+        const friendInfos: Array<FriendInfo> = []
+        for (const friendId of existUser.friendIds) {
+          const friend = await User.findById(friendId)
+          if (friend === null) {
+            throw new AccessDatabaseError()
+          }
+          friendInfos.push({
+            userId: friendId,
+            name: friend.name,
+            username: friend.username,
+            avatar: friend.avatar,
+          })
+        }
+        return initLoginResult({
+          success: true,
+          message: 'Login successfully',
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          userId: userId,
+          email: existUser.email,
+          name: existUser.name,
+          username: existUser.username,
+          avatar: existUser.avatar,
+          friendInfos: friendInfos
+        }) 
+      }else {
+        return initLoginResult({
+          success: false,
+          message: 'Please provide a valid email address and password.'
+        })
+      }
+    } catch (err) {
+      throw new AccessDatabaseError()
+    }
   }
 
   logout = (verifiedName: string): LogoutResult => {

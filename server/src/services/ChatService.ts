@@ -1,9 +1,7 @@
 import { PrivateMessage } from '../models/PrivateMessage'
-import { HttpException } from '../utils/HttpException'
-import { ServiceError } from '../interfaces/service.interface'
+import { AccessDatabaseError, HttpException } from '../utils/HttpException'
 import { GetMessageResult, initGetMessageResult, 
         SendMessageResult, initSendMessageResult } from '../interfaces/service.interface'
-import e from 'express'
 
 export class ChatService {
   static calculateChatRoomId(user1Id: string, user2Id: string): string {
@@ -13,7 +11,7 @@ export class ChatService {
   getMessages = async (
     userId: string, 
     friendUserId: string
-  ): Promise<ServiceError | GetMessageResult> => {
+  ): Promise<GetMessageResult> => {
     try {
       const chatRoomId = ChatService.calculateChatRoomId(userId, friendUserId)
       const messages = await PrivateMessage.find({
@@ -32,9 +30,7 @@ export class ChatService {
         })
       }
     } catch (err) {
-      return {
-        error: new HttpException(500, 'Access Database Error')
-      }
+      throw new AccessDatabaseError()
     }
   }
 
@@ -43,7 +39,7 @@ export class ChatService {
     friendUserId: string, 
     messageText: string, 
     timestamp: string
-  ): Promise<ServiceError | SendMessageResult> => {
+  ): Promise<SendMessageResult> => {
     try {
       const chatRoomId = ChatService.calculateChatRoomId(senderId, friendUserId)
       const privateMessage = new PrivateMessage({
@@ -60,9 +56,7 @@ export class ChatService {
         message: 'Successfully send the message'
       })
     } catch (err) {
-      return {
-        error: new HttpException(500, 'Access Database Error')
-      }
+      throw new AccessDatabaseError()
     }
   }
 }

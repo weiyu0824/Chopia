@@ -3,9 +3,9 @@ import { setTokenHeader } from './header'
 
 const baseURL = 'http://localhost:8088/api/ml'
 
-export const GetSummaryapi = async (friendUsername: string, accessToken: string) => {
-  const url = `${baseURL}/summary/${friendUsername}`
-  console.log(friendUsername)
+export const getSummary = async (friendId: string, accessToken: string) => {
+  const url = `${baseURL}/summary/${friendId}`
+  console.log(friendId)
   console.log(accessToken)
   try {
     const headerConfig = setTokenHeader(accessToken)
@@ -16,8 +16,12 @@ export const GetSummaryapi = async (friendUsername: string, accessToken: string)
         data: res.data
     }
   } catch (err) {
-    return {
-      err: err
+    if (axios.isAxiosError(err)) {
+      console.log('is axios error')
+      if (!err?.response) {
+        console.log("No Server Response");
+      } 
     }
+    return {}
   }
 }

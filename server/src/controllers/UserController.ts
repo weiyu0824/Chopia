@@ -47,6 +47,7 @@ export class UserController implements Controller {
     try {
       const serviceResult = await userService.editProfile(userId, name, username, avatar)
       res.send(serviceResult)
+      next()
     } catch (err) {
       next(err)
     }
@@ -60,6 +61,7 @@ export class UserController implements Controller {
     try {
       const serviceResult = await userService.changePassword(userId, oldPassword, newPassword)
       res.send(serviceResult)
+      next()
     } catch (err) {
       next(err)
     }

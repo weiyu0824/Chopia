@@ -1,8 +1,8 @@
 import { HttpException } from "../utils/HttpException"
 
-// export interface ServiceError {
-//   error: HttpException
-// }
+export interface ServiceError {
+  error: HttpException
+}
 
 // This is a main interface for all data layer service
 export interface ServiceResult {

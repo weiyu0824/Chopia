@@ -30,6 +30,7 @@ export class AuthController implements Controller {
     try {
       const serviceResult = await authService.login(email, password)
       res.send(serviceResult)
+      next()
     } catch(err) {
       next(err)
     }

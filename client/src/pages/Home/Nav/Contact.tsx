@@ -10,12 +10,12 @@ interface IContactBox {
 const ContactBox = styled.div<IContactBox>`
   display: flex;
   flex-direction: row;
-  color: ${Color.lgrey};
+  margin: 3px 0;
   border-radius: 0.2rem;
   padding: 0.2rem;
   /* border-radius: 0.1rem; */
   background-color: ${(props) => (props.pick)? `${Color.lblue}`: ''};
-
+  color: ${Color.lgrey};
   &:hover{
     background-color: ${Color.lblue};
     cursor: pointer;

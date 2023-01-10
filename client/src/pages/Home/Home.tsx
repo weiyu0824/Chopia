@@ -137,7 +137,9 @@ const Home: React.FC<IHome> = (props) => {
             friendId={(params.friendId)? params.friendId : ''} 
             sendMessage={sendMessage}
           /> 
-          <TopicDrawer />
+          <TopicDrawer 
+            friendId={(params.friendId)? params.friendId : ''} 
+          />
         </MyContainer>
       )
     } else {

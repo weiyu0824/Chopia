@@ -38,17 +38,9 @@ const Wrapper = styled.div<IWrapper>`
     background-color: black;
     opacity: 0.9;
   }
-`
 
-const ContactInfo = styled.div`
-  height: 100%;
-  width: auto;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
   input {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 10px 10px;
     border-radius: 2px;
     border: none;
     padding: 5px;
@@ -57,11 +49,23 @@ const ContactInfo = styled.div`
   }
 
   .caption {
+    margin: 0px 10px;
     color: lightgray;
     font-size: 1rem;
-    text-align: left;
-    margin: 0.2rem 0rem;
+    text-align: left;   
   }
+`
+
+const ContactInfo = styled.div`
+  /* display: flex;
+  flex-direction: column; */
+  height: 100%;
+  width: auto;
+  padding: 10px;
+  overflow: scroll;
+
+
+
 
   .contact {
     background-color: orange;
@@ -97,6 +101,18 @@ const DashBoard = styled.div`
 
     &:hover {
       background-color: lightblue;
+    }
+  }
+  #notifBtn{
+    position: relative;
+    #redDot{
+      position: absolute;
+      top: 5px;
+      left: 20px;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background-color: red;
     }
   }
 `
@@ -137,13 +153,15 @@ const LeftNav: React.FC = () => {
   }
 
   const contacts = Object.values(friendInfos).map((friendInfo, index) => {
-    return <Contact 
-              key={index}
-              contactId={friendInfo.userId}
-              name={friendInfo.name} 
-              username={friendInfo.username}
-              avatar={friendInfo.avatar}
-            />
+    return (
+      <Contact 
+        key={index}
+        contactId={friendInfo.userId}
+        name={friendInfo.name} 
+        username={friendInfo.username}
+        avatar={friendInfo.avatar}
+      />
+    )
   })
 
   let popOutPanal = <></>
@@ -163,21 +181,23 @@ const LeftNav: React.FC = () => {
 
   return (
     <Wrapper popOutName={popOutName}>
+      <input placeholder='Search for friend'/>
+      {/* <div className='caption'>DIRECT MESSAGES </div> */}
       <ContactInfo>
-        <input placeholder='Search for friend'/>
-        <div className='caption'>DIRECT MESSAGES </div>
-        {contacts}
+       {contacts}
       </ContactInfo>
 
       <DashBoard > 
         <UserLabel />
 
         <button 
+          id='notifBtn'
           className='controlButton'
           onClick={goToNotification}>
-            {/* <IoIosNotifications /> */}
-            {/* <VscBellDot /> */}
-            <VscBell />
+            <div id='redDot'/>
+            <IoIosNotifications />
+            {/* <VscBellDot />
+            <VscBell /> */}
         </button>
 
         <button 
