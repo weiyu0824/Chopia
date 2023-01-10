@@ -6,6 +6,7 @@ import Avatar from '../../components/Avatar'
 import DataInputBox from '../../components/DataInputBox'
 import WarningBlock from '../../components/WarningBlock'
 import { validate } from '../../utils/validate'
+import { useUserInfoStore } from '../../store/UserInfoStore'
 
 const Wrapper = styled.div`
   flex-grow: 1;
@@ -32,6 +33,8 @@ const Wrapper = styled.div`
 `
 
 const PasswordSetting: React.FC = (props) => {
+  const name = useUserInfoStore((state) => state.name)
+  const avatar = useUserInfoStore((state) => state.avatar)
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmedPassword, setConfirmedPassword] = useState('')
@@ -39,7 +42,7 @@ const PasswordSetting: React.FC = (props) => {
   const [oldPasswordWarning, setOldPasswordWarning] = useState('')
   const [newPasswordWarning, setNewPasswordWarning] = useState('')
   const [confirmedPasswordWarning, setConfirmedPasswordWarning] = useState('')
-  const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
+  const [cookies, _] = useCookies(['access_token', 'refresh_token'])
   const [warningMessage, setWarningMessage] = useState('')
 
 
@@ -99,10 +102,10 @@ const PasswordSetting: React.FC = (props) => {
     <Wrapper>
       <div className='info'>
         <Avatar
-          avatarName='fox'
+          avatarName={avatar}
           size={2}
         /> 
-        <span>Anderson</span>
+        <span>{name}</span>
       </div>
       
       <DataInputBox 

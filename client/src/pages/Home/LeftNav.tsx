@@ -39,7 +39,7 @@ const Wrapper = styled.div<IWrapper>`
     opacity: 0.9;
   }
 
-  input {
+  #leftNavTopSearchInput {
     margin: 10px 10px;
     border-radius: 2px;
     border: none;
@@ -63,10 +63,7 @@ const ContactInfo = styled.div`
   width: auto;
   padding: 10px;
   overflow: scroll;
-
-
-
-
+  
   .contact {
     background-color: orange;
     text-align: left;
@@ -181,7 +178,7 @@ const LeftNav: React.FC = () => {
 
   return (
     <Wrapper popOutName={popOutName}>
-      <input placeholder='Search for friend'/>
+      <input id='leftNavTopSearchInput' placeholder='Search for friend'/>
       {/* <div className='caption'>DIRECT MESSAGES </div> */}
       <ContactInfo>
        {contacts}

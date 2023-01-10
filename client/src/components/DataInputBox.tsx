@@ -33,18 +33,12 @@ const StyledInputBox = styled.div<IStyledInputBox>`
     pointer-events: ${(props) => (props.floatLabel)? 'none' : ''};
     transition: 0.2s;
   }
-  input {
+  .dataInputArea {
     width: 100%;
     border: none;
     outline: none;
     background-color: ${Color.white};
     cursor: ${(props) => (props.readOnly)? 'no-drop': ''};
-    /* :valid + label{
-      font-size: 0.7rem;
-      top: -0.5rem;
-      transition: 0.2s;
-      pointer-events: none;
-    } */
     :focus + label {
       font-size: 0.7rem;
       top: -0.5rem;
@@ -116,6 +110,7 @@ const DataInputBox: React.FC<IDataInputBox> = (options) => {
       >
         <input 
           id={props.id}
+          className='dataInputArea'
           value={props.data} 
           onClick={handleOnClick} 
           onChange={handleOnChange} 
