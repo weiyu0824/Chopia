@@ -39,6 +39,7 @@ export class UserController implements Controller {
   }
 
   private editProfile = async (req: Request, res: Response, next: NextFunction) => {
+    await setTimeout(500)
     const userId = req.body.userId
     const name = req.body.name
     const username = req.body.username
@@ -54,6 +55,7 @@ export class UserController implements Controller {
   }
 
   private changePassword = async (req: Request, res: Response, next: NextFunction) => {
+    await setTimeout(500)
     const userId = req.body.userId
     const oldPassword = req.body.oldPassword
     const newPassword = req.body.newPassword

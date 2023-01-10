@@ -11,10 +11,18 @@ export class MLService {
         chatRoomId: chatRoomId
       })
       if (chatMessages.length < 5) {
-        throw new Error('Your should have over 10 messages so that we could generate summary')
+        return {
+          success: false,
+          message: 'Your should have over 5 messages to generate summary' 
+        }
       }
+      console.log('gen')
       const prediction = await inference(chatMessages)
-      return prediction
+      return {
+        success: true,
+        message: '',
+        prediction: prediction
+      }
     } catch (err) {
       throw (err)
     }

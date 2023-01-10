@@ -8,10 +8,12 @@ import Icon from '../../components/Icon'
 import { editProfile } from '../../api/user'
 import { validate } from '../../utils/validate'
 import { useUserInfoStore } from '../../store/UserInfoStore'
+import { Spin } from 'antd';
 
 const Wrapper = styled.div`
   flex-grow: 1;
   flex-direction: column;
+  justify-content: center;
   display: flex;
   margin: 1rem;
 
@@ -56,6 +58,7 @@ const ProfileSetting: React.FC<IProfileSetting> = (props) => {
   const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
   const updateName = useUserInfoStore((state) => state.updateName)
   const updateAvatar = useUserInfoStore((state) => state.updateAvatar)
+  const [loading, setLoading] = useState(false)
 
   const handleSubmitProfile = async () => {
     validateName(name)
@@ -63,12 +66,14 @@ const ProfileSetting: React.FC<IProfileSetting> = (props) => {
     // Check if there still any error then update!
     if (nameWarning === ''){
       console.log('edit')
+      setLoading(true)
       const res = await editProfile(name, username, props.confirmedAvatar, cookies.access_token)
       if (res.data.success) {
         console.log('sucessfully update profile')
         updateAvatar(res.data.avatar)
         updateName(res.data.name)
       }
+      setLoading(false)
     }
   }
 
@@ -89,54 +94,62 @@ const ProfileSetting: React.FC<IProfileSetting> = (props) => {
   const handleUsername = (username: string) => {
     setUsername(username)
   }
-  return (
-    <Wrapper>
-      <div id='avatarEditor'>
-        <Avatar 
-          avatarName={props.confirmedAvatar}
-          size={10}
-        />
-        <div id='editAvatarIcon'
-        onClick={props.onClickEditAvatar}>
-          <Icon 
-            icon={<MdAddPhotoAlternate />}
-            size={1.5}
-            backgroundColor='white'
-            hoverColor='lightgrey'
+
+  if (loading) {
+    return (
+      <Wrapper>
+        <Spin /> 
+      </Wrapper>
+    )
+  } else {
+    return (
+      <Wrapper>
+        <div id='avatarEditor'>
+          <Avatar 
+            avatarName={props.confirmedAvatar}
+            size={10}
           />
+          <div id='editAvatarIcon'
+          onClick={props.onClickEditAvatar}>
+            <Icon 
+              icon={<MdAddPhotoAlternate />}
+              size={1.5}
+              backgroundColor='white'
+              hoverColor='lightgrey'
+            />
+          </div>
         </div>
-      </div>
-        <DataInputBox 
-          id='profile-name'
-          data={name}
-          dataName='Full name'
-          warning={nameWarning}
-          handleChange={(name: string)=>{handleName(name)}}
-        />
-        <DataInputBox 
-          id='profile-username'
-          data={username}
-          dataName='Username'
-          warning=''
-          handleChange={(username: string)=>{handleUsername(username)}}
-          readonly={true}
-        />
-        <DataInputBox 
-          id='profile-email'
-          data={email}
-          dataName='Email'
-          warning=''
-          handleChange={(email: string)=>{handleEmail(email)}}
-          readonly={true}
-        />
-        <div 
-          id='buttonWrapper'
-          onClick={handleSubmitProfile}>
-          <button id='submitProfileButton'>Submit</button>
-        </div>
-    </ Wrapper>
-  )
-  
+          <DataInputBox 
+            id='profile-name'
+            data={name}
+            dataName='Full name'
+            warning={nameWarning}
+            handleChange={(name: string)=>{handleName(name)}}
+          />
+          <DataInputBox 
+            id='profile-username'
+            data={username}
+            dataName='Username'
+            warning=''
+            handleChange={(username: string)=>{handleUsername(username)}}
+            readonly={true}
+          />
+          <DataInputBox 
+            id='profile-email'
+            data={email}
+            dataName='Email'
+            warning=''
+            handleChange={(email: string)=>{handleEmail(email)}}
+            readonly={true}
+          />
+          <div 
+            id='buttonWrapper'
+            onClick={handleSubmitProfile}>
+            <button id='submitProfileButton'>Submit</button>
+          </div>
+      </ Wrapper>
+    )
+  }
 
 }
 export default ProfileSetting

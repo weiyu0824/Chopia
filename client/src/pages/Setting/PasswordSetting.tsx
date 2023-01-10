@@ -7,6 +7,8 @@ import DataInputBox from '../../components/DataInputBox'
 import WarningBlock from '../../components/WarningBlock'
 import { validate } from '../../utils/validate'
 import { useUserInfoStore } from '../../store/UserInfoStore'
+import { Spin } from 'antd';
+
 
 const Wrapper = styled.div`
   flex-grow: 1;
@@ -44,7 +46,7 @@ const PasswordSetting: React.FC = (props) => {
   const [confirmedPasswordWarning, setConfirmedPasswordWarning] = useState('')
   const [cookies, _] = useCookies(['access_token', 'refresh_token'])
   const [warningMessage, setWarningMessage] = useState('')
-
+  const [loading, setLoading] = useState(false)
 
   const handleChangePassoword = async () => {
     validateOldPassword(oldPassword)
@@ -55,6 +57,7 @@ const PasswordSetting: React.FC = (props) => {
     if (confirmedPasswordWarning === ''
       && newPasswordWarning === ''
       && oldPasswordWarning === '') {
+        setLoading(true)
         const res = await changePassword(oldPassword, newPassword, cookies.access_token)
         if (res.data.success) {
           console.log('update password !')
@@ -62,6 +65,7 @@ const PasswordSetting: React.FC = (props) => {
         }else {
           setWarningMessage(res.data.message)
         }
+        setLoading(false)
       }
   }
   
@@ -98,8 +102,10 @@ const PasswordSetting: React.FC = (props) => {
       validateConfirmPassword(password)
     }
   }
-  return (
-    <Wrapper>
+
+  if (loading) {
+    return (
+      <Wrapper>
       <div className='info'>
         <Avatar
           avatarName={avatar}
@@ -107,44 +113,59 @@ const PasswordSetting: React.FC = (props) => {
         /> 
         <span>{name}</span>
       </div>
-      
-      <DataInputBox 
-        id='old-password'
-        data={oldPassword}
-        dataName='Old password'
-        warning={oldPasswordWarning}
-        isPassword={true}
-        handleChange={(password) => handleOldPassword(password)}
-      />
-      <DataInputBox 
-        id='new-password'
-        data={newPassword}
-        dataName='New Password'
-        warning={newPasswordWarning}
-        isPassword={true}
-        handleChange={(password)=>{handleNewPassword(password)}}
-      />
-      <DataInputBox 
-        id='confirm-password'
-        data={confirmedPassword}
-        dataName='Confirmation'
-        warning={confirmedPasswordWarning}
-        isPassword={true}
-        handleChange={(password)=>{handleConfirmedPassword(password)}}
-      />
-     <WarningBlock isHidden={false}>
-      {warningMessage}
-     </WarningBlock>
-     <div id='buttonWrapper'>
-      <button 
-        id='changePasswordButton'
-        onClick={handleChangePassoword}>
-        Change Password
-      </button>
-     </div>
-      
-    </ Wrapper>
-  )
+      <Spin />
+      </Wrapper>
+    )
+  } else {
+    return (
+      <Wrapper>
+        <div className='info'>
+          <Avatar
+            avatarName={avatar}
+            size={2}
+          /> 
+          <span>{name}</span>
+        </div>
+        
+        <DataInputBox 
+          id='old-password'
+          data={oldPassword}
+          dataName='Old password'
+          warning={oldPasswordWarning}
+          isPassword={true}
+          handleChange={(password) => handleOldPassword(password)}
+        />
+        <DataInputBox 
+          id='new-password'
+          data={newPassword}
+          dataName='New Password'
+          warning={newPasswordWarning}
+          isPassword={true}
+          handleChange={(password)=>{handleNewPassword(password)}}
+        />
+        <DataInputBox 
+          id='confirm-password'
+          data={confirmedPassword}
+          dataName='Confirmation'
+          warning={confirmedPasswordWarning}
+          isPassword={true}
+          handleChange={(password)=>{handleConfirmedPassword(password)}}
+        />
+       <WarningBlock isHidden={warningMessage === ''}>
+        {warningMessage}
+       </WarningBlock>
+       <div id='buttonWrapper'>
+        <button 
+          id='changePasswordButton'
+          onClick={handleChangePassoword}>
+          Change Password
+        </button>
+       </div>
+        
+      </ Wrapper>
+    )
+  }
+
 }
 
 export default PasswordSetting
