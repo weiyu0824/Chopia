@@ -11,6 +11,9 @@ import { BsPencilFill } from 'react-icons/bs'
 import Icon from '../../../components/Icon'
 import Avatar from '../../../components/Avatar'
 import { useCookies } from 'react-cookie'
+import { useUserInfoStore } from '../../../store/UserInfoStore'
+import { useChatStore } from '../../../store/ChatStore'
+import { useNotifStore } from '../../../store/NotifStore'
 
 interface IPanal {
   showPanal: boolean
@@ -27,10 +30,10 @@ const Panal = styled.div<IPanal>`
   background-color: orange;
   cursor: default;
   
-  #userInfoEditButton {
+  /* #userInfoEditButton {
     position: absolute;
     left: 85%;
-  }
+  } */
   #userInfoFullName {
     font-size: 1.8rem;
   }
@@ -76,47 +79,41 @@ interface IUserInfoPanal {
 const UserInfoPanal: React.FC<IUserInfoPanal> = (props) => {
   const leaveAuth = useAuthStore((state => state.leaveAuth))
   const [cookies, setCookie, removeCookie] = useCookies(['access_token', 'refresh_token'])
+  const resetUserInfo = useUserInfoStore((state) => state.resetUserInfo)
+  const resetChatroom = useChatStore((state) => state.resetChatroom)
+  const resetNotif = useNotifStore((state) => state.resetNotif)
 
-    const handleSignOut = () => {
-      console.log('sign out')
-      removeCookie('access_token')
-      removeCookie('refresh_token')
-      leaveAuth()
-      
+  const handleSignOut = () => {
+    console.log('sign out')
+    removeCookie('access_token')
+    removeCookie('refresh_token')
 
-    }
+    // Make sure to reset all state here!!
+    leaveAuth()
+    resetUserInfo()
+    resetChatroom()
+    resetNotif()
+  }
+  return (
+    <Panal showPanal={props.showPanal}>
+      <Avatar 
+        avatarName={props.avatar}
+        size={6}/>
+      <span id='userInfoFullName'>{props.name}</span>
 
-    const handleEditProfile = () => {
-      // useNavigate
-    }
-
-    return (
-      <Panal showPanal={props.showPanal}>
-        <div id='userInfoEditButton'>
-          <Icon 
-            icon={<BsPencilFill /> }
-            size={1}
-            hoverColor='lightgrey'
-          />
+      <ControlPart> 
+        <div className='personalInfo'>
+          <div> <AiOutlineRobot/>&nbsp; #{props.username}</div>
+          <div> <GoMail/>&nbsp; {props.email}</div>
         </div>
-        <Avatar 
-          avatarName={props.avatar}
-          size={6}/>
-        <span id='userInfoFullName'>{props.name}</span>
-
-        <ControlPart> 
-          <div className='personalInfo'>
-            <div> <AiOutlineRobot/>&nbsp; #{props.username}</div>
-            <div> <GoMail/>&nbsp; {props.email}</div>
-          </div>
-          <div className='signoutButton'
-            onClick={handleSignOut}> 
-            <FaSignOutAlt /> &nbsp;
-            <span>Sign out</span>
-          </div>
-        </ControlPart>
-      </Panal>
-    )
+        <div className='signoutButton'
+          onClick={handleSignOut}> 
+          <FaSignOutAlt /> &nbsp;
+          <span>Sign out</span>
+        </div>
+      </ControlPart>
+    </Panal>
+  )
       
 }
             

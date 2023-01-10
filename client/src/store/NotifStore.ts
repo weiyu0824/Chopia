@@ -14,6 +14,7 @@ export type NotifAction = {
   addNewNotif: (notification: CompleteNotification) => void
   addOldNotification: (notification: CompleteNotification[]) => void
   removeNotif: (notifId: string) => void
+  resetNotif: () => void
 }
 
 export const useNotifStore = create<NotifState & NotifAction>()((set) => ({
@@ -32,6 +33,12 @@ export const useNotifStore = create<NotifState & NotifAction>()((set) => ({
   removeNotif: (notifId: string) => {
     set((state) => ({
       notificatoins: state.notificatoins.filter((notif) => notif.notifId !== notifId)
+    }))
+  },
+  resetNotif: () => {
+    set(() => ({
+      notificatoins: [],
+      newNotifCome: false
     }))
   }
 }))

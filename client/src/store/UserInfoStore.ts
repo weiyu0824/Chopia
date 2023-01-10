@@ -35,7 +35,7 @@ export type UserInfoAction = {
   updateFriendInfos: (
     friendInfo: FriendInfo
   ) => void
-  removeInfo: () => void // when logout
+  resetUserInfo: () => void // when logout
 }
 
 export const useUserInfoStore = create<UserInfoState & UserInfoAction>()((set) => ({
@@ -93,6 +93,16 @@ export const useUserInfoStore = create<UserInfoState & UserInfoAction>()((set) =
   }, 
   removeInfo: () => {
     set(()=> ({
+      userId: '',
+      email: '',
+      name: '',
+      username: '',
+      avatar: '',
+      friendInfos: {}
+    }))
+  },
+  resetUserInfo: () => {
+    set(() => ({
       userId: '',
       email: '',
       name: '',

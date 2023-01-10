@@ -10,6 +10,7 @@ export type ChatAction = {
   addHistory: (history: ChatMessage[]) => void
   addNewMessage: (chatRoomId: string, cmessage : ChatMessage) => void
   initChatroom: (chatroomId: string, history: ChatMessage[]) => void
+  resetChatroom: () => void
 }
 
 export const useChatStore = create<ChatState & ChatAction>()((set) => ({
@@ -32,6 +33,11 @@ export const useChatStore = create<ChatState & ChatAction>()((set) => ({
       chatRoomId: chatroomId,
       chatHistory: history // make history empty when changing the chatroom
     }))
-  }
-  
+  },
+  resetChatroom: () => {
+    set(() => ({
+      chatRoomId: '',
+      chatHistory: []
+    }))
+  }  
 }))
