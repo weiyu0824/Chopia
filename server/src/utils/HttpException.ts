@@ -38,3 +38,9 @@ export class AlreadyLogoutError extends HttpException {
     super(status, message)
   }
 }
+
+export class WrongDataError extends HttpException {
+  constructor(status=400, message='The data you provided is wrong'){
+    super(status, message)
+  }
+}

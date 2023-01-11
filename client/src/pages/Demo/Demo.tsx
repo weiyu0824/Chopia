@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import {color} from '../../utils/color'
-const C = new color()
+import { Color } from '../../utils/color'
+ 
 const MyContainer = styled.div`
-  background-color: ${C.dblue};
+  background-color: ${Color.dblue};
   height: 100vh;
   .demo{
-    color:${C.white};
+    color:${Color.white};
   }
 `
 const Demo: React.FC = () => {

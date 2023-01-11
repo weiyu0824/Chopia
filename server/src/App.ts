@@ -1,51 +1,51 @@
+import exp from 'constants'
 import express, { Application } from 'express'
-import cors from 'cors'
+import http from 'http'
 import mongoose from 'mongoose'
-import { AuthController } from './controllers/AuthController'
-import { ChatController } from './controllers/ChatController'
-import { MLController } from './controllers/MLController'
-import { Controller } from './interfaces/Controller'
-import { errorMiddleware } from './middlewares/ErrorMiddleware'
+import ws, { Server } from 'ws'
+import { parse } from 'url'
+import { APIServer } from './servers/APIServer'
+import { ChatServer } from './servers/ChatServer'
+import { NotifServer } from './servers/NotifServer'
+import { sendVerificationEmail } from './services/EmailService'
 
 class App {
   public express: Application
   public port: number
   public dbUrl: string
-  public apiUrl: string
+  public wsServer1: ws.Server
+  public wsServer2: ws.Server
+  private chatServer: ChatServer
+  private notifServer: NotifServer
+  private apiServer: APIServer
+  
+  
 
   constructor(port: number, dbUrl: string) {
     this.express = express()
     this.port = port
     this.dbUrl = dbUrl
-    this.apiUrl = '/api'
+    this.wsServer1 = new ws.Server({ noServer: true })
+    this.wsServer2 = new ws.Server({ noServer: true })
 
-    const controllers: Controller[] = [new AuthController(), new ChatController(), new MLController()]
+    // 
+    this.chatServer = ChatServer.getInstance()
+    this.notifServer = NotifServer.getInstance()
+    this.apiServer = APIServer.getInstance()
+
+    // Micro servers
+    // App.apiServer = new APIServer()
+    // App.chatServer = new ChatServer()
+
     this.mountDatabase()
-    this.mountMiddlewares()
-    this.mountControllers(controllers)
-    this.mountErrorHandler()
-  }
+    
 
-  private mountMiddlewares(): void {
-    // this.express.use(helmet())
-    this.express.use(cors())
-    // this.express.use(morgan('dev'))
+    // mount Http-based service
+    this.apiServer.mount(this.express)
 
-    // body-parser
-    this.express.use(express.json())
-    // this.express.use(express.urlencoded({ extended: false })) 
-    // this.express.use(compression())
-  }
-
-  private mountControllers(controllers: Controller[]): void {
-    controllers.forEach((controller) => {
-      console.log(this.apiUrl + controller.path)
-      this.express.use(this.apiUrl + controller.path, controller.router)
-    })
-  }
-
-  private mountErrorHandler(): void {
-    this.express.use(errorMiddleware)
+    // mount WS-based service
+    this.chatServer.mount(this.wsServer1)
+    this.notifServer.mount(this.wsServer2)
   }
 
   private async mountDatabase() {
@@ -58,10 +58,35 @@ class App {
   }
 
   public listen(): void {
-    this.express.listen(this.port, () => {
+    const server = this.express.listen(this.port, () => {
       console.log(`App listening on the port ${this.port} ...`)
+    })
+    
+    server.on('upgrade', (req: http.IncomingMessage, socket, head) => {
+      console.log('hello new conn')
+      if (req.url) {
+        const { pathname } = parse(req.url)
+        if (pathname === '/chat') {
+          const wss = this.wsServer1
+          wss.handleUpgrade(req, socket, head, function done(ws) {
+            wss.emit('connection', ws, req)
+          })
+        } else if (pathname === '/notif') {
+          const wss = this.wsServer2
+          wss.handleUpgrade(req, socket, head, function done(ws) {
+            wss.emit('connection', ws, req)
+          })
+        } else {
+          socket.destroy()
+        }
+      }else {
+        socket.destroy()
+      }
+      
     })
   }
 }
 
 export default App;
+
+

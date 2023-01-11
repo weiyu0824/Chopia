@@ -1,74 +1,62 @@
 import { PrivateMessage } from '../models/PrivateMessage'
-import { HttpException } from '../utils/HttpException'
-
-interface ServiceResult {
-  error?: HttpException
-  messages?: Message[]
-}
-
-interface Message {
-  messageText: string,
-  senderUsername: string,
-  time: string,
-}
-
+import { AccessDatabaseError, HttpException } from '../utils/HttpException'
+import { GetMessageResult, initGetMessageResult, 
+        SendMessageResult, initSendMessageResult } from '../interfaces/service.interface'
 
 export class ChatService {
-  static calculateChatRoomId(usernameA: string, usernameB: string): string {
-    if (usernameA < usernameB) {
-      return usernameA + usernameB
-    } else {
-      return usernameB + usernameA
-    }
+  static calculateChatRoomId(user1Id: string, user2Id: string): string {
+    return (user1Id < user2Id) ? `${user1Id}${user2Id}` : `${user2Id}${user1Id}`
   }
 
-  getMessages = async (username: string, friendUsername: string): Promise<ServiceResult> => {
+  getMessages = async (
+    userId: string, 
+    friendUserId: string
+  ): Promise<GetMessageResult> => {
     try {
-      const chatRoomId = ChatService.calculateChatRoomId(username, friendUsername)
-      const rawMessages = await PrivateMessage.find({
+      const chatRoomId = ChatService.calculateChatRoomId(userId, friendUserId)
+      const messages = await PrivateMessage.find({
         chatRoomId: chatRoomId
-      })
-
-      // console.log(rawMessages)
-
-      // const processedMessages = rawMessages.map((rawMessage, index) => {
-      //   return {
-      //     "messageText": rawMessage.message,
-      //     "senderUsername": rawMessage.senderUsername
-      //   }
-      // })
-
-      return {
-        messages: rawMessages
+      }).select('messageText senderId timestamp')
+ 
+      if (chatRoomId === null) {
+        return initGetMessageResult({
+          success: true,
+          chatMessages: []
+        })
+      }else {
+        return initGetMessageResult({
+          success: true,
+          chatMessages: messages
+        })
       }
     } catch (err) {
-      return {
-        error: new HttpException(500, 'Access Database Error')
-      }
+      throw new AccessDatabaseError()
     }
-
-
   }
 
-  sendMessages = async (username: string, friendUsername: string, message: Message): Promise<ServiceResult> => {
+  sendMessages = async (
+    senderId: string, 
+    friendUserId: string, 
+    messageText: string, 
+    timestamp: string
+  ): Promise<SendMessageResult> => {
     try {
-      const chatRoomId = ChatService.calculateChatRoomId(username, friendUsername)
+      const chatRoomId = ChatService.calculateChatRoomId(senderId, friendUserId)
       const privateMessage = new PrivateMessage({
         chatRoomId: chatRoomId,
-        messageText: message.messageText,
-        senderUsername: message.senderUsername,
-        time: message.time
+        messageText: messageText,
+        senderId: senderId,
+        timestamp: timestamp
       })
-
       console.log(privateMessage)
       privateMessage.save()
       // TODO: check return type
-      return {}
-
+      return initSendMessageResult({
+        success: true,
+        message: 'Successfully send the message'
+      })
     } catch (err) {
-      return {
-        error: new HttpException(500, 'Access Database Error')
-      }
+      throw new AccessDatabaseError()
     }
   }
 }

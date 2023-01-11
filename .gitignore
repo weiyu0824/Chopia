@@ -5,5 +5,7 @@ server/node_modules/*
 server/dist/*
 idea*
 server/cache/*.json
-
+TODO
 *.env
+assets/
+.vscode/

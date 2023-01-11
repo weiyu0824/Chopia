@@ -1,65 +1,152 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef } from 'react'
+import { useParams } from 'react-router-dom'
 import ChatFeed from './ChatFeed'
 import LeftNav from './LeftNav'
 import styled from 'styled-components'
 import TopicDrawer from './TopicDrawer'
-// const MessageBox: React.FC = (props: {message: string}) => {
-//     return <div>props.message</div>
-// }
+import FriendPanal from '../Friend/FriendPanal'
+import NotificationPanal from '../Notification/NotificationPanal'
+import SettingPanel from '../Setting/SettingPanal'
+import DefaultArea from './DefaultArea'
+import { useAuthStore } from '../../store/AuthStore'
+import { useUserInfoStore } from '../../store/UserInfoStore';
+import { useCookies } from 'react-cookie';
+import { loginWithToken } from '../../api/auth';
+import Demo from '../../pages/Demo/Demo'
+import MyNav from '../../components/MyNav'
+import { useChatStore } from '../../store/ChatStore'
+import config from '../../config/config'
+
+
 
 const MyContainer = styled.div`
   display: flex;
   flex-direction: row;
 `
 
-// const Chatting = styled.div`
-//     height: 100vh;
-//     width: 100%;
-//     background-color: pink;
-// `
-// const Trigger = styled.div`
-//     height: 100vh;
-//     width: 80px;
-//     background-color: coral;
-// `
+interface IHome{
+  page: 'inbox' | 'notification' | 'default'
+}
+const Home: React.FC<IHome> = (props) => {
 
-const Home: React.FC = () => {
-  const [inputMessage, setInputMessage] = useState("")
-  const [messages, setMessages] = useState([""])
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
+  const userId = useUserInfoStore((state => state.userId))
+  const wsChat = useRef<WebSocket | null>(null)
+  const wsNotif = useRef<WebSocket | null>(null)
+  const [cookies] = useCookies(['access_token', 'refresh_token'])  
+  const params = useParams()
+  const addNewMessage = useChatStore((state) => state.addNewMessage)
+  const friendInfo = useUserInfoStore((state) => state.friendInfos)
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputMessage(e.target.value)
-    console.log(inputMessage)
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      console.log('Use effect in Home')
+      // Socket for chat server
+      wsChat.current = new WebSocket(`ws://${config.ip}:8088/chat`)
+      wsChat.current.onopen = (event) => {
+        console.log('open ws (chat)')
+        if (wsChat.current) {
+          wsChat.current.send(JSON.stringify({
+            type: 'auth',
+            token: `${cookies.access_token}`
+          }))
+        }
+      }
+      wsChat.current.onclose = (event) => {
+        console.log('close ws (chat)')
+      }
+      wsChat.current.onerror = (event) => {
+        console.log('error ws (chat)')
+      }
+      wsChat.current.onmessage = (event) => {
+        console.log('message ws')
+        const message = JSON.parse(event.data)
+
+        addNewMessage(message.chatRoomId, {
+          senderId: message.senderId,
+          timestamp: message.timestamp,
+          messageText: message.messageText
+        })
+
+        console.log(message)
+      }
+      // Socket for notification server
+      wsNotif.current = new WebSocket(`ws://${config.ip}:8088/notif`)
+      wsNotif.current.onopen = () => {
+        console.log('open ws (notif)')
+        if (wsNotif.current) {
+          wsNotif.current.send(JSON.stringify({
+            type: 'auth',
+            token: `${cookies.access_token}`
+          }))
+        }
+      }
+      wsNotif.current.onclose = () => {
+        console.log('close ws (notif)')
+      }
+      wsNotif.current.onerror = () => {
+        console.log('error ws (notif)')
+      }
+      wsNotif.current.onmessage = () => {
+        console.log('message ws (notif)')
+      }
+    }
+  }, [isLoggedIn])
+
+  const sendMessage = (messageText: string, friendId: string) => {
+    const message = {
+      type: 'chat',
+      senderId: userId,
+      messageText: messageText,
+      friendId: friendId,
+    }
+    if (wsChat.current) {
+      wsChat.current.send(JSON.stringify(message))
+    }
   }
-  const handleSend = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(inputMessage)
-    const updatedMessages = messages.concat(inputMessage)
-    setMessages(updatedMessages)
-    setInputMessage("")
+   
+  if (!isLoggedIn) {
+    return (
+      <>
+        <MyNav />
+        <Demo />
+      </>
+    )
+  } else {
+    if (props.page === 'notification') {
+      return (
+        <MyContainer>
+          <LeftNav/>
+          <NotificationPanal/>
+        </MyContainer>
+      )
+    } else if (props.page === 'default' 
+      || !friendInfo[(params.friendId)? params.friendId: '']) {
+      return (
+        <MyContainer>
+          <LeftNav/>
+          <DefaultArea />
+        </MyContainer>
+      )
+    } else if (props.page === 'inbox') {
 
+      return (
+        <MyContainer>
+          <LeftNav/>
+          <ChatFeed 
+            friendId={(params.friendId)? params.friendId : ''} 
+            sendMessage={sendMessage}
+          /> 
+          <TopicDrawer 
+            friendId={(params.friendId)? params.friendId : ''} 
+          />
+        </MyContainer>
+      )
+    } else {
+      return <></>
+    }
   }
-
-  let chatHistory: JSX.Element[] = []
-  messages.forEach((message, index) => {
-    chatHistory.push(<div key={index}>{message}</div>)
-  })
-  return (
-      
-    <MyContainer>
-      <LeftNav/>
-      {/* <Chatting >sdf</Chatting> */}
-      <ChatFeed />
-      <TopicDrawer />
-    </MyContainer>
-    
-    // <Container fluid className='gx-0 vh-100'>
-    //     <Row className='gx-0'>
-    //         {/* <Col>
-    //             <TopicBox />
-    //         </Col> */}
-    //     </Row>
-    // </Container>
-  )
 }
 
 export default Home

@@ -3,46 +3,40 @@ import create from 'zustand'
 export type AuthState = {
   isLoggedIn: boolean
   loading: boolean
-  username: string
 }
 
 export type AuthAction = {
   startAuth: () => void
   endAuth: () => void
-  successAuth: (username: string) => void
+  successAuth: () => void
   leaveAuth: () => void
 }
 
 export const useAuthStore = create<AuthState & AuthAction>()((set) => ({
   isLoggedIn: false,
   loading: false,
-  username: '',
+
   startAuth: () => {
-    set(
-      () => (
-        { loading: true }
-      )
-    )
+    set(() => ({ 
+      loading: true 
+    }))
   },
   endAuth: () => {
-    set(
-      () => (
-        {loading: false}
-      )
-    )
+    set(() => ({
+      loading: false
+    }))
   },
-  successAuth: (username: string) => {
-    set(
-      () => (
-        { isLoggedIn: true, loading: false, username: username }
-      )
-    )
+  successAuth: (
+  ) => {
+    set(() => ({ 
+        isLoggedIn: true, 
+        loading: false
+    }))
   },
   leaveAuth: () => {
-    set(
-      () => (
-        { isLoggedIn: false, loading: false, username: '' }
-      )
-    )
-  }
+    set(() => ({ 
+      isLoggedIn: false, 
+      loading: false
+    }))
+  },
 }))

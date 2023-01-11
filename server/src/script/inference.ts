@@ -38,8 +38,8 @@ export const inference = async (jsonData: object) => {
         const result = await fsPromises.readFile(`${folderName}${filename}.out.json`)
         const prediction = result.toString()
         return JSON.parse(prediction)
-    } catch (error) {
-        console.log(error)
+    } catch (err) {
+        throw err
     }
 }
 

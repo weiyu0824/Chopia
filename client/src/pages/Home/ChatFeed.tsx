@@ -1,170 +1,230 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import MessageEditor from './MessageEditor'
-import { GetChatApi, SendMessageAPI } from '../../api/chat'
+import MessageEditor from './Chat/MessageEditor'
+import { getChat } from '../../api/chat'
 import { useCookies } from 'react-cookie'
-import { useAuthStore } from '../../store/AuthStore'
-import { Message } from '../../utils/Message'
+import { useChatStore } from '../../store/ChatStore'
+import { useUserInfoStore } from '../../store/UserInfoStore'
 import { getCurrentTimeString } from '../../utils/time'
-import { color } from '../../utils/color'
-import { AiOutlineMessage } from 'react-icons/ai'
-import { IconContext } from "react-icons"
+import { Color } from '../../utils/color'
+import TextareaAutosize from 'react-textarea-autosize'
+import { calculateChatRoomId } from '../../utils/chatroom'
+import { Spin } from 'antd';
 
 
-const C = new color()
 
-const Box = styled.div`
-  width: 100%;
-  /* height: 700px; */
-  background-color: ${C.white};
-  border-style: solid;
-  border-right: none;
-  border-color: lightgray;
-`
-const Editor = styled.div`
-  height: 40px;
-  border-style: solid;
-  margin: 10px 50px;
-  padding: 0px 10px;
-  border-color: lightgray;
-  background-color: white;
-  border-radius: 20px;
-`
-const StyledInputBox = styled.input`
-  width: 90%;
-  height: 90%;
+const scrollWidth = '15px';
+const Wrapper = styled.div`
+  flex-grow: 1;
   border-style: none;
-  outline: none;
+  flex-direction: column;
+  display: flex;
+  height: 100vh;
+
+  .loadingSpin{
+    margin: auto
+  }
 `
-const StyledSendButton = styled.button`
-  height: 30px;
-  border-style: none;
-  background-color: white;
-  border-radius: 20%;
-  color: ${C.blue};
-  border-color: #A0E4CB;
+const FriendBar = styled.div`
+  border-bottom: solid gray;
+  padding: 10px 15px;
+  background-color: ${Color.white};
+  text-align: left;
+  font-size: 1.1rem;
+  font-weight: 500;
+
 `
 const ChatArea = styled.div`
-  padding-top: 20px;
-  height: calc(100vh - 60px); // 644
-  background-color: ${C.white};
+  flex-grow: 1;
+  background-color: ${Color.white};;
   overflow-y: scroll;
-`
-const DefaultChatArea = styled.div`
-  height: 100vh;
-  background-color: ${C.white};
 
-  .loadMsgBtn{
-    margin-top: 300px;
-    background-color: ${C.white};
-    color: grey;
-    border: none;
-    padding: 10px;
-  &:hover{
-    color: ${C.dblue}
+  ::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+    background: ${Color.white};
   }
+
+  ::-webkit-scrollbar-thumb {
+      background: #393812;
+      -webkit-border-radius: 1ex;
+      -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+  }
+
+  ::-webkit-scrollbar-corner {
+      background: #000;
   }
 `
-const LoadMessageButton = styled.button`
+
+const Editor = styled.div`
+  flex-direction: row;
+  display: flex;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background-color: #222222;
   
+  #editorSendButton{
+    border: none;
+    background-color: inherit;
+    outline: none;
+    color: lightblue;
+    &:hover {
+      color: lightpink;
+    }
+  }
+  textarea {
+    flex-grow: 1;
+    background-color: inherit;
+    border: none;
+    overflow-y: hidden;
+    color: white;
+    ::placeholder{
+      color: white;
+    }
+  }
 `
 
-const ChatFeed: React.FC = () => {
-  const [messageText, setMessageText] = React.useState('')
-  const [messages, setMessages] = React.useState<Message[]>([])
-  const [isLoadedMessage, setIsLoadedMessage] = React.useState(false)
-  const bottomRef = React.useRef<null | HTMLDivElement>(null)
-  const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
-  const username = useAuthStore((state) => state.username)
+interface IChatFeed {
+  friendId: string,
+  sendMessage: (messageText: string, friendId: string) => void
+}
+const ChatFeed: React.FC<IChatFeed> = (props) => {
+  const [currText, setCurrText] = useState('')
+  const [loading, setLoading] = useState(false)
+  const bottomRef = useRef<null | HTMLDivElement>(null)
+  const [cookies, _] = useCookies(['access_token', 'refresh_token'])
+  const name = useUserInfoStore((state) => state.name)
+  const userId = useUserInfoStore((state) => state.userId)
+  const avatar = useUserInfoStore((state) => state.avatar)
+  const friendInfos= useUserInfoStore((state) => state.friendInfos)
+  const chatHistory = useChatStore((state) => state.chatHistory)
+  const addNewMessage = useChatStore((state) => state.addNewMessage)
+  const initChatroom = useChatStore((state) => state.initChatroom)
+
+  const fetchChatHistory = async () => {
+    console.log('fetch history')
+    setLoading(true)
+    const res = await getChat(props.friendId, cookies.access_token)
+    console.log('fetch hist good??')
+    if (res.data.success) {
+      const chatRoomId = calculateChatRoomId(userId, props.friendId)
+      console.log('chat room id', chatRoomId)
+      initChatroom(chatRoomId, res.data.chatMessages)
+    }
+    setLoading(false)
+  }
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({behavior: 'auto'})
+  }, [chatHistory])
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({behavior: 'smooth'})
-  }, [messages])
+    console.log('use effect in chatfeed when friendId change')
+    fetchChatHistory()
+  }, [props.friendId])
 
   const sendMessage = () => {
-    console.log(`send: ${messageText}`)
-    const newMessage = {
-      messageText: messageText, 
-      senderUsername: username,
-      time: getCurrentTimeString()
+    if (currText.replace(/\s+/g, '') !== ''){
+      const messsage = {
+        messageText: currText, 
+        senderId: userId,
+        timestamp: getCurrentTimeString(),
+      }
+      const chatRoomId = calculateChatRoomId(userId, props.friendId)
+      addNewMessage(chatRoomId, messsage)
+      props.sendMessage(currText, props.friendId)
     }
-    const newMessages = messages.concat(newMessage)
-    setMessages(newMessages)
-    setMessageText('')
-    SendMessageAPI(username, newMessage, cookies.access_token)
-    
-
+    setCurrText('')
   }
 
-  const handleKeyEnter: React.KeyboardEventHandler = (e) => {
-    if (e.key == 'Enter') {
+  const onKeyEnter: React.KeyboardEventHandler = (e) => {
+    if (e.key === 'Enter' && e.ctrlKey) {
+      setCurrText(currText + '\n')
+    } else if (e.key === 'Enter') {
       sendMessage()
-    } 
+    }
   }
 
-  const handleClickMessageButton: React.MouseEventHandler = (e) => {
+  const onClickSendButton: React.MouseEventHandler = (e) => {
     sendMessage()
   }
 
-  const handleMessageChange: React.ChangeEventHandler = (e) => {
-    const target = e.target as HTMLInputElement;
-    setMessageText(target.value)
-  }
-
-  const handleLoadMessage = async() => {
-    const friendUsername = username
-    const res = await GetChatApi(friendUsername, cookies.access_token)
-    
-    if (res.data !== undefined) {
-      const loadedMessages = res.data.messages
-      console.log(res.data.messages)
-      setMessages(messages.concat(loadedMessages))
-      setIsLoadedMessage(true)
-      
+  const onTextChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+    const text = e.target.value
+    if (text.slice(-1) !== '\n'){
+      setCurrText(text)
     }
-    
   }
 
-  const dialogue = messages.map((message, index, messages) => {
-    const showOnlyMessage = (index === 0 || (messages[index].time !== messages[index - 1].time) ) ? false : true
-    return <MessageEditor key={index} showOnlyMessage={showOnlyMessage} message={message} />
+  const dialogue = chatHistory.map((message, idx, history) => {
+    // (idx === 0 || (history[idx].timestamp !== history[idx - 1].timestamp)) ? false : true
+    let noAvatar = true;
+    if ((idx === 0)
+      || (history[idx].senderId !== history[idx - 1].senderId)
+      || (history[idx].timestamp !== history[idx - 1].timestamp)){
+      noAvatar = false
+    }
+    let senderName = ''
+    let senderAvatar = 'standard'
+    if (message.senderId === userId){
+      senderName = name
+      senderAvatar = avatar
+    } else {
+      senderName = friendInfos[message.senderId].name
+      senderAvatar = friendInfos[message.senderId].avatar
+    }
+    return (
+      <MessageEditor 
+        key={idx} 
+        messageText={message.messageText}
+        senderName={senderName}
+        timestamp={message.timestamp}
+        avatar={senderAvatar}
+        noAvatar={noAvatar} 
+      />
+    )
   })
 
-  if (isLoadedMessage === false){
-    return (
-      <Box>
-        <DefaultChatArea>
-          <button className='loadMsgBtn' onClick={handleLoadMessage}>
-            <IconContext.Provider value={{size: '5rem'}}>
-              <AiOutlineMessage />
-            </IconContext.Provider >
-          </button>
-        </DefaultChatArea>
-      </Box>
-    )
-  } else {
-    return (
-      <Box>
-        <ChatArea >
-          {dialogue}
-          <div ref={bottomRef}></div>
-        </ChatArea>
-        <Editor>
-          <StyledInputBox
-            placeholder='Send a Message ...'
-            value={messageText}
-            onKeyDown={handleKeyEnter}
-            onChange={handleMessageChange}>
-          </StyledInputBox>
+  const chatHistArea = (loading)? (
+    <Spin className='loadingSpin'/>
+  ) : (
+    <ChatArea>
+      {dialogue}
+      <div ref={bottomRef}></div>
+    </ChatArea>
+  )
 
-          <StyledSendButton
-            onClick={handleClickMessageButton}>
-            Send
-          </StyledSendButton>
-        </Editor>
-      </Box>
+
+    return (
+      <Wrapper>
+        <h1></h1>
+        <FriendBar>
+          <span>{friendInfos[props.friendId].name}</span>
+        </FriendBar>
+        {chatHistArea}
+        <div style={{margin: '0 15px 25px 15px'}}>
+          <Editor>
+              <TextareaAutosize 
+                minRows={1}
+                maxRows={5}
+                value={currText}
+                placeholder='Message ...'
+                onChange={onTextChange}
+                onKeyDown={onKeyEnter}
+                style={{
+                  'outline': 'none',
+                  'resize': 'none',
+                }}
+              />
+              <button 
+                id='editorSendButton'
+                onClick={onClickSendButton}>
+                Send
+              </button>
+          </Editor>
+        </div>
+        
+      </Wrapper>
     )
-  }
 }
 
 export default ChatFeed
