@@ -1,5 +1,4 @@
 import React from 'react'
-import { FaBlackTie } from 'react-icons/fa'
 import styled from 'styled-components'
 
 interface IBox {

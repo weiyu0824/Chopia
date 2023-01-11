@@ -3,11 +3,9 @@ import styled from 'styled-components'
 import { Color } from '../../utils/color'
 import { IoMdCheckmarkCircle } from 'react-icons/io'
 import { MdError } from 'react-icons/md'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { verify } from '../../api/auth'
 import Icon from '../../components/Icon'
-import WarningBlock from '../../components/WarningBlock'
-import Avatar from '../../components/Avatar'
 
 const Wrapper = styled.div`
   position: relative;
@@ -37,7 +35,6 @@ const Announcement = styled.div<IAnnouncement>`
 `
 
 const Verification: React.FC = () => {
-  const params = useParams()
   const [success, setSuccess] = useState(false)
   const [warning, setWarning] = useState('')
   const [searchParams, setSearchParam] = useSearchParams()
@@ -48,9 +45,6 @@ const Verification: React.FC = () => {
     try {
       const userId = searchParams.get('id')
       const token = searchParams.get('token')
-      console.log('verify page')
-      console.log(userId)
-      console.log(token)
       if (!userId || !token) {
         navigate('/error')
       } else {

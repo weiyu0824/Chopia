@@ -4,9 +4,6 @@ import styled from 'styled-components'
 import { Summary } from '../../../interfaces/Summary'
 import { Color } from '../../../utils/color'
 
-interface IButtonWindow {
-  show: boolean
-}
 const ButtonWindow = styled.div`
   display: flex;
   width: 400px;
@@ -17,12 +14,10 @@ const ButtonWindow = styled.div`
   overflow-x: scroll;
   flex-direction: row;
 `
+
 interface ITopicButton {
   pick: boolean
 }
-
-
-
 const TopicButton = styled.button<ITopicButton>`
   background-color: ${props => (props.pick) ? Color.ddblue : Color.grey};
   color: ${Color.white};

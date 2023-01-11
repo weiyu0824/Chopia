@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Color } from '../../utils/color'
 import { AvatarImgs } from '../../utils/avatar'
 import Avatar from '../../components/Avatar'
 import { BiArrowBack } from 'react-icons/bi'
 import { GrCheckmark } from 'react-icons/gr'
 import Icon from '../../components/Icon'
-import { propTypes } from 'react-bootstrap/esm/Image'
 
 interface IWrapper {
   width: number;

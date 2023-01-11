@@ -1,5 +1,4 @@
 import create from 'zustand'
-import FriendInfo from '../pages/Friend/FriendInfo'
 
 export interface FriendInfo {
   userId: string,

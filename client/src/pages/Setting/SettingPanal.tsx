@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Color } from '../../utils/color'
 import ProfileSetting from './ProfileSetting'
 import PasswordSetting from './PasswordSetting'
 import { AiTwotoneSetting } from 'react-icons/ai'

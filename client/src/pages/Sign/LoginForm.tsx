@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
 import { useAuthStore } from '../../store/AuthStore'
 import { useUserInfoStore} from '../../store/UserInfoStore'
 import { LoginApi } from '../../api/auth'
@@ -11,13 +10,6 @@ import WarningBlock from '../../components/WarningBlock'
 import FormWrapper from './FormWrapper'
 import StyledForm from './StyledForm'
 import SubmitButton from './SubmitButton'
-
-const Input = styled.input`
-  margin: 10px 0px;
-  padding: 5px;
-  border-width: 1px;
-  border-radius: 5px;
-`
 
 const LoginForm: React.FC = () => {
 

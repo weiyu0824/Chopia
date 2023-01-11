@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Color } from '../../../utils/color'
-import { AvatarImgs } from '../../../utils/avatar'
 import { useNavigate, useParams } from 'react-router-dom'
+import Avatar from '../../../components/Avatar'
 
 interface IContactBox {
   pick: boolean
@@ -13,27 +13,14 @@ const ContactBox = styled.div<IContactBox>`
   margin: 3px 0;
   border-radius: 0.2rem;
   padding: 0.2rem;
-  /* border-radius: 0.1rem; */
   background-color: ${(props) => (props.pick)? `${Color.lblue}`: ''};
   color: ${Color.lgrey};
   &:hover{
     background-color: ${Color.lblue};
     cursor: pointer;
   }
-
-  .avatarBox {
-    flex-shrink:0;
-    height: 2rem;
-    width: 2rem;
-    margin: 0px 15px 0px 0px;
-
-    .avatar {
-      width: 100%;
-      height: 100%;
-    }
-  }
   .fullName {
-    margin: auto 0;
+    margin: auto 5px;
   }
 
 `
@@ -54,9 +41,10 @@ const Contact: React.FC<IContact> = (props) => {
     <ContactBox 
       pick={props.contactId === params.friendId}
       onClick={clickContact}>
-      <div className='avatarBox'>
-        <img className='avatar' src={AvatarImgs[props.avatar]} alt="Image"/>
-      </div>
+      <Avatar 
+        avatarName={props.avatar}
+        size={2.2}
+      />
       <span className='fullName'> {props.name} </span>
       
     </ContactBox>
