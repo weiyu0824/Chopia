@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { setTokenHeader } from './header'
+import config from '../config/config'
 
-const baseURL = 'http://localhost:8088/api/notif'
+const baseURL = `http://${config.ip}:8088/api/notif`
 
 export const getNotifs = async (
   accessToken: string) => {

@@ -8,6 +8,7 @@ export interface IUser {
   groupIds: string[]
   friendIds: string[]
   avatar: string
+  verify: boolean
 }
 
 export interface IPrivateMessage {
@@ -36,4 +37,10 @@ export interface INotification {
   receiverId: string
   type: string // Currently 2 type: new-friend, friend-request
   timestamp: string
+}
+
+export interface IUserVerification {
+  userId: string,
+  verificationToken: string,
+  expireDate: Number
 }

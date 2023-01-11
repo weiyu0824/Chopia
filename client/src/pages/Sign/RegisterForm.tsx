@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuthStore } from '../../store/AuthStore'
-import { RegisterApi } from '../../api/auth'
+import { register } from '../../api/auth'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import DataInputBox from '../../components/DataInputBox'
@@ -42,13 +42,12 @@ const RegisterForm: React.FC = () => {
   const endAuth = useAuthStore((state) => state.endAuth)
   const successAuth = useAuthStore((state => state.successAuth))
 
-  const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
+  // const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
 
   const handleSignUp = async () => {
-    console.log('handle sign up')
     if (email && name && username && password) {
       startAuth()
-      const res = await RegisterApi(email, name, username, password)
+      const res = await register(email, name, username, password)
       endAuth()
 
       if (res.data.success === false) {
@@ -56,10 +55,13 @@ const RegisterForm: React.FC = () => {
         setWarningMessage(res.data.message)
       }else {
         console.log('Registered Sucess')
-        // successAuth(username) //TODO: username should be in response
-        navigate('/signin')
-        setCookies('access_token', res.data.accessToken)
-        setCookies('refresh_token', res.data.refreshToken)
+        console.log(res.data)
+        navigate({
+          pathname: '/goverify',
+          search: `?id=${res.data.userId}&email=${email}`,
+        });
+        // setCookies('access_token', res.data.accessToken)
+        // setCookies('refresh_token', res.data.refreshToken)
       }
       
     }else {

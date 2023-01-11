@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { setTokenHeader } from './header'
+import config from '../config/config'
 
-const baseURL = 'http://localhost:8088/api/auth'
+const baseURL = `http://${config.ip}:8088/api/auth`
 
-export const RegisterApi = async (email: string, name: string, username: string, password: string) => {
+export const register = async (email: string, name: string, username: string, password: string) => {
   const url = baseURL + '/register'
 
   try {
@@ -74,8 +75,25 @@ export const loginWithToken = async (accessToken: string) => {
     }
     
   } catch (err) {
-    return {
-      err: err
+    throw err
+  }
+}
+
+export const verify = async (
+  userId: string,
+  verificationToken: string
+) => {
+  const url = `${baseURL}/verify`
+  try {
+    const postData = {
+      userId,
+      verificationToken
     }
+    const res = await axios.post(url, postData)
+    return {
+      data: res.data
+    }
+  } catch (err) {
+    throw err
   }
 }

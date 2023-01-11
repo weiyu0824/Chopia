@@ -3,7 +3,9 @@ import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home/Home'
 import Demo from './pages/Demo/Demo'
 import MyNav from './components/MyNav'
-import Sign from './pages/Sign/Sign';
+import Sign from './pages/Sign/Sign'
+import GoVerification from './pages/Verification/GoVerification'
+import Verification from './pages/Verification/Verification';
 import { useAuthStore } from './store/AuthStore'
 import { useChatStore } from './store/ChatStore'
 import { useUserInfoStore } from './store/UserInfoStore';
@@ -30,19 +32,23 @@ const App : React.FC = () => {
   const [cookies] = useCookies(['access_token', 'refresh_token'])  
 
   const autoLogin = async (accessToken: string) => {
-    const res = await loginWithToken(accessToken)
-    if (res.data.success) {
-      console.log('App')
-      console.log(res.data.friendInfos)
-      successAuth()
-      initUserInfo(
-        res.data.userId,
-        res.data.email,
-        res.data.name,
-        res.data.username,
-        res.data.avatar,
-        res.data.friendInfos
-      )
+    try {
+      const res = await loginWithToken(accessToken)
+      if (res.data.success) {
+        console.log('App')
+        console.log(res.data.friendInfos)
+        successAuth()
+        initUserInfo(
+          res.data.userId,
+          res.data.email,
+          res.data.name,
+          res.data.username,
+          res.data.avatar,
+          res.data.friendInfos
+        )
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -59,11 +65,13 @@ const App : React.FC = () => {
   return (
     <div className="App"> 
       <Routes>
-        <Route path='/signin' element={<Sign for='login' />}/>
+        <Route path='/signin' element={<Sign for='login' />} />
         <Route path='/signup' element={<Sign for='register' />}/>
         <Route path="/" element={<Home page='default'/>} />
         <Route path="/inbox/:friendId" element={<Home page='inbox'/>}  />
         <Route path="/notification" element={<Home page='notification'/>} />
+        <Route path='/goverify' element={<GoVerification />} />
+        <Route path='/verify' element={<Verification />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>

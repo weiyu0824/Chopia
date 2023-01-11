@@ -38,11 +38,11 @@ export interface LoginResult extends ServiceResult {
   username: string
   avatar: string
   friendInfos: FriendInfo[]
+  verify: boolean
 }
 
 export interface RegisterResult extends ServiceResult {
-  accessToken: string
-  refreshToken: string
+  userId: string
 }
 
 export interface LogoutResult extends ServiceResult { 
@@ -69,7 +69,8 @@ export function initLoginResult(options?: Partial<LoginResult>): LoginResult {
     name: '',
     username: '',
     avatar: '',
-    friendInfos: []
+    friendInfos: [],
+    verify: true
   }
 
   return {
@@ -81,8 +82,7 @@ export function initLoginResult(options?: Partial<LoginResult>): LoginResult {
 
 export function initRegisterResult(options?: Partial<RegisterResult>): RegisterResult {
   const defaults = {
-    accessToken: '',
-    refreshToken: ''
+    userId: ''
   }
 
   return {
@@ -113,7 +113,7 @@ export function initLoginWithTokenResult (options?: Partial<LoginWithTokenResult
     name: '',
     username: '',
     avatar: '',
-    friendInfos: []
+    friendInfos: [],
   }
   return {
     ...serviceDefaults,

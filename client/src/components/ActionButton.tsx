@@ -13,7 +13,7 @@ const AButton  = styled.button<IAButton>`
   outline: none;
   padding: ${(props) => `${props.padding}`};
   background-color: ${(props) => `${props.backgroundColor}`};
-  
+  color: ${(props) => `${props.color}`};
   &:hover {
     background-color: ${(props) => (props.allowToAct)? `${props.hoverColor}`: ''};
   }

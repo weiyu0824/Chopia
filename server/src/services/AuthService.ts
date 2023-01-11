@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken'
+import { v4 as uuidv4 } from 'uuid';
 import config from '../config/config'
 import { User } from '../models/User'
-import { HttpException, AccessDatabaseError, AlreadyLogoutError } from '../utils/HttpException'
+import { UserVerification } from '../models/UserVerification'
+import { HttpException, AccessDatabaseError, AlreadyLogoutError, WrongDataError } from '../utils/HttpException'
 import { TokenPayload } from '../interfaces/TokenPayload'
 import { initRegisterResult, RegisterResult, 
           initLoginResult, LoginResult, 
@@ -88,17 +90,20 @@ export class AuthService {
         name: name,
         username: username,
         password: password,
-        avatar: 'standard'
+        avatar: 'standard',
+        verify: false
       })
-
-      await user.save()
+      console.log('store')
+      const newUser = await user.save()
 
       // TODO: email verify
       return initRegisterResult({
         success: true,
-        message: 'Succesfully create the user'
+        message: 'Succesfully create the user',
+        userId: newUser._id.toString()
       })
     } catch (err) {
+      
       throw new AccessDatabaseError()
     }
   }
@@ -112,13 +117,12 @@ export class AuthService {
   ): Promise<LoginResult> => {
 
     try {
-      
       const existUser = await User.findOne({
         email: email,
         password: password
       })
-      
-      if (existUser !== null) {
+      console.log(existUser)
+      if (existUser !== null && existUser.verify) {
         const userId = existUser._id.toString()
         console.log(userId)
         const accessToken = this.genAccessToken({ userId: userId})
@@ -151,7 +155,13 @@ export class AuthService {
           avatar: existUser.avatar,
           friendInfos: friendInfos
         }) 
-      }else {
+      } else if (existUser !== null && !existUser.verify){
+        return initLoginResult({
+          success: true,
+          userId: existUser._id.toString(),
+          verify: false
+        })
+      } else {
         return initLoginResult({
           success: false,
           message: 'Please provide a valid email address and password.'
@@ -233,6 +243,65 @@ export class AuthService {
 
     } catch(err) {
       throw new AccessDatabaseError()
+    }
+  }
+
+  verify = async (
+    userId: string,
+    verificationToken: string
+  ) => {
+    const user = await User.findOne({_id: userId})
+    console.log(user)
+    if (!user) {
+      return {
+        success: false,
+        message: 'This user does not exist!!'
+      }
+    }
+    if (user.verify) {
+      return {
+        success: false,
+        message: 'this email address have already been verified'
+      }
+    }
+    const currDate = Date.now() / 1000
+    // 86,400 seconds per day
+    const userVerification = await UserVerification.findOneAndDelete({
+      userId: userId,
+      verificationToken: verificationToken
+    })
+    console.log(userVerification)
+    if (!userVerification) {
+      throw new WrongDataError()
+    } else {
+      // if (currDate < userVerification.expireDate) {
+        await User.findOneAndUpdate({_id: userId}, {verify: true})
+        return {
+          success: true,
+          message: ''
+        }
+      // }
+    }
+    return {}
+  }
+
+  storeVerfication = async (
+    userId: string,
+  ) => {
+    const token = uuidv4()
+    const userVerification = new UserVerification({
+      userId: userId,
+      verificationToken: token,
+      expireDate: (Date.now() / 1000) + 864000
+    })
+
+    // link:
+    console.log(`Verification Link: http://localhost:3000/verify?id=${userId}&token=${token}`)
+    try {
+      await userVerification.save()
+      return userVerification
+    } catch (err) {
+      throw err
     }
   }
 }

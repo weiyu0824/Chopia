@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { AvatarImgs } from '../utils/avatar'
+import { AvatarImgs, LogoImg } from '../utils/avatar'
 
 interface IBox {
   imgSize: number
@@ -40,6 +40,11 @@ const Avatar: React.FC<IAvatar> = (options) => {
     ...options
   }
   
+  const img = (props.avatarName === 'logo')? (
+    <img src={LogoImg} alt="Image" />
+  ) : (
+    <img src={AvatarImgs[props.avatarName]} alt="Image" />
+  )
   return (
     <Box 
       imgSize={props.size}
@@ -47,7 +52,7 @@ const Avatar: React.FC<IAvatar> = (options) => {
       onClick={props.onClick}
       withMargin={props.withMargin}
     >
-      <img src={AvatarImgs[props.avatarName]} alt="Image" />
+      {img}
     </Box>
   )
 }

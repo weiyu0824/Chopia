@@ -82,6 +82,7 @@ const UserInfoPanal: React.FC<IUserInfoPanal> = (props) => {
   const resetUserInfo = useUserInfoStore((state) => state.resetUserInfo)
   const resetChatroom = useChatStore((state) => state.resetChatroom)
   const resetNotif = useNotifStore((state) => state.resetNotif)
+  const navigate = useNavigate()
 
   const handleSignOut = () => {
     console.log('sign out')
@@ -93,6 +94,7 @@ const UserInfoPanal: React.FC<IUserInfoPanal> = (props) => {
     resetUserInfo()
     resetChatroom()
     resetNotif()
+    navigate('/')
   }
   return (
     <Panal showPanal={props.showPanal}>

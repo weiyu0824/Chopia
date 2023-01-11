@@ -9,6 +9,7 @@ const userSchema = new Schema<IUser>({
   groupIds: { type: [String], default: [] },
   friendIds: { type: [String], default: []},
   avatar: { type: String, required: true },
+  verify: {type: Boolean, required: true}
 })
               
 export const User = model<IUser>('User', userSchema)

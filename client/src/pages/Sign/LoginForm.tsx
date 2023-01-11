@@ -44,11 +44,8 @@ const LoginForm: React.FC = () => {
       endAuth()
 
       if (res.data.success === false) {
-        console.log('fail to login')
         setWarningMessage(res.data.message)
       }else {
-        console.log('sucess to login')
-        console.log(res.data)
         successAuth() 
         initUserInfo(
           res.data.userId,
@@ -58,11 +55,18 @@ const LoginForm: React.FC = () => {
           res.data.avatar,
           res.data.friendInfos
         )
-        navigate('/')
-        setCookies('access_token', res.data.accessToken, {path: '/'})
-        setCookies('refresh_token', res.data.refreshToken, {path: '/'})
+
+        if (res.data.verify) {
+          navigate('/')
+          setCookies('access_token', res.data.accessToken, {path: '/'})
+          setCookies('refresh_token', res.data.refreshToken, {path: '/'})
+        } else {
+          navigate({
+            pathname: '/goverify',
+            search: `?id=${res.data.userId}&email=${email}`,
+          });
+        }
       }
-      
     }else {
       setWarningMessage('Please input a valid username and password')
       console.log(warningMessage)

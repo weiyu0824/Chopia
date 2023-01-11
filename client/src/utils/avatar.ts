@@ -15,6 +15,7 @@ import joyce from '../asset/joyce.png'
 import mike from '../asset/mike.png'
 import celine from '../asset/celine.png'
 import john from '../asset/john.png'
+import robot from '../asset/robot-logo.png'
 
 export const AvatarImgs: {[name: string]: string} = {
   'fox': fox,
@@ -35,3 +36,5 @@ export const AvatarImgs: {[name: string]: string} = {
   'celine': celine,
   'john': john,
 }
+
+export const LogoImg = robot

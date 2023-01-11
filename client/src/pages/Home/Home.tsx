@@ -15,6 +15,7 @@ import { loginWithToken } from '../../api/auth';
 import Demo from '../../pages/Demo/Demo'
 import MyNav from '../../components/MyNav'
 import { useChatStore } from '../../store/ChatStore'
+import config from '../../config/config'
 
 
 
@@ -42,7 +43,7 @@ const Home: React.FC<IHome> = (props) => {
     if (isLoggedIn) {
       console.log('Use effect in Home')
       // Socket for chat server
-      wsChat.current = new WebSocket('ws://localhost:8088/chat')
+      wsChat.current = new WebSocket(`ws://${config.ip}:8088/chat`)
       wsChat.current.onopen = (event) => {
         console.log('open ws (chat)')
         if (wsChat.current) {
@@ -71,7 +72,7 @@ const Home: React.FC<IHome> = (props) => {
         console.log(message)
       }
       // Socket for notification server
-      wsNotif.current = new WebSocket('ws://localhost:8088/notif')
+      wsNotif.current = new WebSocket(`ws://${config.ip}:8088/notif`)
       wsNotif.current.onopen = () => {
         console.log('open ws (notif)')
         if (wsNotif.current) {
