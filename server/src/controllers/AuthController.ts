@@ -21,7 +21,7 @@ export class AuthController implements Controller {
     this.router.get('/refresh', refreshMiddleware, this.refresh)
     this.router.post('/login-with-token', validateToken, this.loginWithToken)
     this.router.post('/verify', this.verify)
-    this.router.post('send-mail', this.sendMail)
+    this.router.post('/send-mail', this.sendMail)
   }
 
   private login = async (req: Request, res: Response, next: NextFunction) => {
@@ -65,26 +65,26 @@ export class AuthController implements Controller {
   }
 
   private logout = (req: Request, res: Response, next: NextFunction) => {
-    const verifiedName: string = req.body.verifiedName
-    console.log('logout', verifiedName)
-    try {
-      const serviceResult = authService.logout(verifiedName)
-      res.send(serviceResult)
-      next()
-    } catch (err) {
-      next(err)
-    }
+    // const verifiedName: string = req.body.verifiedName
+    // console.log('logout', verifiedName)
+    // try {
+    //   const serviceResult = authService.logout(verifiedName)
+    //   res.send(serviceResult)
+    //   next()
+    // } catch (err) {
+    //   next(err)
+    // }
   }
 
   private refresh = (req: Request, res: Response, next: NextFunction) => {
-    const verifiedName: string = req.body.verifiedName
-    try {
-      const serviceResult = authService.refresh(verifiedName)
-      res.send(serviceResult)
-      next()
-    } catch (err) {
-      next(err)
-    }
+    // const verifiedName: string = req.body.verifiedName
+    // try {
+    //   const serviceResult = authService.refresh(verifiedName)
+    //   res.send(serviceResult)
+    //   next()
+    // } catch (err) {
+    //   next(err)
+    // }
   }
 
   private loginWithToken = async (req: Request, res: Response, next: NextFunction) => {
