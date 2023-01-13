@@ -11,9 +11,6 @@ import TextareaAutosize from 'react-textarea-autosize'
 import { calculateChatRoomId } from '../../utils/chatroom'
 import { Spin } from 'antd';
 
-
-
-const scrollWidth = '15px';
 const Wrapper = styled.div`
   flex-grow: 1;
   border-style: none;
@@ -92,7 +89,7 @@ const ChatFeed: React.FC<IChatFeed> = (props) => {
   const [currText, setCurrText] = useState('')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef<null | HTMLDivElement>(null)
-  const [cookies, _] = useCookies(['access_token', 'refresh_token'])
+  const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
   const name = useUserInfoStore((state) => state.name)
   const userId = useUserInfoStore((state) => state.userId)
   const avatar = useUserInfoStore((state) => state.avatar)
@@ -196,7 +193,6 @@ const ChatFeed: React.FC<IChatFeed> = (props) => {
 
     return (
       <Wrapper>
-        <h1></h1>
         <FriendBar>
           <span>{friendInfos[props.friendId].name}</span>
         </FriendBar>

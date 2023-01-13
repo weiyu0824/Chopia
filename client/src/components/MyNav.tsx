@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import styled from 'styled-components'
 import { Color } from '../utils/color'
-import Avatar from './Avatar'
+// import Avatar from './Avatar'
 
 
 const Brand = styled.span`
@@ -14,11 +14,11 @@ const Brand = styled.span`
 const MyNav: React.FC = () => {
   return (
     <Navbar color='light'>
-      <Avatar 
+      {/* <Avatar 
         avatarName='logo'
         size={2}
-      />
-      {/* <Brand>brand</Brand> */}
+      /> */}
+      <Brand>brand</Brand>
       <Link to='/signin'><Button style={{ color: Color.blue}} type="link"> Sign In </Button></Link>
     </Navbar>
   )

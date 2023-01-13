@@ -41,9 +41,9 @@ const Avatar: React.FC<IAvatar> = (options) => {
   }
   
   const img = (props.avatarName === 'logo')? (
-    <img src={LogoImg} alt="Image" />
+    <img src={LogoImg} alt='avatar-img' />
   ) : (
-    <img src={AvatarImgs[props.avatarName]} alt="Image" />
+    <img src={AvatarImgs[props.avatarName]} alt='avatar-img'/>
   )
   return (
     <Box 

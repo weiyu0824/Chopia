@@ -6,7 +6,7 @@ import FriendInfo from '../Friend/FriendInfo'
 import { GiThreeFriends } from 'react-icons/gi'
 import Icon from '../../components/Icon'
 import { Spin } from 'antd'
-import { searchUser, addFriend } from '../../api/user'
+import { searchUser } from '../../api/user'
 import { useCookies } from 'react-cookie'
 import ActionButton from '../../components/ActionButton'
 

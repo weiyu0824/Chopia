@@ -1,20 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home/Home'
-import Demo from './pages/Demo/Demo'
-import MyNav from './components/MyNav'
 import Sign from './pages/Sign/Sign'
 import GoVerification from './pages/Verification/GoVerification'
 import Verification from './pages/Verification/Verification';
 import { useAuthStore } from './store/AuthStore'
-import { useChatStore } from './store/ChatStore'
 import { useUserInfoStore } from './store/UserInfoStore';
 import { useCookies } from 'react-cookie';
 import { loginWithToken } from './api/auth';
 import './App.css'
-
-
-
 
 function PageNotFound() {
   return (
@@ -23,7 +17,6 @@ function PageNotFound() {
     </div>
   );
 }
-
 
 const App : React.FC = () => {
   

@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Color } from '../../utils/color'
-import imageToAdd from '../../asset/hamster.png'
 import { useCookies } from 'react-cookie'
 import { useNotifStore } from '../../store/NotifStore'
 import Avatar from '../../components/Avatar'
@@ -57,7 +56,7 @@ const Notification = styled.div`
   }
 `
 
-const NotificationPanal = () => {
+const NotificationPanal: React.FC = () => {
   const [cookies, _] = useCookies(['access_token', 'refresh_token'])
   const notifications = useNotifStore((state) => state.notificatoins)
   const removeNotif = useNotifStore((state) => state.removeNotif)

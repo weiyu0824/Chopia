@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useCookies } from 'react-cookie'
-import { IconContext } from "react-icons"
 import { MdSummarize } from 'react-icons/md'
 import { VscRefresh } from 'react-icons/vsc'
 import { RxCross1 } from 'react-icons/rx'
@@ -11,11 +10,7 @@ import TopicButtonList from './Topic/TopicButtonList'
 import TopicCard from './Topic/TopicCard'
 import { Color } from '../../utils/color'
 import { Spin } from 'antd';
-import { useUserInfoStore } from '../../store/UserInfoStore'
 import Icon from '../../components/Icon'
-import { clear } from 'console'
-
-
 
 interface IBox {
   shrink: boolean

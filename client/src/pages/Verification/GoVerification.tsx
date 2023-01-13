@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Color } from '../../utils/color'
 import { MdEmail } from 'react-icons/md'
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Icon from '../../components/Icon'
 import ActionButton from '../../components/ActionButton'
 
@@ -29,12 +29,18 @@ const Announcement = styled.div`
 `
 
 const GoVerification: React.FC = () => {
-  const [searchParams, _] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate()
 
   useEffect(() => {
-    console.log(searchParams.get('id'));
-    console.log(searchParams.get('email'))
-  })
+    const userId = searchParams.get('id')
+    const email = searchParams.get('email')
+
+    if (!userId || !email) {
+      navigate('/error')
+    }
+    
+  }, [])
   
   return (
     <Wrapper>

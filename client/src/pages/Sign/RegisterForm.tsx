@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { useAuthStore } from '../../store/AuthStore'
 import { register } from '../../api/auth'
 import { useNavigate } from 'react-router-dom'
-import { useCookies } from 'react-cookie'
 import DataInputBox from '../../components/DataInputBox'
 import WarningBlock from '../../components/WarningBlock'
 import FormWrapper from './FormWrapper'
@@ -36,12 +35,10 @@ const RegisterForm: React.FC = () => {
   // Other
   const navigate = useNavigate()
   const loading = useAuthStore((state) => state.loading)
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   const startAuth = useAuthStore((state) => state.startAuth)
   const endAuth = useAuthStore((state) => state.endAuth)
-  const successAuth = useAuthStore((state => state.successAuth))
-
+  // const successAuth = useAuthStore((state => state.successAuth))
   // const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
 
   const handleSignUp = async () => {
@@ -51,11 +48,8 @@ const RegisterForm: React.FC = () => {
       endAuth()
 
       if (res.data.success === false) {
-        console.log('Fail to register')
         setWarningMessage(res.data.message)
       }else {
-        console.log('Registered Sucess')
-        console.log(res.data)
         navigate({
           pathname: '/goverify',
           search: `?id=${res.data.userId}&email=${email}`,

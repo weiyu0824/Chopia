@@ -4,14 +4,11 @@ import ChatFeed from './ChatFeed'
 import LeftNav from './LeftNav'
 import styled from 'styled-components'
 import TopicDrawer from './TopicDrawer'
-import FriendPanal from '../Friend/FriendPanal'
 import NotificationPanal from '../Notification/NotificationPanal'
-import SettingPanel from '../Setting/SettingPanal'
 import DefaultArea from './DefaultArea'
 import { useAuthStore } from '../../store/AuthStore'
 import { useUserInfoStore } from '../../store/UserInfoStore';
 import { useCookies } from 'react-cookie';
-import { loginWithToken } from '../../api/auth';
 import Demo from '../../pages/Demo/Demo'
 import MyNav from '../../components/MyNav'
 import { useChatStore } from '../../store/ChatStore'
