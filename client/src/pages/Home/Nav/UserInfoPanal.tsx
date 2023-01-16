@@ -73,7 +73,7 @@ interface IUserInfoPanal {
 }
 
 const UserInfoPanal: React.FC<IUserInfoPanal> = (props) => {
-  const leaveAuth = useAuthStore((state => state.leaveAuth))
+  const setLogout = useAuthStore((state => state.setLogout))
   const [cookies, setCookie, removeCookie] = useCookies(['access_token', 'refresh_token'])
   const resetUserInfo = useUserInfoStore((state) => state.resetUserInfo)
   const resetChatroom = useChatStore((state) => state.resetChatroom)
@@ -86,7 +86,7 @@ const UserInfoPanal: React.FC<IUserInfoPanal> = (props) => {
     removeCookie('refresh_token')
 
     // Make sure to reset all state here!!
-    leaveAuth()
+    setLogout()
     resetUserInfo()
     resetChatroom()
     resetNotif()

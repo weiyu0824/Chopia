@@ -20,7 +20,7 @@ function PageNotFound() {
 
 const App : React.FC = () => {
   
-  const successAuth = useAuthStore((state) => state.successAuth)
+  const setLogin = useAuthStore((state) => state.setLogin)
   const initUserInfo = useUserInfoStore((state) => state.initUserInfo)
   const [cookies] = useCookies(['access_token', 'refresh_token'])  
 
@@ -30,7 +30,7 @@ const App : React.FC = () => {
       if (res.data.success) {
         console.log('App')
         console.log(res.data.friendInfos)
-        successAuth()
+        setLogin()
         initUserInfo(
           res.data.userId,
           res.data.email,
