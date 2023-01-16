@@ -62,6 +62,23 @@ const ContactInfo = styled.div`
   width: auto;
   padding: 10px;
   overflow: scroll;
+
+  overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+      background: #393812;
+      -webkit-border-radius: 1ex;
+      -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+  }
+
+  ::-webkit-scrollbar-corner {
+      background: #000;
+  }
   
   .contact {
     background-color: orange;
