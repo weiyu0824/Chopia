@@ -77,14 +77,19 @@ const TopicDrawer: React.FC<ITopicDrawer> = (props) => {
   const handleRefresh = async () => {
     clearTopicDrawer()
     setIsLoading(true)
-    const res = await getSummary(props.friendId, cookies.access_token)
-    if (res.data.success === true) {
-      setSummarys(res.data.prediction)
-      setShowBtnList(true)
-    }else {
-      setWarning(res.data.message)
-      console.log(warning)
+    try {
+      const res = await getSummary(props.friendId, cookies.access_token)
+      if (res.data.success === true) {
+        setSummarys(res.data.prediction)
+        setShowBtnList(true)
+      }else {
+        setWarning(res.data.message)
+        console.log(warning)
+      }
+    } catch (err) {
+      setWarning('Internal Server Error')
     }
+    
     setHasFetched(true)
     setIsLoading(false)
   }
