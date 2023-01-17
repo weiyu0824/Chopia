@@ -9,22 +9,23 @@ interface ISummaryCard {
 }
 
 const SummaryCard = styled.div<ISummaryCard>`
+  align-self: stretch;
   width: auto;
   height: auto;
   flex-grow: 2;
   /* height: 100px; */
   background-color: ${props => props.summaryColor};
-  border-radius: 15px;
+  border-radius: 8px;
   padding: 10px;
   margin: 10px 0px;
-
+  color: ${Color.sogrey};
   .summary-header {
     text-align: left;
-    color: ${Color.white};
+    color: ${Color.sogrey};
   }
   .summary-paragraph {
     text-align: left;
-    color: ${Color.white};
+    color: ${Color.sogrey};
   }
   
 `

@@ -9,9 +9,12 @@ import { editProfile } from '../../api/user'
 import { validate } from '../../utils/validate'
 import { useUserInfoStore } from '../../store/UserInfoStore'
 import { Spin } from 'antd';
+import { Color } from '../../utils/color'
+
 
 const Wrapper = styled.div`
-  flex-grow: 1;
+  /* flex-grow: 1; */
+  height: 100%;
   flex-direction: column;
   justify-content: center;
   display: flex;
@@ -35,9 +38,11 @@ const Wrapper = styled.div`
     border-radius: 0.4rem;
     padding: 0.6rem 1rem;
     outline: none;
-    background-color: #0197f6;
+    background-color: ${Color.fagrey};
+    color: ${Color.dogrey};
     &:hover{
-      background-color: lightblue;
+      background-color: ${Color.yellow};
+      color: ${Color.lagrey};
     }
   }
 
@@ -115,7 +120,7 @@ const ProfileSetting: React.FC<IProfileSetting> = (props) => {
               icon={<MdAddPhotoAlternate />}
               size={1.5}
               backgroundColor='white'
-              hoverColor='lightgrey'
+              hoverColor={Color.yellow}
             />
           </div>
         </div>

@@ -19,16 +19,16 @@ const StyledInputBox = styled.div<IStyledInputBox>`
   margin: 8px 0px 5px 0px;
   border: solid 1px;
   border-radius: 5px;
-  border-color: ${(props) => (props.warn)? 'red' : 'green'};
+  border-color: ${(props) => (props.warn)? 'red' : `${Color.sogrey}`};
   padding: 8px;
-  background-color: ${Color.white};
+  background-color: inherit;
   
   label {
     position: absolute;
     top: ${(props) => (props.floatLabel)? '-0.5rem' : '0.5rem'};
     left: 0.5rem;
     padding: 0rem 0.2rem;
-    background-color: ${Color.white};
+    background-color: ${Color.regrey};
     font-size: ${(props) => (props.floatLabel)? '0.7rem' : ''};
     pointer-events: ${(props) => (props.floatLabel)? 'none' : ''};
     transition: 0.2s;
@@ -37,7 +37,7 @@ const StyledInputBox = styled.div<IStyledInputBox>`
     width: 100%;
     border: none;
     outline: none;
-    background-color: ${Color.white};
+    background-color: inherit;
     cursor: ${(props) => (props.readOnly)? 'no-drop': ''};
     :focus + label {
       font-size: 0.7rem;

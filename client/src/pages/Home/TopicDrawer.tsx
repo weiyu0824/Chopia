@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useCookies } from 'react-cookie'
 import { MdSummarize } from 'react-icons/md'
-import { VscRefresh } from 'react-icons/vsc'
-import { RxCross1 } from 'react-icons/rx'
+import { MdOutlineAutorenew } from 'react-icons/md'
+import { RxCross2 } from 'react-icons/rx'
 import { Summary } from '../../interfaces/Summary'
 import { getSummary } from '../../api/ml'
 import TopicButtonList from './Topic/TopicButtonList'
@@ -19,15 +19,15 @@ interface IBox {
 }
 
 const Box = styled.div<IBox>`
-  padding: 10px;
+  padding: 5px;
   width: ${props => (props.shrink) ? "50px" : "400px"};
   height: 100vh;
-  background-color: lightblue;
+  background-color: ${Color.fagrey};
   transition-duration: 0.3s;
   display: flex;
   flex-direction: column;
   justify-content: ${props => (props.isLoading && !props.shrink) ? 'center' : ''};
-  align-items: ${props => (props.isLoading && !props.shrink) ? 'center' : ''};
+  align-items: ${props => (props.isLoading && !props.shrink) ? 'center' : 'center'};
   .ant-spin-dot-item {
     background-color: ${Color.blue};
   }
@@ -35,9 +35,10 @@ const Box = styled.div<IBox>`
     display: ${props => (props.isLoading && !props.shrink) ? '' : 'none'};
   }
   .topicDrawerBtns{
+    align-self: stretch;
     flex-direction: row;
+    justify-content: space-between;
     display: flex;
-    justify-content: space-between
   }
   #topicGenerationWarning{
     display: ${props => (props.showWarning && !props.shrink) ? '' : 'none'};
@@ -49,7 +50,7 @@ interface ITopicDrawer {
   friendId: string
 }
 const TopicDrawer: React.FC<ITopicDrawer> = (props) => {
-  const summaryColors = [Color.dblue, Color.blue]
+  const summaryColors = [Color.yellow, Color.regrey]
   const [shrink, setShrink] = useState(true)
   const [colorId, setColorId] = useState(0)
   const [summaryId, setSumaryId] = useState(-1)
@@ -126,31 +127,29 @@ const TopicDrawer: React.FC<ITopicDrawer> = (props) => {
   let controlBtns = <></>
   if (shrink) {
     controlBtns = (
-      <div className='topicDrawerBtns'>
-        <Icon 
-          icon={<MdSummarize />}
-          size={1.2}
-          backgroundColor='white'
-          hoverColor='lightgray'
-          onClick={handleShrinkAndExpand}
-        />
-     </div>
+      <Icon 
+        icon={<MdSummarize />}
+        size={1.2}
+        shape='square'
+        hoverColor={Color.sogrey}
+        onClick={handleShrinkAndExpand}
+      />
     ) 
   }else if (!shrink && !isLoading){
     controlBtns = (
       <div className='topicDrawerBtns'>
         <Icon 
-          icon={<VscRefresh />}
+          icon={<MdOutlineAutorenew />}
           size={1.2}
-          backgroundColor='white'
-          hoverColor='lightgray'
+          shape='square'
+          hoverColor={Color.sogrey}
           onClick={handleRefresh}
         />
         <Icon 
-          icon={<RxCross1 />}
+          icon={<RxCross2 />}
           size={1.2}
-          backgroundColor='white'
-          hoverColor='lightgray'
+          shape='square'
+          hoverColor={Color.sogrey}
           onClick={handleShrinkAndExpand}
         />
       </div>

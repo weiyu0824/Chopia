@@ -6,6 +6,7 @@ import GoVerification from './pages/Verification/GoVerification'
 import Verification from './pages/Verification/Verification';
 import { useAuthStore } from './store/AuthStore'
 import { useUserInfoStore } from './store/UserInfoStore';
+import { useErrorStore } from './store/ErrorStore'
 import { useCookies } from 'react-cookie';
 import { loginWithToken } from './api/auth';
 import './App.css'
@@ -17,7 +18,15 @@ function PageNotFound() {
     </div>
   );
 }
-
+function ErrorPage () {
+  const errorCode = useErrorStore((state) => state.errorCode)
+  const errorMessage = useErrorStore((state) => state.errorMessage)
+  return (
+    <div>
+      {errorCode.toString()} {errorMessage}
+    </div>
+  )
+}
 const App : React.FC = () => {
   
   const setLogin = useAuthStore((state) => state.setLogin)
@@ -65,6 +74,7 @@ const App : React.FC = () => {
         <Route path="/notification" element={<Home page='notification'/>} />
         <Route path='/goverify' element={<GoVerification />} />
         <Route path='/verify' element={<Verification />} />
+        <Route path='/error' element={<ErrorPage />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>

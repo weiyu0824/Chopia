@@ -24,9 +24,11 @@ const Wrapper = styled.div`
   width: 100%;
   padding: 2rem 5rem;
   border-style: none;
-  background-color: ${Color.white};
+  /* background-color: ${Color.white}; */
+  /* background-color: #222831; */
   overflow: scroll;
   .windowTitle{
+    color: ${Color.dogrey};
     text-align: left;
   }
 `
@@ -52,7 +54,7 @@ const Notification = styled.div`
   }
 
   &:hover{
-    background-color: ${Color.lblue};
+    background-color: ${Color.fagrey};
   }
 `
 

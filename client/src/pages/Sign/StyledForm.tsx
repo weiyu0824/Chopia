@@ -4,13 +4,12 @@ import { Color } from '../../utils/color'
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  background-color: ${Color.white};
+  color: ${Color.sogrey};
   .signinHeader{
-    color: ${Color.ddblue};
     text-align: left;
   };
   .signinLink{
-    color: ${Color.dblue};
+    color: ${Color.sogrey};
     text-align: right;
   }
 

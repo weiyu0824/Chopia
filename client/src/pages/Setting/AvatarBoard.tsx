@@ -5,6 +5,7 @@ import Avatar from '../../components/Avatar'
 import { BiArrowBack } from 'react-icons/bi'
 import { GrCheckmark } from 'react-icons/gr'
 import Icon from '../../components/Icon'
+import { Color } from '../../utils/color'
 
 interface IWrapper {
   width: number;
@@ -82,7 +83,7 @@ const AvatarBoard: React.FC<IAvatarBoard> = (props) => {
           <Icon
             icon={<BiArrowBack />}
             backgroundColor='white'
-            hoverColor='pink'
+            hoverColor={Color.fagrey}
             size={1.5}
             shape='round'
           />
@@ -93,7 +94,7 @@ const AvatarBoard: React.FC<IAvatarBoard> = (props) => {
          >
           <Icon
             icon={<GrCheckmark />}
-            backgroundColor={(confirmed)? 'pink': 'white'}
+            backgroundColor={(confirmed)? Color.yellow: 'white'}
             size={1.5}
             shape='round'
           />

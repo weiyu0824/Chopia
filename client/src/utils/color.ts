@@ -14,4 +14,11 @@ export class Color {
   static ddgrey = '#212121';
   static lred = '#FF597B'
   static lightblue ='lightblue'
+  static yellow='#FFD369'
+  static dogrey='#EEEEEE'
+  static regrey='lightgrey'
+  static migrey='darkgray'
+  static fagrey='#393E46'
+  static sogrey='#222831'
+  static lagrey='#222222'
 }

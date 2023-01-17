@@ -11,7 +11,7 @@ const FormWrapper = styled.div`
   border-style: solid;
   border-color: lightgray;
   border-radius: 10px;
-  background-color: ${Color.white}; 
+  background-color: ${Color.regrey}; 
   box-shadow: 0px 2px 6px -2px rgba(0,0,0,0.3);
 `
 

@@ -22,7 +22,7 @@ const Panal = styled.div<IPanal>`
   display: flex;
   border-style: solid black;
   border-radius: 0.5rem;
-  background-color: ${Color.white};
+  background-color: ${Color.dogrey};
   width: ${(props) => `${props.width}rem`};
   height: ${(props) => `${props.height}rem`};
   padding: 2rem 2rem;
@@ -106,7 +106,7 @@ const FriendPanal: React.FC = () => {
     result = (<Icon
               icon={<GiThreeFriends />}
               size={5}
-              color='red'
+              color={Color.yellow}
             />)
   } else if (searchState === 'withResult') {
     result = <FriendInfo 
@@ -149,7 +149,7 @@ const FriendPanal: React.FC = () => {
           word='Search for friend'
           padding='0.5rem 1rem'
           backgroundColor='lightgrey'
-          hoverColor='lightblue'
+          hoverColor={Color.yellow}
           onClick={searchForFriend}
           allowToAct={searchStr !== ''} />
       </SearchBar>

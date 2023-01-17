@@ -6,17 +6,18 @@ interface Props {
 }
 const SubmitButton = styled.button<Props>`
   margin: 10px 0px;
-  padding: 10px;
-  color: white;
   border-radius: 5px;
   border-style: none;
-  background-color: ${Color.dblue};
+  padding: 10px;
+  background-color: ${Color.sogrey};
+  color: ${Color.dogrey};
   pointer-events: ${props => props.allowToSubmit? '': 'none'};
 
   /* TODO: Why hover not working */
   &:hover {
-    opacity: 0.5;
-    background-color: black;
+    /* opacity: 0.5; */
+    background-color: ${Color.yellow};
+    color: ${Color.lagrey};
   }
 `
 

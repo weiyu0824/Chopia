@@ -5,28 +5,33 @@ import { Summary } from '../../../interfaces/Summary'
 import { Color } from '../../../utils/color'
 
 const ButtonWindow = styled.div`
+  flex-direction: row;
   display: flex;
+  margin-top: 10px;
   width: 400px;
   height: 60px;
   max-height: 50px;
-  /* flex: 1; */
-  /* white-space: nowrap; */
+  padding: 0px 5px;
+
   overflow-x: scroll;
-  flex-direction: row;
+  ::-webkit-scrollbar {
+    height: 0px;
+    width: 0px;
+  }
 `
 
 interface ITopicButton {
   pick: boolean
 }
 const TopicButton = styled.button<ITopicButton>`
-  background-color: ${props => (props.pick) ? Color.ddblue : Color.grey};
+  background-color: ${props => (props.pick) ? Color.sogrey : Color.migrey};
   color: ${Color.white};
   position: relative;
   outline: none;
   border: none;
   border-radius: 8px;
   padding: 5px 10px;
-  margin: 4px;
+  margin: 4px 8px 4px 0px;
   white-space: nowrap;
   &:hover{
     top: -2px;
