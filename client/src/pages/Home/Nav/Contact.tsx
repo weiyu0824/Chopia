@@ -13,10 +13,11 @@ const ContactBox = styled.div<IContactBox>`
   margin: 3px 0;
   border-radius: 0.2rem;
   padding: 0.2rem;
-  background-color: ${(props) => (props.pick)? `${Color.lblue}`: ''};
-  color: ${Color.lgrey};
+  background-color: ${(props) => (props.pick)? `${Color.sogrey}`: ''};
   &:hover{
-    background-color: ${Color.lblue};
+    /* background-color: ${Color.lblue}; */
+    background-color: lightgrey;
+    color: black;
     cursor: pointer;
   }
   .fullName {

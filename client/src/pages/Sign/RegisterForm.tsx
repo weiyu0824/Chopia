@@ -34,18 +34,19 @@ const RegisterForm: React.FC = () => {
 
   // Other
   const navigate = useNavigate()
-  const loading = useAuthStore((state) => state.loading)
+  const [loading, setLoading] = useState(false)
 
-  const startAuth = useAuthStore((state) => state.startAuth)
-  const endAuth = useAuthStore((state) => state.endAuth)
-  // const successAuth = useAuthStore((state => state.successAuth))
-  // const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
+  const setLogin = useAuthStore((state) => state.setLogin)
 
   const handleSignUp = async () => {
-    if (email && name && username && password) {
-      startAuth()
+    if (!(email && name && username && password)) { 
+      setWarningMessage('Please input a valid username and password')
+      return 
+    }
+    try {
+      setLoading(true)
       const res = await register(email, name, username, password)
-      endAuth()
+      setLoading(false)
 
       if (res.data.success === false) {
         setWarningMessage(res.data.message)
@@ -54,15 +55,12 @@ const RegisterForm: React.FC = () => {
           pathname: '/goverify',
           search: `?id=${res.data.userId}&email=${email}`,
         });
-        // setCookies('access_token', res.data.accessToken)
-        // setCookies('refresh_token', res.data.refreshToken)
       }
-      
-    }else {
-      setWarningMessage('Please input a valid username and password')
-      console.log(warningMessage)
+    } catch (err) {
+      navigate('/')
     }
   }
+     
 
   const validateEmail = (newEmail: string) => {
     const warning = validate(newEmail, {type: 'email'})

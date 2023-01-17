@@ -19,11 +19,14 @@ const UserInfoButton = styled.div`
   padding: 0.2rem;
 
   &:hover{
-    background-color: ${Color.lgrey};
+    /* background-color: ${Color.lgrey}; */
+    background-color: #FFD369;
     cursor: pointer;
+    .fullName {
+      color: black;
+    }
   }
   .fullName {
-    color: black;
     margin: auto 0;
     padding: 0rem 1rem;
   }

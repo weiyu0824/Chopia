@@ -11,10 +11,10 @@ const Wrapper = styled.div<IWrapper>`
   border-style: none;
   display: flex;
   flex-direction: row;
-  border-radius: 3px;
+  border-radius: 1px;
 
   &:hover{
-    background-color: ${Color.lblue};
+    background-color: ${Color.fagrey};
   }
   .avatarSquare{
     flex-shrink: 0;

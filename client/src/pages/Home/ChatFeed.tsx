@@ -23,9 +23,9 @@ const Wrapper = styled.div`
   }
 `
 const FriendBar = styled.div`
-  border-bottom: solid gray;
+  border-bottom: solid ${Color.fagrey};
   padding: 10px 15px;
-  background-color: ${Color.white};
+  /* background-color: ${Color.white}; */
   text-align: left;
   font-size: 1.1rem;
   font-weight: 500;
@@ -33,23 +33,22 @@ const FriendBar = styled.div`
 `
 const ChatArea = styled.div`
   flex-grow: 1;
-  background-color: ${Color.white};;
+  /* background-color: ${Color.white};; */
   overflow-y: scroll;
 
   ::-webkit-scrollbar {
     height: 12px;
     width: 12px;
-    background: ${Color.white};
+    background: ${Color.sogrey};
   }
 
   ::-webkit-scrollbar-thumb {
-      background: #393812;
-      -webkit-border-radius: 1ex;
-      -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+      background: #${Color.fagrey};
+      /* -webkit-border-radius: 1ex;
+      -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75); */
   }
 
   ::-webkit-scrollbar-corner {
-      background: #000;
   }
 `
 
@@ -58,15 +57,15 @@ const Editor = styled.div`
   display: flex;
   border-radius: 0.5rem;
   padding: 1rem;
-  background-color: #222222;
+  background-color: ${Color.lagrey};
   
   #editorSendButton{
     border: none;
     background-color: inherit;
     outline: none;
-    color: lightblue;
+    color: ${Color.migrey};
     &:hover {
-      color: lightpink;
+      color: ${Color.yellow};
     }
   }
   textarea {

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuthStore } from '../../store/AuthStore'
 import { useUserInfoStore} from '../../store/UserInfoStore'
-import { LoginApi } from '../../api/auth'
+import { login } from '../../api/auth'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import DataInputBox from '../../components/DataInputBox'
@@ -10,35 +10,40 @@ import WarningBlock from '../../components/WarningBlock'
 import FormWrapper from './FormWrapper'
 import StyledForm from './StyledForm'
 import SubmitButton from './SubmitButton'
+import { Spin } from 'antd'
 
 const LoginForm: React.FC = () => {
 
   // Form Data
   const [email, setEmail] = useState('') 
   const [password, setPassword ] = useState('')
+  const [loading, setLoading] = useState(false)
 
   // Server side warning message
   const [warningMessage, setWarningMessage ] = useState('')
   const navigate = useNavigate()
-  const loading = useAuthStore((state) => state.loading)
 
-  const startAuth = useAuthStore((state) => state.startAuth)
-  const endAuth = useAuthStore((state) => state.endAuth)
-  const successAuth = useAuthStore((state => state.successAuth))
+  const setLogin = useAuthStore((state) => state.setLogin)
   const initUserInfo = useUserInfoStore((state) => state.initUserInfo)
 
   const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
 
   const handleSignIn = async () => {
-    if (email && password) {
-      startAuth()
-      const res = await LoginApi(email, password)
-      endAuth()
+    if (!(email && password)) {
+      setWarningMessage('Please input a valid username and password')
+      return 
+    }
+
+    try {
+      setLoading(true)
+      const res = await login(email, password)
+      setLoading(false)
+    
 
       if (res.data.success === false) {
         setWarningMessage(res.data.message)
-      }else {
-        successAuth() 
+      } else {
+        setLogin()
         initUserInfo(
           res.data.userId,
           res.data.email,
@@ -59,9 +64,8 @@ const LoginForm: React.FC = () => {
           });
         }
       }
-    }else {
-      setWarningMessage('Please input a valid username and password')
-      console.log(warningMessage)
+    } catch (err) {
+      navigate('/error')
     }
   }
   
@@ -74,7 +78,7 @@ const LoginForm: React.FC = () => {
   }
 
 
-  const loadingWarn = loading ? 'loading' : ''
+  const btnText = loading ? <Spin />: 'sign in'
   return (
     <FormWrapper>
       <StyledForm>
@@ -96,14 +100,14 @@ const LoginForm: React.FC = () => {
           handleChange={(newData: string) => handlePassword(newData)}
         />
         <WarningBlock isHidden={warningMessage === ''}> 
-          <span>{loadingWarn}</span>
           <span>{warningMessage} </span>
         </WarningBlock> 
 
         <SubmitButton 
-          allowToSubmit={true} 
+          allowToSubmit={loading === false} 
           onClick={handleSignIn} 
-          type='button'> sign in 
+          type='button'> 
+          {btnText}
         </SubmitButton>
       </StyledForm>
     </FormWrapper>

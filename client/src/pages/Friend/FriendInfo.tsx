@@ -5,6 +5,7 @@ import ActionButton from '../../components/ActionButton'
 import { useUserInfoStore } from '../../store/UserInfoStore'
 import { useCookies } from 'react-cookie'
 import { addFriend } from '../../api/user'
+import { Color } from '../../utils/color'
 
 const Panal = styled.div`
   flex-direction: column;
@@ -13,12 +14,13 @@ const Panal = styled.div`
   width: 20rem;
   border-radius: 0.8rem;
   padding: 2rem;
-  background-color: lightblue;
+  background-color: ${Color.fagrey};
   align-items: center;
 
   #friendFullName {
     margin: 1rem auto;
     font-size: 1.8rem;
+    color: ${Color.dogrey}
   }
   #findFriendActionBtns {
     margin-top: auto;
@@ -73,14 +75,14 @@ const FriendInfo: React.FC<IFriendInfo> = (props) => {
           margin='0.3rem' 
           width='6rem'
           height='2.5rem'
-          hoverColor='red'
+          hoverColor={Color.yellow}
           onClick={props.onClickCancel} />
         <ActionButton 
           word='Add'
           margin='0.3rem'
           width='6rem'
           height='2.5rem'
-          hoverColor='red'
+          hoverColor={Color.yellow}
           allowToAct={allowToAdd}
           onClick={sendFriendRequest} />
       </div>

@@ -24,7 +24,7 @@ export const register = async (email: string, name: string, username: string, pa
     }
   }
 }
-export const LoginApi = async (email: string, password: string) => {
+export const login = async (email: string, password: string) => {
   const url = baseURL + '/login'
 
   try {
@@ -55,9 +55,7 @@ export const refresh = async (refreshToken: string) => {
     }
     
   } catch (err) {
-    return {
-      err: err
-    }
+    throw err
   }
 }
 

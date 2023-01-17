@@ -6,7 +6,7 @@ import RegisterForm from './RegisterForm'
 import LoginForm from './LoginForm'
 
 const Wrapper = styled.div`
-  background-color: ${Color.dblue};
+  background-color: ${Color.sogrey};
   height: 100vh;
 `
 

@@ -23,6 +23,7 @@ const Wrapper = styled.div<IWrapper>`
   height: 100vh;
   width: 300px;
   background-color: ${Color.dblue};
+  background-color: #393E46;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -35,7 +36,7 @@ const Wrapper = styled.div<IWrapper>`
     height: 100vh;
     display: ${(props) => (props.popOutName !== '')? '': 'none'};
     background-color: black;
-    opacity: 0.9;
+    opacity: 0.8;
   }
 
   #leftNavTopSearchInput {
@@ -44,12 +45,12 @@ const Wrapper = styled.div<IWrapper>`
     border: none;
     padding: 5px;
     outline: none;
-    background-color: lightgrey;
+    background-color: ${Color.sogrey};
   }
 
   .caption {
     margin: 0px 10px;
-    color: lightgray;
+    /* color: lightgray; */
     font-size: 1rem;
     text-align: left;   
   }
@@ -62,6 +63,23 @@ const ContactInfo = styled.div`
   width: auto;
   padding: 10px;
   overflow: scroll;
+
+  overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    height: 0px;
+    width: 0px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+      background: #393812;
+      /* -webkit-border-radius: 1ex;
+      -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75); */
+  }
+
+  ::-webkit-scrollbar-corner {
+      background: #000;
+  }
   
   .contact {
     background-color: orange;
@@ -75,8 +93,9 @@ const DashBoard = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: ${Color.grey};
-  /* color: grey; */
+  /* background-color: ${Color.migrey}; */
+  /* background-color: #EEEEEE; */
+  border-top: solid ${Color.sogrey};
   padding: 0.3rem 0.5rem;
 
   .signoutBtn {
@@ -88,15 +107,16 @@ const DashBoard = styled.div`
     }
   }
   .controlButton {
-    color: black;
+    color: ${Color.dogrey};;;
     font-size: 1.5rem;
     outline: none;
     border: none;
     margin: 0rem 0.2rem;
     border-radius: 0.2rem;
+    background-color: ${Color.fagrey};
 
     &:hover {
-      background-color: lightblue;
+      background-color: ${Color.sogrey};
     }
   }
   #notifBtn{

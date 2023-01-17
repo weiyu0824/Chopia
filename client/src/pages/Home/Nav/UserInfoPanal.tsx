@@ -10,6 +10,8 @@ import { useCookies } from 'react-cookie'
 import { useUserInfoStore } from '../../../store/UserInfoStore'
 import { useChatStore } from '../../../store/ChatStore'
 import { useNotifStore } from '../../../store/NotifStore'
+import { Color } from '../../../utils/color'
+
 
 interface IPanal {
   showPanal: boolean
@@ -23,7 +25,9 @@ const Panal = styled.div<IPanal>`
   width: 17rem;
   border-radius: 0.8rem;
   padding: 1rem;
-  background-color: orange;
+  background-color: ${Color.yellow};
+  color: black;
+
   cursor: default;
   
   /* #userInfoEditButton {
@@ -40,7 +44,7 @@ const ControlPart = styled.div`
   border-radius: 0.5rem;
   height: 8rem;
   padding: 0 0.8rem;
-  background-color: darkgray;
+  background-color: ${Color.dogrey};
 
   .personalInfo {
     border-bottom: solid;
@@ -57,9 +61,8 @@ const ControlPart = styled.div`
     padding: 0 0.3rem;
     cursor: pointer;
     text-align: left;
-    color: black;
     &:hover{
-      background-color: lightblue;
+      background-color: ${Color.regrey};
     }
   }
 `
@@ -73,7 +76,7 @@ interface IUserInfoPanal {
 }
 
 const UserInfoPanal: React.FC<IUserInfoPanal> = (props) => {
-  const leaveAuth = useAuthStore((state => state.leaveAuth))
+  const setLogout = useAuthStore((state => state.setLogout))
   const [cookies, setCookie, removeCookie] = useCookies(['access_token', 'refresh_token'])
   const resetUserInfo = useUserInfoStore((state) => state.resetUserInfo)
   const resetChatroom = useChatStore((state) => state.resetChatroom)
@@ -86,7 +89,7 @@ const UserInfoPanal: React.FC<IUserInfoPanal> = (props) => {
     removeCookie('refresh_token')
 
     // Make sure to reset all state here!!
-    leaveAuth()
+    setLogout()
     resetUserInfo()
     resetChatroom()
     resetNotif()

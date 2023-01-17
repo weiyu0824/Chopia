@@ -14,6 +14,11 @@ interface ISentences {
 const SentencePanal = styled.div`
   height: 200px;
   overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    height: 0px;
+    width: 0px;
+  }
 `
 const AvatarBox = styled.div`
   flex-shrink:0;
@@ -23,7 +28,6 @@ const AvatarBox = styled.div`
 `
 const Sentence = styled.div<ISentences>`
   background-color: ${props => props.sentencesColor};
-  color: ${Color.white};
   margin: 5px 0px;
   text-align: left;
   display: flex;

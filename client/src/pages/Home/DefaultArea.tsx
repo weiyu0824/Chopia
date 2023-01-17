@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   display: flex;
   margin: auto;
-  color: ${Color.ddgrey};
+  color: ${Color.dogrey};
 `
 
 const DefaultArea: React.FC = () => {

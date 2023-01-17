@@ -6,6 +6,7 @@ import { AiTwotoneSetting } from 'react-icons/ai'
 import Icon from '../../components/Icon'
 import AvatarBoard from './AvatarBoard'
 import { useUserInfoStore } from '../../store/UserInfoStore'
+import { Color } from '../../utils/color'
 
 
 interface IPanal {
@@ -16,40 +17,32 @@ const Panal = styled.div<IPanal>`
   position: absolute;
   top: ${(props) => `calc(50% - ${props.height / 2}rem)`};
   left: ${(props) => `calc(50% - ${props.width / 2}rem)`};
-  flex-direction: column;
-  display: flex;
-  padding: 2rem;
-  border: solid black;
-  border-radius: 0.5rem;
-  width: ${(props) => `${props.width}rem`};
-  height: ${(props) => `${props.height}rem`};
-  background-color: white;
-
-  #settingTitle{
-    flex-direction: row;
-    display: flex;
-    /* justify-content: center; */
-    align-items: center;
-    text-align: left;
-    h2{
-      display: inline-block;
-      margin: auto 0;
-    }
-  }
-`
-
-const Container = styled.div`
-  flex-grow: 2;
   flex-direction: row;
   display: flex;
-  background-color: lightpink;
+  border-radius: 5px;
+  width: ${(props) => `${props.width}rem`};
+  height: ${(props) => `${props.height}rem`};
+  background-color: ${Color.fagrey};
 
   .settingNav{
-    flex-grow: 0;
-    flex-shrink: 0;
-    width: 15rem;
-    background-color: #f8efef;
-    
+    padding: 20px 0;
+    #settingTitle{
+      flex-direction: row;
+      display: flex;
+      align-items: center;
+      color: ${Color.dogrey};
+      h2{
+        margin: auto 0;
+        color: ${Color.dogrey};
+      }
+    }
+  }
+  .settingMain{
+    flex-grow: 1;
+    border-radius: 0 5px 5px 0;
+    padding: 20px 0 50px 0;
+    background-color: ${Color.regrey};
+    color: ${Color.lagrey};
   }
 `
 
@@ -59,9 +52,9 @@ interface INavButton {
 const NavButton = styled.button<INavButton>`
   border: none;
   width: 100%;
-  padding: 0.5rem;
+  padding: 10px;
   outline: none;
-  background-color: ${(props) => (props.selected)? 'lightgray': '#f8efef'};
+  background-color: ${(props) => (props.selected)? Color.migrey: Color.fagrey};
   text-align: left;
 `
 
@@ -115,20 +108,20 @@ const SettingPanel: React.FC = () => {
       settingPage = <PasswordSetting />
     }
     return (    
-      <Panal width={50} height={38}>
-        <div id='settingTitle'>
-          <Icon
-            icon={<AiTwotoneSetting />}
-            size={2}
-          />
-          <h2>Setting</h2>
-        </div>
-        <Container>
-          <div className='settingNav'>
+      <Panal width={45} height={38}>
+        <div className='settingNav'>
+          <div id='settingTitle'>
+              <Icon
+                icon={<AiTwotoneSetting />}
+                size={2}
+              />
+              <h2>Setting</h2>
+            </div>
             {navButtons}
           </div>
-            {settingPage}
-        </Container>
+        <div className='settingMain'>
+          {settingPage}
+        </div>
       </Panal>
     ) 
   }

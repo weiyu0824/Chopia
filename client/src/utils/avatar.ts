@@ -15,7 +15,14 @@ import joyce from '../asset/joyce.png'
 import mike from '../asset/mike.png'
 import celine from '../asset/celine.png'
 import john from '../asset/john.png'
+import grandma from '../asset/grandma.png'
+import grandpa from '../asset/grandpa.png'
+import sister from '../asset/sister.png'
+import uncle from '../asset/uncle.png'
+import aunt from '../asset/aunt.png'
+import cousin from '../asset/cousin.png'
 import robot from '../asset/robot-logo.png'
+
 
 export const AvatarImgs: {[name: string]: string} = {
   'fox': fox,
@@ -26,6 +33,12 @@ export const AvatarImgs: {[name: string]: string} = {
   'rabbit': rabbit,
   'schnauzer': schnauzer,
   'tiger': tiger,
+  'grandma': grandma,
+  'grandpa': grandpa,
+  'sister': sister,
+  'uncle': uncle,
+  'aunt': aunt,
+  'cousin': cousin,
   'standard': standard,
   'amy': amy,
   'sam': sam,
